@@ -1,0 +1,31 @@
+{
+    "env": {
+        "node": true,
+        "browser": true,
+        "es6": true,
+        "jest": true
+    },
+    "parser": "babel-eslint",
+    "extends": "airbnb",
+    "rules": {
+      "semi": [2, "never"],
+      "brace-style": [2, "stroustrup"],
+      "arrow-parens": [2, "always"],
+      "no-console": ["error", { "allow": ["debug", "warn", "error"]}],
+      "camelcase": [0, {"properties":"never", "ignoreDestructuring": true} ],
+      "import/no-extraneous-dependencies": ["error", {"devDependencies": true}],
+      "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+      "react/jsx-uses-vars": [2],
+      "react/forbid-prop-types": { "forbid": ["any", "array"] }
+    },
+    "parserOptions": {
+      "ecmaVersion": 6,
+      "sourceType": "module",
+      "ecmaFeatures": {
+        "jsx": true,
+        "modules": true,
+        "experimentalObjectRestSpread": true
+      }
+    },
+    "globals": {}
+  }
