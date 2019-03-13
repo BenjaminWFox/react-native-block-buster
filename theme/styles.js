@@ -62,6 +62,6 @@ StatusBar.setBarStyle('dark-content', false)
 // StatusBar.setBackgroundColor('#fff')
 
 export {
-  colors,
+  colors, unit,
 }
 export default theme
