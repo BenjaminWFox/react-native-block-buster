@@ -8,6 +8,8 @@ import Theme from '../theme'
 import Grid from './grid'
 
 class GridScreen extends React.Component {
+  state = {}
+
   render() {
     return (
       <View style={[Theme.styles.container, { paddingTop: Constants.statusBarHeight }]}>
