@@ -57,40 +57,42 @@ class TileElement extends React.Component {
     const height = edge
 
     return (
-      <TouchableHighlight
-        onPress={this.handleTilePress}
-        underlayColor="transparent"
-        style={{
-          width,
-          height,
-          padding,
-          left: x,
-          top: y,
-          position: 'absolute',
-          backgroundColor: 'transparent',
-        }}
+      <Animated.View style={{
+        width,
+        height,
+        padding,
+        left: x,
+        top: y,
+        position: 'absolute',
+        backgroundColor: 'transparent',
+      }}
       >
-        <Animated.View style={{
-          backgroundColor: color,
-          width: hit ? this.animation().interpolate({
-            inputRange: [0, 100],
-            outputRange: ['0%', '100%'],
-          }) : '100%',
-          height: hit ? this.animation().interpolate({
-            inputRange: [0, 100],
-            outputRange: ['0%', '100%'],
-          }) : '100%',
-          left: hit ? this.animation().interpolate({
-            inputRange: [0, 100],
-            outputRange: [edge / 2 - 2, 0],
-          }) : 0,
-          top: hit ? this.animation().interpolate({
-            inputRange: [0, 100],
-            outputRange: [edge / 2 - 2, 0],
-          }) : 0,
-        }}
-        />
-      </TouchableHighlight>
+        <TouchableHighlight
+          onPress={this.handleTilePress}
+          underlayColor="transparent"
+        >
+          <Animated.View style={{
+            backgroundColor: color,
+            width: hit ? this.animation().interpolate({
+              inputRange: [0, 100],
+              outputRange: ['0%', '100%'],
+            }) : '100%',
+            height: hit ? this.animation().interpolate({
+              inputRange: [0, 100],
+              outputRange: ['0%', '100%'],
+            }) : '100%',
+            left: hit ? this.animation().interpolate({
+              inputRange: [0, 100],
+              outputRange: [edge / 2 - 2, 0],
+            }) : 0,
+            top: hit ? this.animation().interpolate({
+              inputRange: [0, 100],
+              outputRange: [edge / 2 - 2, 0],
+            }) : 0,
+          }}
+          />
+        </TouchableHighlight>
+      </Animated.View>
     )
   }
 }
@@ -100,7 +102,7 @@ TileElement.propTypes = {
   padding: PropTypes.number.isRequired,
   color: PropTypes.string.isRequired,
   x: PropTypes.number.isRequired,
-  y: PropTypes.number.isRequired,
+  y: PropTypes.oneOfType([PropTypes.number, PropTypes.object]).isRequired,
 }
 
 export default TileElement

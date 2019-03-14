@@ -1,5 +1,5 @@
 import React from 'react'
-import { View } from 'react-native'
+import { View, Animated } from 'react-native'
 import PropTypes from 'prop-types'
 import Tile from './tile'
 
@@ -34,6 +34,20 @@ const getColumnsArray = function getColumnsArray(numColumns) {
   }
 
   return arr
+}
+
+const getSlideDownAnimation = function getSlideDownAnimation(start, finish) {
+  const animation = new Animated.Value(start)
+
+  Animated.timing(
+    animation,
+    {
+      toValue: finish,
+      duration: 150,
+    },
+  ).start()
+
+  return animation
 }
 
 class TileManager extends React.Component {
@@ -119,17 +133,19 @@ class TileManager extends React.Component {
     // and a new Key
     for (let i = 1; i <= rowIndex; i += 1) {
       const currentKey = this.getTileKey(rowIndex, columnIndex) - i * 10
+      const currentY = tiles[currentKey].y._value === undefined ? tiles[currentKey].y : tiles[currentKey].y._value
+      console.log('CY', currentY)
       const newKey = i === 0 ? columnIndex : currentKey + 10
-      const newY = (tiles[currentKey].y + this.tileEdge)
+      const newY = (currentY + this.tileEdge)
 
-      console.log('Updating tile with key from/to', currentKey, newKey)
-      console.log('Updating tile with Y from/to', tiles[currentKey].y, newY)
-      tempTiles[newKey] = new Tile(newKey, this.tileEdge, this.tilePadding, currentTile.x, newY, tiles[currentKey].color, this.handleTileRespawn)
+      // console.log('Updating tile with key from/to', currentKey, newKey)
+      // console.log('Updating tile with Y from/to', currentY, newY)
+      tempTiles[newKey] = new Tile(newKey, this.tileEdge, this.tilePadding, currentTile.x, getSlideDownAnimation(currentY, newY), tiles[currentKey].color, this.handleTileRespawn)
       tempElements[newKey] = tempTiles[newKey].element
     }
 
     // Respawn the original missing block
-    tempTiles[columnIndex] = new Tile(columnIndex, this.tileEdge, this.tilePadding, currentTile.x, 0, COLORS[getRandomInt(0, COLORS.length - 1)], this.handleTileRespawn)
+    tempTiles[columnIndex] = new Tile(columnIndex, this.tileEdge, this.tilePadding, currentTile.x, getSlideDownAnimation(0 - this.tileEdge, 0), COLORS[getRandomInt(0, COLORS.length - 1)], this.handleTileRespawn)
     tempElements[columnIndex] = tempTiles[columnIndex].element
 
     this.setState({
