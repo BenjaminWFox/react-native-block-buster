@@ -1,15 +1,15 @@
 import React from 'react'
 import {
-  StatusBar,
+  StatusBar, SafeAreaView,
 } from 'react-native'
-import AppContainer from './navigation/main-routing'
+import Grid from './grid/grid'
 
 const App = function App() {
   return (
-    <>
+    <SafeAreaView style={{ flex: 1 }}>
       <StatusBar style={{ backgroundColor: 'black' }} barStyle="light-content" />
-      <AppContainer style={{ backgroundColor: 'black' }} />
-    </>
+      <Grid />
+    </SafeAreaView>
   )
 }
 
