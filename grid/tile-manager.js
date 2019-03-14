@@ -123,29 +123,39 @@ class TileManager extends React.Component {
     const rowIndex = Math.floor(tileKey / this.tilesPerRow)
     const columnIndex = 0 + (tileKey % this.tilesPerRow)
     const column = this.columns[columnIndex]
-
-    console.log('Coords: column/row', rowIndex, columnIndex)
-    console.log('Tile key', tileKey, currentTile)
     const extractedElement = column.splice(rowIndex, 1)
+    let lastUpdatedKey
     column.unshift(extractedElement[0])
 
     // Update each of the tiles above the current tile with new Y coords
     // and a new Key
     for (let i = 1; i <= rowIndex; i += 1) {
       const currentKey = this.getTileKey(rowIndex, columnIndex) - i * 10
-      const currentY = tiles[currentKey].y._value === undefined ? tiles[currentKey].y : tiles[currentKey].y._value
-      console.log('CY', currentY)
+
+      let extraY = 0
+
+      if (tiles[currentKey].y._animation) { // eslint-disable-line
+        // tiles[currentKey].y._animation.stop()
+        extraY = tiles[currentKey].y._startingValue + this.tileEdge - tiles[currentKey].y._value // eslint-disable-line
+      }
+
+      const currentY = tiles[currentKey].y._value === undefined ? tiles[currentKey].y : tiles[currentKey].y._value // eslint-disable-line
+
       const newKey = i === 0 ? columnIndex : currentKey + 10
-      const newY = (currentY + this.tileEdge)
+      const newY = (currentY + this.tileEdge) + extraY
 
       // console.log('Updating tile with key from/to', currentKey, newKey)
       // console.log('Updating tile with Y from/to', currentY, newY)
       tempTiles[newKey] = new Tile(newKey, this.tileEdge, this.tilePadding, currentTile.x, getSlideDownAnimation(currentY, newY), tiles[currentKey].color, this.handleTileRespawn)
       tempElements[newKey] = tempTiles[newKey].element
+
+      lastUpdatedKey = newKey
     }
 
     // Respawn the original missing block
-    tempTiles[columnIndex] = new Tile(columnIndex, this.tileEdge, this.tilePadding, currentTile.x, getSlideDownAnimation(0 - this.tileEdge, 0), COLORS[getRandomInt(0, COLORS.length - 1)], this.handleTileRespawn)
+    const refY = tempTiles[lastUpdatedKey].y._value || 0
+    console.log('refY', refY)
+    tempTiles[columnIndex] = new Tile(columnIndex, this.tileEdge, this.tilePadding, currentTile.x, getSlideDownAnimation(refY - this.tileEdge, 0), COLORS[getRandomInt(0, COLORS.length - 1)], this.handleTileRespawn)
     tempElements[columnIndex] = tempTiles[columnIndex].element
 
     this.setState({
