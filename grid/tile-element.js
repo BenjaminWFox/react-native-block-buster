@@ -30,22 +30,31 @@ class TileElement extends React.Component {
     return out
   }
 
+  componentDidUpdate = (prevProps) => {
+    const { hit } = this.state
+    const { isHit } = this.props
+    if (!prevProps.isHit && isHit && !hit) {
+      this.setState({ hit: true })
+    }
+  }
+
   handleAnimationComplete = () => {
     const { onRespawn, index } = this.props
 
     this.animationsComplete += 1
+
     if (this.animationsComplete === this.TOTAL_ANIMATIONS) {
       this.animationsComplete = 0
+      console.log('Reset hit!', index)
       this.setState({ hit: false })
       onRespawn(index)
     }
   }
 
   handleTilePress = () => {
-    const { hit } = this.state
-    if (!hit) {
-      this.setState({ hit: true })
-    }
+    const { onClick, index } = this.props
+
+    onClick(index)
   }
 
   render() {
@@ -53,6 +62,7 @@ class TileElement extends React.Component {
       edge, padding, color, x, y,
     } = this.props
     const { hit } = this.state
+    const { isHit } = this.props
     const width = edge
     const height = edge
 
@@ -73,19 +83,19 @@ class TileElement extends React.Component {
         >
           <Animated.View style={{
             backgroundColor: color,
-            width: hit ? this.animation().interpolate({
+            width: hit && isHit ? this.animation().interpolate({
               inputRange: [0, 100],
               outputRange: ['0%', '100%'],
             }) : '100%',
-            height: hit ? this.animation().interpolate({
+            height: hit && isHit ? this.animation().interpolate({
               inputRange: [0, 100],
               outputRange: ['0%', '100%'],
             }) : '100%',
-            left: hit ? this.animation().interpolate({
+            left: hit && isHit ? this.animation().interpolate({
               inputRange: [0, 100],
               outputRange: [edge / 2 - 2, 0],
             }) : 0,
-            top: hit ? this.animation().interpolate({
+            top: hit && isHit ? this.animation().interpolate({
               inputRange: [0, 100],
               outputRange: [edge / 2 - 2, 0],
             }) : 0,

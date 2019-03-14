@@ -3,7 +3,8 @@ import PropTypes from 'prop-types'
 import TileElement from './tile-element'
 
 class Tile {
-  constructor(key, edge, padding, x, y, color, onRespawn) {
+  constructor(key, edge, padding, x, y, isHit, color, onClick, onRespawn) {
+    this.index = key
     this.x = x
     this.y = y
     this.color = color
@@ -20,6 +21,8 @@ class Tile {
         color={this.color}
         x={x}
         y={y}
+        isHit={isHit}
+        onClick={onClick}
         onRespawn={onRespawn}
       />
     )

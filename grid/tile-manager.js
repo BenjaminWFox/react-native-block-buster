@@ -50,6 +50,36 @@ const getSlideDownAnimation = function getSlideDownAnimation(start, finish) {
   return animation
 }
 
+const getFadeOutAnimation = function getFadeOutAnimation() {
+  const out = new Animated.Value(100)
+
+  Animated.timing(
+    out,
+    {
+      toValue: 0,
+      duration: 150,
+    },
+  ).start(() => {
+    this.handleAnimationComplete()
+  })
+
+  return out
+}
+
+const getDimensionFadeOutAnimation = function getDimensionFadeOutAnimation() {
+  return getFadeOutAnimation().interpolate({
+    inputRange: [0, 100],
+    outputRange: ['0%', '100%'],
+  })
+}
+
+const getPositionFadeOutAnimation = function getPositionFadeOutAnimation() {
+  return getFadeOutAnimation().interpolate({
+    inputRange: [0, 100],
+    outputRange: [edge / 2 - 2, 0],
+  })
+}
+
 class TileManager extends React.Component {
   constructor({
     tileEdge, tileRows, tilesPerRow, tilePadding, gridWidth,
@@ -68,7 +98,9 @@ class TileManager extends React.Component {
       tileElements: [],
       tilesCreated: false,
       burstTiles: [],
+      readyTiles: 0,
     }
+    this.getRandomColor = () => COLORS[getRandomInt(0, COLORS.length - 1)]
   }
 
   componentDidMount = () => {
@@ -92,7 +124,8 @@ class TileManager extends React.Component {
         const x = (this.tileEdge * column) + centeringOffset
         const y = (this.tileEdge * row)
 
-        const tile = new Tile(i, this.tileEdge, this.tilePadding, x, y, this.colors[i], this.handleTileRespawn)
+        const tile = this.getNewTile(i, this.edge, x, y, false, this.colors[i])
+        // new Tile(i, this.tileEdge, this.tilePadding, x, y, this.colors[i], this.handleTileClick, this.handleTileRespawn)
 
         this.columns[column].push(tile)
 
@@ -104,9 +137,12 @@ class TileManager extends React.Component {
       this.setState({ tiles: tempTiles })
       this.setState({ tileElements })
     }
-    else if (burstTiles.length) {
-      this.respawnTiles(burstTiles)
-    }
+  }
+
+  getNewTile(index, edge, x, y, isHit, color = undefined) {
+    const thisColor = color || this.getRandomColor()
+
+    return new Tile(index, this.tileEdge, this.tilePadding, x, y, isHit, thisColor, this.handleTileClick, this.handleTileRespawn)
   }
 
   respawnTiles = (burstTiles) => {
@@ -146,7 +182,8 @@ class TileManager extends React.Component {
 
       // console.log('Updating tile with key from/to', currentKey, newKey)
       // console.log('Updating tile with Y from/to', currentY, newY)
-      tempTiles[newKey] = new Tile(newKey, this.tileEdge, this.tilePadding, currentTile.x, getSlideDownAnimation(currentY, newY), tiles[currentKey].color, this.handleTileRespawn)
+      tempTiles[newKey] = this.getNewTile(newKey, this.edge, currentTile.x, getSlideDownAnimation(currentY, newY), false, tiles[currentKey].color)
+      // new Tile(newKey, this.tileEdge, this.tilePadding, currentTile.x, getSlideDownAnimation(currentY, newY), tiles[currentKey].color, this.handleTileClick, this.handleTileRespawn)
       tempElements[newKey] = tempTiles[newKey].element
 
       lastUpdatedKey = newKey
@@ -154,8 +191,9 @@ class TileManager extends React.Component {
 
     // Respawn the original missing block
     const refY = tempTiles[lastUpdatedKey].y._value || 0
-    console.log('refY', refY)
-    tempTiles[columnIndex] = new Tile(columnIndex, this.tileEdge, this.tilePadding, currentTile.x, getSlideDownAnimation(refY - this.tileEdge, 0), COLORS[getRandomInt(0, COLORS.length - 1)], this.handleTileRespawn)
+
+    tempTiles[columnIndex] = this.getNewTile(columnIndex, this.edge, currentTile.x, getSlideDownAnimation(refY - this.tileEdge, 0), false, this.getRandomColor())
+    // new Tile(columnIndex, this.tileEdge, this.tilePadding, currentTile.x, getSlideDownAnimation(refY - this.tileEdge, 0), COLORS[getRandomInt(0, COLORS.length - 1)], this.handleTileClick, this.handleTileRespawn)
     tempElements[columnIndex] = tempTiles[columnIndex].element
 
     this.setState({
@@ -168,16 +206,95 @@ class TileManager extends React.Component {
   getTileKey = (row, column) => parseInt(row.toString() + column.toString(), 10)
 
   handleTileRespawn = (key) => {
-    const { tiles, burstTiles } = this.state
+    // const { readyTiles, burstTiles } = this.state
 
-    const tempArray = burstTiles
+    console.log('Respawning', key)
 
-    tempArray.push(key)
+    // // New idea:
+    // this.setState({ readyTiles: readyTiles + 1 }, () => {
+    //   if (readyTiles === burstTiles.length) {
+    //     this.respawnTiles(burstTiles)
+    //   }
+    // })
 
-    this.setState({ burstTiles: tempArray }, () => {
-      this.setupAllTiles()
+    // // Old idea:
+    // const tempArray = burstTiles
+
+    // tempArray.push(key)
+
+    // this.setState({ burstTiles: tempArray }, () => {
+    //   this.setupAllTiles()
+    // })
+  }
+
+  handleTileClick = (key) => {
+    const { tiles } = this.state
+    const tempTiles = tiles
+    let allHitTiles = [key]
+
+    console.log('Initial tile clicked. Index:', key)
+
+    allHitTiles = this.addAdjacentHits(key, allHitTiles)
+
+    console.log('Received all hit tiles', allHitTiles)
+
+    allHitTiles.forEach((tileKey) => {
+      const currentTile = tiles[tileKey]
+
+      tempTiles[tileKey] = this.getNewTile(currentTile.index, this.edge, currentTile.x, currentTile.y, true, currentTile.color)
+    })
+
+    console.log('wrapping up handle click', allHitTiles)
+
+    this.setState({
+      tiles: tempTiles,
+      tileElements: tiles.map((tile) => tile.element),
+      burstTiles: allHitTiles,
+      readyTiles: 0,
     })
   }
+
+  addAdjacentHits = (hitTileKey, hitArray) => {
+    const { tiles } = this.state
+    const currentTile = tiles[hitTileKey]
+
+    const adjacentTileKeys = this.getAdjacentTiles(hitTileKey)
+
+    adjacentTileKeys.forEach((key) => {
+      if (key && !hitArray.includes(key)) {
+        if (currentTile.color === tiles[key].color) {
+          hitArray.push(key)
+          this.addAdjacentHits(key, hitArray)
+        }
+      }
+    })
+
+    // for (let i = 0; i < hitArray.length; i += 1) {
+    //   const adjacentTileKeys = this.getAdjacentTiles(hitArray[i])
+
+    //   console.log('Have adjacent keys', adjacentTileKeys)
+
+    // }
+
+    return hitArray
+  }
+
+  getAdjacentTiles = (key) => [
+    key - 10 < this.tilesPerRow ? null : key - 10,
+    key % (this.tilesPerRow - 1) === 0 ? null : key + 1,
+    key + 10 > this.tilesPerRow * this.tileRows ? null : key + 10,
+    key % this.tilesPerRow === 0 ? null : key - 1,
+  ]
+  // const above = key - 10 < this.tilesPerRow ? null : key - 10
+  // const right = (key + 1) % (this.tilesPerRow - 1) !== 0 ? null : key + 1
+  // const below = key + 10 > this.tilesPerRow * this.tileRows ? null : key + 10
+  // const left = key % this.tilesPerRow !== 0 ? null : key + 1
+
+
+  // Gets the current colum (as array)
+  getColumnIndexForKey = (key) => 0 + (key % this.tilesPerRow)
+
+  getColumnForKey = (key) => this.columns[this.getColumnIndexForKey(key)]
 
   render() {
     const { tileElements } = this.state
