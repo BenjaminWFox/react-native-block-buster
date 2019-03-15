@@ -14,7 +14,7 @@ export const getSlideDownAnimation = function getSlideDownAnimation(start, finis
   return animation
 }
 
-export const fadeOutAnimation = function fadeOutAnimation() {
+export const fadeOutAnimation = function fadeOutAnimation(callback) {
   const out = new Animated.Value(100)
 
   Animated.timing(
@@ -24,22 +24,21 @@ export const fadeOutAnimation = function fadeOutAnimation() {
       duration: 500,
     },
   ).start(() => {
-    // this.handleAnimationComplete()
-    console.log('Callback here.')
+    callback()
   })
 
   return out
 }
 
-export const dimensionFadeOutInterpolation = function getDimensionFadeOutAnimation() {
-  return fadeOutAnimation().interpolate({
+export const dimensionFadeOutInterpolation = function getDimensionFadeOutAnimation(callback) {
+  return fadeOutAnimation(callback).interpolate({
     inputRange: [0, 100],
     outputRange: ['0%', '100%'],
   })
 }
 
-export const positionFadeOutInterpolation = function getPositionFadeOutAnimation(edge) {
-  return fadeOutAnimation().interpolate({
+export const positionFadeOutInterpolation = function getPositionFadeOutAnimation(edge, callback) {
+  return fadeOutAnimation(callback).interpolate({
     inputRange: [0, 100],
     outputRange: [edge / 2 - 2, 0],
   })
