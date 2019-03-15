@@ -4,10 +4,10 @@ import PropTypes from 'prop-types'
 import Tile from './tile'
 
 const COLORS = [
-  '#00FF00',
-  '#FFFF00',
-  '#FF0009',
-  '#0000FF',
+  '#00FF00', // GREEN
+  '#FF00FF', // FUSCIA
+  '#FF0000', // RED
+  '#0000FF', // BLUE
 ]
 
 const getRandomInt = function getRandomInt(pMin, pMax) {
@@ -48,15 +48,16 @@ class TileManager extends React.Component {
     this.tilesPerRow = tilesPerRow
     this.tilePadding = tilePadding
     this.gridWidth = gridWidth
+    this.burstTiles = []
+    this.readyTiles = 0
     this.colors = getColorsForIndexes(tileRows * tilesPerRow)
     this.state = {
       tiles: [],
       tileElements: [],
       tilesCreated: false,
-      burstTiles: [],
-      readyTiles: 0,
     }
     this.getRandomColor = () => COLORS[getRandomInt(0, COLORS.length - 1)]
+    this.updateQueue = []
 
     Tile.init(this.tileEdge, this.tilePadding, this.handleTileClick, this.handleTileRespawn)
   }
@@ -66,13 +67,13 @@ class TileManager extends React.Component {
   }
 
   setupAllTiles = () => {
-    const { tiles, tilesCreated, burstTiles } = this.state
+    const { tiles, tilesCreated } = this.state
     const centeringOffset = (this.gridWidth - (this.tileEdge * this.tilesPerRow)) / 2
     const tempTiles = tiles
     let row = -1
     let column = 0
 
-    if (this.tileEdge > 0 && !tilesCreated && !burstTiles.length) {
+    if (this.tileEdge > 0 && !tilesCreated && !this.burstTiles.length) {
       for (let i = 0; i < this.tileRows * this.tilesPerRow; i += 1) {
         column = 0 + (i % this.tilesPerRow)
         row = (i % this.tilesPerRow) === 0 ? row + 1 : row
@@ -99,95 +100,84 @@ class TileManager extends React.Component {
     return new Tile(index, x, y, tileState, thisColor)
   }
 
-  updateTiles = (tilesArray) => {
+  updateTiles = (tilesArray, index) => {
     this.setState({
       tiles: tilesArray,
       tileElements: tilesArray.map((tile) => tile.element),
     })
   }
 
-  // respawnTiles = (burstTiles) => {
-  //   for (let i = 0; i < burstTiles.length; i += 1) {
-  //     this.respawnTile(burstTiles[i])
-  //   }
-  // }
+  respawnAllTiles = () => {
+    const { tiles } = this.state
+    let tempTiles = tiles
 
-  // respawnTile = (tileKey) => {
-  //   const { tiles, tileElements } = this.state
-  //   const currentTile = tiles[tileKey]
-  //   const tempTiles = tiles
-  //   const tempElements = tileElements
-  //   const rowIndex = Math.floor(tileKey / this.tilesPerRow)
-  //   const columnIndex = 0 + (tileKey % this.tilesPerRow)
-  //   const column = this.columns[columnIndex]
-  //   const extractedElement = column.splice(rowIndex, 1)
-  //   let lastUpdatedKey
-  //   column.unshift(extractedElement[0])
+    for (let i = 0; i < this.burstTiles.length; i += 1) {
+      tempTiles = this.respawnTile(this.burstTiles[i], tempTiles)
+    }
 
-  //   // Update each of the tiles above the current tile with new Y coords
-  //   // and a new Key
-  //   for (let i = 1; i <= rowIndex; i += 1) {
-  //     const currentKey = this.getTileKey(rowIndex, columnIndex) - i * 10
+    this.updateTiles(tempTiles)
+    this.burstTiles = []
+    this.readyTiles = 0
+  }
 
-  //     let extraY = 0
+  respawnTile = (tileIndex, tiles) => {
+    const operatingIndex = tileIndex
+    const currentIndex = tileIndex
+    const currentTile = tiles[currentIndex]
+    const tempTiles = tiles
 
-  //     if (tiles[currentKey].y._animation) { // eslint-disable-line
-  //       // tiles[currentKey].y._animation.stop()
-  //       extraY = tiles[currentKey].y._startingValue + this.tileEdge - tiles[currentKey].y._value // eslint-disable-line
-  //     }
+    console.log('COMPARE...before:', currentTile)
+    tempTiles[currentIndex] = this.getNewTile(currentIndex, currentTile.x, currentTile.y, Tile.states.stationary, this.getRandomColor())
+    console.log('COMPARE...after:', tempTiles[currentIndex])
+    // while (operatingIndex > this.tilesPerRow) {
+    //   const tileAbove = tempTiles[operatingIndex - this.tilesPerRow]
+    //   // console.log('OI', operatingIndex, tileAbove.color)
+    //   console.log('Setting Y for Index', tileAbove.y, operatingIndex)
+    //   tempTiles[operatingIndex] = this.getNewTile(operatingIndex, tileAbove.x, tileAbove.y + this.tileEdge, Tile.states.stationary, tileAbove.color)
+    //   operatingIndex -= this.tilesPerRow
+    // }
+    // console.log('Final Setting Y for Index', 0, operatingIndex)
+    // tempTiles[operatingIndex] = this.getNewTile(operatingIndex, currentTile.x, 0, Tile.states.stationary, this.getRandomColor())
 
-  //     const currentY = tiles[currentKey].y._value === undefined ? tiles[currentKey].y : tiles[currentKey].y._value // eslint-disable-line
-
-  //     const newKey = i === 0 ? columnIndex : currentKey + 10
-  //     const newY = (currentY + this.tileEdge) + extraY
-
-  //     // console.log('Updating tile with key from/to', currentKey, newKey)
-  //     // console.log('Updating tile with Y from/to', currentY, newY)
-  //     tempTiles[newKey] = this.getNewTile(newKey, currentTile.x, getSlideDownAnimation(currentY, newY), '100%', tiles[currentKey].color)
-  //     // new Tile(newKey, this.tileEdge, this.tilePadding, currentTile.x, getSlideDownAnimation(currentY, newY), tiles[currentKey].color, this.handleTileClick, this.handleTileRespawn)
-  //     tempElements[newKey] = tempTiles[newKey].element
-
-  //     lastUpdatedKey = newKey
-  //   }
-
-  //   // Respawn the original missing block
-  //   const refY = tempTiles[lastUpdatedKey].y._value || 0
-
-  //   tempTiles[columnIndex] = this.getNewTile(columnIndex, currentTile.x, getSlideDownAnimation(refY - this.tileEdge, 0), '100%', this.getRandomColor())
-  //   // new Tile(columnIndex, this.tileEdge, this.tilePadding, currentTile.x, getSlideDownAnimation(refY - this.tileEdge, 0), COLORS[getRandomInt(0, COLORS.length - 1)], this.handleTileClick, this.handleTileRespawn)
-  //   tempElements[columnIndex] = tempTiles[columnIndex].element
-
-  //   this.setState({
-  //     tiles: tempTiles,
-  //     tileElements: tempElements,
-  //     burstTiles: [],
-  //   })
-  // }
+    // this.updateTiles(tempTiles, tileIndex)
+    return tempTiles
+  }
 
   getTileKey = (row, column) => parseInt(row.toString() + column.toString(), 10)
 
-  handleTileRespawn = (key) => {
-    console.log('Respawning', key)
+  handleTileRespawn = (index) => {
+    console.log('Respawning', index)
+    this.readyTiles += 1
+    if (this.readyTiles === this.burstTiles.length) {
+      this.respawnAllTiles()
+    }
   }
 
   handleTileClick = (key) => {
-    const { tiles } = this.state
-    const tempTiles = tiles
-    let allHitTiles = [key]
+    if (!this.burstTiles.length) {
+      console.log('Handling click with index:', key)
+      const { tiles } = this.state
+      const tempTiles = tiles
+      let allHitTiles = [key]
 
-    allHitTiles = this.addAdjacentHits(key, allHitTiles)
+      allHitTiles = this.addAdjacentHits(key, allHitTiles)
 
-    allHitTiles.forEach((tileKey) => {
-      const currentTile = tiles[tileKey]
+      allHitTiles.forEach((tileKey) => {
+        const currentTile = tiles[tileKey]
 
-      tempTiles[tileKey] = this.getNewTile(currentTile.index, currentTile.x, currentTile.y, Tile.states.hit, currentTile.color)
-    })
+        tempTiles[tileKey] = this.getNewTile(currentTile.index, currentTile.x, currentTile.y, Tile.states.hit, currentTile.color)
+      })
 
-    this.setState({
-      tiles: tempTiles,
-      tileElements: tiles.map((tile) => tile.element),
-      burstTiles: allHitTiles,
-    })
+      this.burstTiles = allHitTiles
+      this.readyTiles = 0
+      this.setState({
+        tiles: tempTiles,
+        tileElements: tiles.map((tile) => tile.element),
+      })
+    }
+    else {
+      console.log('Currently respawning tiles, please wait.')
+    }
   }
 
   addAdjacentHits = (hitTileKey, hitArray) => {
@@ -209,7 +199,7 @@ class TileManager extends React.Component {
   }
 
   getAdjacentTiles = (key) => [
-    key - 10 < this.tilesPerRow ? null : key - 10, // top
+    key - 10 < 0 ? null : key - 10, // top
     (key + 1) % (this.tilesPerRow) === 0 ? null : key + 1, // right
     key + 10 >= this.tilesPerRow * this.tileRows ? null : key + 10, // bottom
     key % this.tilesPerRow === 0 ? null : key - 1, // left
