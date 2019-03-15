@@ -101,6 +101,8 @@ class TileManager extends React.Component {
       readyTiles: 0,
     }
     this.getRandomColor = () => COLORS[getRandomInt(0, COLORS.length - 1)]
+
+    Tile.init(this.tileEdge, this.tilePadding, this.handleTileClick, this.handleTileRespawn)
   }
 
   componentDidMount = () => {
@@ -124,7 +126,7 @@ class TileManager extends React.Component {
         const x = (this.tileEdge * column) + centeringOffset
         const y = (this.tileEdge * row)
 
-        const tile = this.getNewTile(i, this.edge, x, y, false, this.colors[i])
+        const tile = this.getNewTile(i, x, y, '100%', this.colors[i])
         // new Tile(i, this.tileEdge, this.tilePadding, x, y, this.colors[i], this.handleTileClick, this.handleTileRespawn)
 
         this.columns[column].push(tile)
@@ -139,10 +141,10 @@ class TileManager extends React.Component {
     }
   }
 
-  getNewTile(index, edge, x, y, isHit, color = undefined) {
+  getNewTile(index, x, y, tileState, color = undefined) {
     const thisColor = color || this.getRandomColor()
 
-    return new Tile(index, this.tileEdge, this.tilePadding, x, y, isHit, thisColor, this.handleTileClick, this.handleTileRespawn)
+    return new Tile(index, x, y, tileState, thisColor)
   }
 
   respawnTiles = (burstTiles) => {
@@ -182,7 +184,7 @@ class TileManager extends React.Component {
 
       // console.log('Updating tile with key from/to', currentKey, newKey)
       // console.log('Updating tile with Y from/to', currentY, newY)
-      tempTiles[newKey] = this.getNewTile(newKey, this.edge, currentTile.x, getSlideDownAnimation(currentY, newY), false, tiles[currentKey].color)
+      tempTiles[newKey] = this.getNewTile(newKey, currentTile.x, getSlideDownAnimation(currentY, newY), '100%', tiles[currentKey].color)
       // new Tile(newKey, this.tileEdge, this.tilePadding, currentTile.x, getSlideDownAnimation(currentY, newY), tiles[currentKey].color, this.handleTileClick, this.handleTileRespawn)
       tempElements[newKey] = tempTiles[newKey].element
 
@@ -192,7 +194,7 @@ class TileManager extends React.Component {
     // Respawn the original missing block
     const refY = tempTiles[lastUpdatedKey].y._value || 0
 
-    tempTiles[columnIndex] = this.getNewTile(columnIndex, this.edge, currentTile.x, getSlideDownAnimation(refY - this.tileEdge, 0), false, this.getRandomColor())
+    tempTiles[columnIndex] = this.getNewTile(columnIndex, currentTile.x, getSlideDownAnimation(refY - this.tileEdge, 0), '100%', this.getRandomColor())
     // new Tile(columnIndex, this.tileEdge, this.tilePadding, currentTile.x, getSlideDownAnimation(refY - this.tileEdge, 0), COLORS[getRandomInt(0, COLORS.length - 1)], this.handleTileClick, this.handleTileRespawn)
     tempElements[columnIndex] = tempTiles[columnIndex].element
 
@@ -241,7 +243,7 @@ class TileManager extends React.Component {
     allHitTiles.forEach((tileKey) => {
       const currentTile = tiles[tileKey]
 
-      tempTiles[tileKey] = this.getNewTile(currentTile.index, this.edge, currentTile.x, currentTile.y, true, currentTile.color)
+      tempTiles[tileKey] = this.getNewTile(currentTile.index, currentTile.x, currentTile.y, Tile.states.hit, currentTile.color)
     })
 
     console.log('wrapping up handle click', allHitTiles)
@@ -259,6 +261,8 @@ class TileManager extends React.Component {
     const currentTile = tiles[hitTileKey]
 
     const adjacentTileKeys = this.getAdjacentTiles(hitTileKey)
+
+    console.log('Adding adjacent', adjacentTileKeys)
 
     adjacentTileKeys.forEach((key) => {
       if (key && !hitArray.includes(key)) {
@@ -281,8 +285,8 @@ class TileManager extends React.Component {
 
   getAdjacentTiles = (key) => [
     key - 10 < this.tilesPerRow ? null : key - 10,
-    key % (this.tilesPerRow - 1) === 0 ? null : key + 1,
-    key + 10 > this.tilesPerRow * this.tileRows ? null : key + 10,
+    (key + 1) % (this.tilesPerRow) === 0 ? null : key + 1,
+    key + 10 >= this.tilesPerRow * this.tileRows ? null : key + 10,
     key % this.tilesPerRow === 0 ? null : key - 1,
   ]
   // const above = key - 10 < this.tilesPerRow ? null : key - 10
