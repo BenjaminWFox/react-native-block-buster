@@ -285,9 +285,11 @@ class TileManager extends React.Component {
 
   render() {
     const { tileElements } = this.state
+    const { gridHeight } = this.props
+    console.log('Layout tile manager', gridHeight, this.tileEdge)
     return (
       <View style={{
-        flex: 1, backgroundColor: 'black', justifyContent: 'center', overflow: 'hidden',
+        flex: 1, backgroundColor: 'black', justifyContent: 'center', overflow: 'hidden', height: gridHeight,
       }}
       >
         { tileElements }
