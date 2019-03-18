@@ -3,9 +3,16 @@ import {
   StatusBar, View, NativeModules, Platform,
 } from 'react-native'
 import Grid from './grid/grid'
+import ScoreBoard from './scoreboard/scoreboard'
+import PointPopper from './point-popper/point-popper'
 
 class App extends React.Component {
-  state = { sbHeight: 0 }
+  state = {
+    sbHeight: 0,
+    score: 0,
+    points: 0,
+    lastTouch: {},
+  }
 
   componentDidMount = () => {
     const { StatusBarManager } = NativeModules
@@ -25,26 +32,51 @@ class App extends React.Component {
     }
   }
 
+  componentDidUpdate = () => {
+
+  }
+
+  handleUpdateScore = (scoreIncrease, event) => {
+    console.log('Score updating', event)
+    const { score } = this.state
+    this.setState({
+      score: Math.ceil(score + scoreIncrease),
+      points: scoreIncrease,
+      lastTouch: {
+        x: event.pageX,
+        y: event.pageY,
+      },
+    })
+  }
+
+  handlePointTouch = (coords) => {
+    console.log('Screen touched at', coords)
+  }
+
   render() {
-    const { sbHeight } = this.state
+    const {
+      sbHeight, score, points, lastTouch,
+    } = this.state
+
     return (
-      <View style={{ flex: 1 }}>
-        <StatusBar style={{ backgroundColor: '#333' }} barStyle="light-content" />
+      <View style={{ flex: 1, backgroundColor: '#000' }}>
+        <StatusBar barStyle="light-content" />
         <View style={{
-          backgroundColor: '#333',
-          height: sbHeight,
+          height: sbHeight + 5,
+          borderBottomWidth: 5,
+          borderColor: '#333',
         }}
         />
-        <Grid style={{
-          paddingVertical: 10,
-        }}
-        />
+        <Grid style={{ paddingVertical: 10 }} handleUpdateScore={this.handleUpdateScore} handlePointTouch={this.handlePointTouch} />
         <View style={{
           flex: 1,
-          height: 100,
-          backgroundColor: '#333',
+          borderTopWidth: 5,
+          borderColor: '#333',
         }}
-        />
+        >
+          <ScoreBoard score={score} points={points} />
+        </View>
+        <PointPopper coords={lastTouch} points={points} />
       </View>
     )
   }

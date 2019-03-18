@@ -216,7 +216,7 @@ class TileManager extends React.Component {
     }
   }
 
-  handleTileClick = (key) => {
+  handleTileClick = (key, event) => {
     if (!this.burstTiles.length) {
       const { tiles } = this.state
       const tempTiles = tiles
@@ -236,6 +236,7 @@ class TileManager extends React.Component {
         )
       })
 
+      this.sendScoreUpdate(allHitTiles.length, event)
       this.burstTiles = allHitTiles
       this.readyTiles = 0
       this.setState({
@@ -247,6 +248,24 @@ class TileManager extends React.Component {
       // Tiles are respawning.
       // console.log('Currently respawning tiles, please wait.')
     }
+  }
+
+  sendScoreUpdate = (totalHitTiles, event) => {
+    const { handleUpdateScore } = this.props
+    const POINTS_PER_TILE = 10
+    const OVERRUN_MULTIPLYER_PER_TILE = 0.5
+    let points = 0
+
+    if (totalHitTiles <= 3) {
+      points = POINTS_PER_TILE * totalHitTiles
+    }
+    else {
+      const multiplyer = 1 + ((totalHitTiles - 3) * OVERRUN_MULTIPLYER_PER_TILE)
+      console.log('multiplyer', multiplyer)
+      points = POINTS_PER_TILE * totalHitTiles * multiplyer
+    }
+
+    handleUpdateScore(points, event)
   }
 
   addAdjacentHits = (hitTileKey, hitArray) => {
@@ -286,10 +305,10 @@ class TileManager extends React.Component {
   render() {
     const { tileElements } = this.state
     const { gridHeight } = this.props
-    console.log('Layout tile manager', gridHeight, this.tileEdge)
+
     return (
       <View style={{
-        flex: 1, backgroundColor: 'black', justifyContent: 'center', overflow: 'hidden', height: gridHeight,
+        flex: 1, justifyContent: 'center', overflow: 'hidden', height: gridHeight,
       }}
       >
         { tileElements }
@@ -304,6 +323,7 @@ TileManager.propTypes = {
   tilesPerRow: PropTypes.number.isRequired,
   tilePadding: PropTypes.number.isRequired,
   gridWidth: PropTypes.number.isRequired,
+  gridHeight: PropTypes.number.isRequired,
 }
 
 export default TileManager

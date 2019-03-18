@@ -18,7 +18,9 @@ const TileElement = function TileElement({
     }}
     >
       <TouchableHighlight
-        onPress={() => onClick(index)}
+        onPress={(event) => {
+          onClick(index, event.nativeEvent)
+        }}
         underlayColor="transparent"
         style={{
           width: '100%',

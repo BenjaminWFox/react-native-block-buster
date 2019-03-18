@@ -38,6 +38,9 @@ class Grid extends React.Component {
 
   render() {
     const { tileEdge, gridWidth, gridHeight } = this.state
+    const { handleUpdateScore, handlePointTouch } = this.props
+
+    console.log('GRID RENDER')
 
     return (
       <View
@@ -60,6 +63,8 @@ class Grid extends React.Component {
           tilePadding={this.TILE_PADDING}
           gridWidth={gridWidth}
           gridHeight={gridHeight}
+          handleUpdateScore={handleUpdateScore}
+          handlePointTouch={handlePointTouch}
         />
         )
         }
