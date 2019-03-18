@@ -7,7 +7,7 @@ export const slideDownAnimation = function getSlideDownAnimation(start, finish) 
     animation,
     {
       toValue: finish,
-      duration: 150,
+      duration: 500,
     },
   ).start()
 
