@@ -2,6 +2,7 @@ import React from 'react'
 import { View, Animated } from 'react-native'
 import PropTypes from 'prop-types'
 import Tile from './tile'
+import { slideDownAnimation } from '../animation/animations'
 
 const COLORS = [
   '#00FF00', // GREEN
@@ -101,6 +102,7 @@ class TileManager extends React.Component {
   }
 
   updateTiles = (tilesArray, index) => {
+    console.log('Updating tiles', tilesArray)
     this.setState({
       tiles: tilesArray,
       tileElements: tilesArray.map((tile) => tile.element),
@@ -109,44 +111,111 @@ class TileManager extends React.Component {
 
   respawnAllTiles = () => {
     const { tiles } = this.state
-    let tempTiles = tiles
+    const tempTiles = tiles
+    const columnUpdateInfo = {}
 
-    for (let i = 0; i < this.burstTiles.length; i += 1) {
-      tempTiles = this.respawnTile(this.burstTiles[i], tempTiles)
-    }
+    console.log('Burst tiles', this.burstTiles.sort())
+
+    this.burstTiles.forEach((tileIndex) => {
+      const exists = !!columnUpdateInfo[tileIndex % 10]
+      if (!exists) {
+        columnUpdateInfo[tileIndex % 10] = {}
+        columnUpdateInfo[tileIndex % 10].shiftFactor = 1
+        columnUpdateInfo[tileIndex % 10].hitTiles = [tileIndex]
+      }
+      else {
+        columnUpdateInfo[tileIndex % 10].shiftFactor += 1
+        columnUpdateInfo[tileIndex % 10].hitTiles.push(tileIndex)
+      }
+
+      console.log('Burst tile:', tileIndex, 'Affected column: ', tileIndex % 10)
+    })
+
+    console.log('Data gathered', columnUpdateInfo)
+    // TODO: Bug. Tiles are dropped somewhere during the processing.
+
+    const newColumnTiles = []
+
+    Object.keys(columnUpdateInfo).forEach((key) => {
+      const currentColumn = columnUpdateInfo[key]
+      const parsedKey = parseInt(key, 10)
+
+      newColumnTiles.push(this.processTilesForColumn(tiles, parsedKey, currentColumn))
+    })
+
+    // TODO: Bug. Tiles are dropped somewhere during the processing.
+    console.log('Have new column tiles', newColumnTiles)
+
+    const newTiles = []
+    newColumnTiles.forEach((tilesArray) => {
+      tilesArray.forEach((tile) => {
+        tempTiles[tile.index] = tile
+      })
+    })
 
     this.updateTiles(tempTiles)
     this.burstTiles = []
     this.readyTiles = 0
   }
 
-  respawnTile = (tileIndex, tiles) => {
-    const operatingIndex = tileIndex
-    const currentIndex = tileIndex
-    const currentTile = tiles[currentIndex]
-    const tempTiles = tiles
+  // eslint-disable-next-line
+  processTilesForColumn(tilesArray, columnKey, currentColumn) {
+    const { hitTiles } = currentColumn
+    const updatedColumnTiles = []
+    // TODO: Implement numeric sort for hitTiles to fix skipped hit tiles.
+    console.log('Hit tiles sorted for column', columnKey, hitTiles.sort())
+    const lastTileIndex = hitTiles[hitTiles.length - 1]
 
-    console.log('COMPARE...before:', currentTile)
-    tempTiles[currentIndex] = this.getNewTile(currentIndex, currentTile.x, currentTile.y, Tile.states.stationary, this.getRandomColor())
-    console.log('COMPARE...after:', tempTiles[currentIndex])
-    // while (operatingIndex > this.tilesPerRow) {
-    //   const tileAbove = tempTiles[operatingIndex - this.tilesPerRow]
-    //   // console.log('OI', operatingIndex, tileAbove.color)
-    //   console.log('Setting Y for Index', tileAbove.y, operatingIndex)
-    //   tempTiles[operatingIndex] = this.getNewTile(operatingIndex, tileAbove.x, tileAbove.y + this.tileEdge, Tile.states.stationary, tileAbove.color)
-    //   operatingIndex -= this.tilesPerRow
-    // }
-    // console.log('Final Setting Y for Index', 0, operatingIndex)
-    // tempTiles[operatingIndex] = this.getNewTile(operatingIndex, currentTile.x, 0, Tile.states.stationary, this.getRandomColor())
+    let runningShiftUpFactor = 0
+    let runningShiftDownFactor = 0
 
-    // this.updateTiles(tempTiles, tileIndex)
-    return tempTiles
+    for (let i = lastTileIndex; i >= 0; i -= 10) {
+      const currentTile = tilesArray[i]
+
+      if (hitTiles.includes(i)) {
+        console.log('Processing a hit tile', i)
+        const tileStartY = 0 - this.tileEdge - (this.tileEdge * runningShiftUpFactor)
+        const tileEndY = tileStartY + this.tileEdge + (this.tileEdge * runningShiftDownFactor * 2)
+
+        updatedColumnTiles.push(this.getNewTile(
+          columnKey + (10 * (runningShiftUpFactor)),
+          currentTile.x,
+          slideDownAnimation(tileStartY, tileEndY),
+          Tile.states.stationary,
+          this.getRandomColor(),
+        ))
+        runningShiftUpFactor += 1
+        runningShiftDownFactor += 1
+      }
+      else {
+        console.log('Processing an affected tile', i)
+
+        const tileStartY = this.getTileY(currentTile.y)
+        const tileEndY = tileStartY + (this.tileEdge * runningShiftDownFactor)
+
+        updatedColumnTiles.push(this.getNewTile(
+          currentTile.index + (10 * runningShiftDownFactor),
+          currentTile.x,
+          slideDownAnimation(tileStartY, tileEndY),
+          Tile.states.stationary,
+          currentTile.color,
+        ))
+      }
+    }
+    return updatedColumnTiles
+  }
+
+  getTileY = (yValue) => {
+    if (yValue._value || yValue._value === 0) {
+      return yValue._value
+    }
+
+    return yValue
   }
 
   getTileKey = (row, column) => parseInt(row.toString() + column.toString(), 10)
 
   handleTileRespawn = (index) => {
-    console.log('Respawning', index)
     this.readyTiles += 1
     if (this.readyTiles === this.burstTiles.length) {
       this.respawnAllTiles()
@@ -155,7 +224,6 @@ class TileManager extends React.Component {
 
   handleTileClick = (key) => {
     if (!this.burstTiles.length) {
-      console.log('Handling click with index:', key)
       const { tiles } = this.state
       const tempTiles = tiles
       let allHitTiles = [key]
@@ -165,7 +233,7 @@ class TileManager extends React.Component {
       allHitTiles.forEach((tileKey) => {
         const currentTile = tiles[tileKey]
 
-        tempTiles[tileKey] = this.getNewTile(currentTile.index, currentTile.x, currentTile.y, Tile.states.hit, currentTile.color)
+        tempTiles[tileKey] = this.getNewTile(currentTile.index, currentTile.x, this.getTileY(currentTile.y), Tile.states.hit, currentTile.color)
       })
 
       this.burstTiles = allHitTiles

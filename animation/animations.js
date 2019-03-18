@@ -1,6 +1,6 @@
 import { Animated } from 'react-native'
 
-export const getSlideDownAnimation = function getSlideDownAnimation(start, finish) {
+export const slideDownAnimation = function getSlideDownAnimation(start, finish) {
   const animation = new Animated.Value(start)
 
   Animated.timing(

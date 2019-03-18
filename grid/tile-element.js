@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 const TileElement = function TileElement({
   edge, padding, color, x, y, onClick, index, innerDimension, innerPosition,
 }) {
-  console.log('Element updated', index, x, y, edge, padding, color, onClick, innerDimension, innerPosition)
+  // console.log('Element updated', index, x, y, edge, padding, color, onClick, innerDimension, innerPosition)
   return (
     <Animated.View style={{
       width: edge,
