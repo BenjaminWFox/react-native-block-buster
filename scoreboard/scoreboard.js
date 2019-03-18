@@ -7,8 +7,8 @@ const ScoreBoard = function ScoreBoard({ score }) {
   return (
     <View style={{
       alignItems: 'center',
-      paddingVertical: 15,
-      borderBottomWidth: 5,
+      paddingVertical: 10,
+      borderBottomWidth: 2,
       borderColor: '#333',
     }}
     >

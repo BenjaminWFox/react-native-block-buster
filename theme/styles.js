@@ -14,6 +14,13 @@ const colors = {
     accent: '#1b4b5a',
     text: '#fefcfa',
   },
+  jewel: {
+    red: '#bb0043', // red
+    blue: '#342f9c', // blue
+    orange: '#e15500', // orange
+    green: '#009975', // green
+    yellow: '#fabb13', // yellow
+  },
 }
 
 const unit = 8
@@ -45,8 +52,9 @@ const theme = StyleSheet.create({
     padding: unit * 2,
   },
   text: {
-    color: colors.primary.text,
+    color: colors.jewel.green,
     fontSize: 17,
+    textAlign: 'center',
     marginVertical: unit,
   },
   textSmall: {

@@ -1,10 +1,11 @@
 import React from 'react'
 import {
-  StatusBar, View, NativeModules, Platform,
+  StatusBar, View, NativeModules, Platform, SafeAreaView,
 } from 'react-native'
 import Grid from './grid/grid'
 import ScoreBoard from './scoreboard/scoreboard'
 import PointPopper from './point-popper/point-popper'
+import Theme from './theme'
 
 class App extends React.Component {
   state = {
@@ -66,11 +67,48 @@ class App extends React.Component {
         <Grid style={{ paddingVertical: 10 }} handleUpdateScore={this.handleUpdateScore} />
         <View style={{
           flex: 1,
-          borderTopWidth: 5,
+          borderTopWidth: 2,
           borderColor: '#333',
+          flexDirection: 'column',
         }}
         >
           <ScoreBoard score={score} points={points} />
+          <SafeAreaView style={{ flex: 1 }}>
+            <View style={{
+              flex: 1,
+              flexDirection: 'row',
+              justifyContent: 'center',
+            }}
+            >
+              <View style={{
+                flexGrow: 1,
+                flexDirection: 'column',
+                justifyContent: 'flex-end',
+              }}
+              >
+                <Theme.Text>Moves Left</Theme.Text>
+                <Theme.Text>10</Theme.Text>
+              </View>
+              <View style={{
+                flexGrow: 1,
+                flexDirection: 'column',
+                justifyContent: 'flex-end',
+              }}
+              >
+                <Theme.Text>High Score</Theme.Text>
+                <Theme.Text>10,000</Theme.Text>
+              </View>
+              <View style={{
+                flexGrow: 1,
+                flexDirection: 'column',
+                justifyContent: 'flex-end',
+              }}
+              >
+                <Theme.Text>Restart</Theme.Text>
+                <Theme.Text>[O]</Theme.Text>
+              </View>
+            </View>
+          </SafeAreaView>
         </View>
         <PointPopper coords={lastTouch} points={points} />
       </View>
