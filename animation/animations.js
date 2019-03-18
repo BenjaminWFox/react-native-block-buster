@@ -7,7 +7,7 @@ export const slideDownAnimation = function getSlideDownAnimation(start, finish) 
     animation,
     {
       toValue: finish,
-      duration: 500,
+      duration: 350,
     },
   ).start()
 
@@ -21,7 +21,7 @@ export const fadeOutAnimation = function fadeOutAnimation(callback) {
     out,
     {
       toValue: 0,
-      duration: 500,
+      duration: 250,
     },
   ).start(() => {
     callback()
