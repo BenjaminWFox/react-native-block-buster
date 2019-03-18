@@ -163,7 +163,7 @@ class TileManager extends React.Component {
     const { hitTiles } = currentColumn
     const updatedColumnTiles = []
     // TODO: Implement numeric sort for hitTiles to fix skipped hit tiles.
-    console.log('Hit tiles sorted for column', columnKey, hitTiles.sort())
+    console.log('Hit tiles sorted for column', columnKey, hitTiles.sort((a, b) => a - b))
     const lastTileIndex = hitTiles[hitTiles.length - 1]
 
     let runningShiftUpFactor = 0
