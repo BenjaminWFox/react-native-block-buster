@@ -138,6 +138,7 @@ class TileManager extends React.Component {
     Object.keys(columnUpdateInfo).forEach((key) => {
       const currentColumn = columnUpdateInfo[key]
       const parsedKey = parseInt(key, 10)
+      currentColumn.hitTiles.sort((a, b) => a - b)
 
       newColumnTiles.push(this.processTilesForColumn(tiles, parsedKey, currentColumn))
     })
@@ -255,6 +256,7 @@ class TileManager extends React.Component {
     const adjacentTileKeys = this.getAdjacentTiles(hitTileKey)
 
     console.info('Adjacent Keys:', adjacentTileKeys)
+
     adjacentTileKeys.forEach((key) => {
       if ((key || key === 0) && !hitArray.includes(key)) {
         if (currentTile.color === tiles[key].color) {
