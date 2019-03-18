@@ -28,7 +28,6 @@ class Tile {
         case Tile.states.stationary:
           return '100%'
         case Tile.states.hit:
-          console.log('It was a hit!')
           return dimensionFadeOutInterpolation(callback)
         default:
           return '100%'

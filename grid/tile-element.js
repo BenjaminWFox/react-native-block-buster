@@ -3,9 +3,9 @@ import { TouchableHighlight, Animated } from 'react-native'
 import PropTypes from 'prop-types'
 
 const TileElement = function TileElement({
-  edge, padding, color, x, y, onClick, index, innerDimension, innerPosition,
+  edge, padding, color, x, y, onClick,
+  index, innerDimension, innerPosition,
 }) {
-  // console.log('Element updated', index, x, y, edge, padding, color, onClick, innerDimension, innerPosition)
   return (
     <Animated.View style={{
       width: edge,
@@ -44,6 +44,10 @@ TileElement.propTypes = {
   color: PropTypes.string.isRequired,
   x: PropTypes.number.isRequired,
   y: PropTypes.oneOfType([PropTypes.number, PropTypes.object]).isRequired,
+  onClick: PropTypes.func.isRequired,
+  index: PropTypes.number.isRequired,
+  innerDimension: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
+  innerPosition: PropTypes.oneOfType([PropTypes.number, PropTypes.object]).isRequired,
 }
 
 export default TileElement

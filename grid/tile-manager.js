@@ -1,14 +1,23 @@
 import React from 'react'
-import { View, Animated } from 'react-native'
+import { View } from 'react-native'
 import PropTypes from 'prop-types'
 import Tile from './tile'
 import { slideDownAnimation } from '../animation/animations'
 
 const COLORS = [
-  '#00FF00', // GREEN
-  '#FF00FF', // FUSCIA
-  '#FF0000', // RED
-  '#0000FF', // BLUE
+  /* Flat, brights: */
+  // '#FF00FF', // FUSCIA
+  // '#00FF00', // GREEN
+  // '#FFFF00', // YELLOW
+  // '#FF0000', // RED
+  // '#0000FF', // BLUE
+
+  /* Jewel tones: */
+  '#bb0043', // red
+  '#342f9c', // blue
+  '#e15500', // orange
+  '#009975', // green
+  '#fabb13', // yellow
 ]
 
 const getRandomInt = function getRandomInt(pMin, pMax) {
@@ -91,8 +100,6 @@ class TileManager extends React.Component {
 
       this.updateTiles(tempTiles)
     }
-
-    console.log('Finished setup')
   }
 
   getNewTile(index, x, y, tileState, color = undefined) {
@@ -101,8 +108,7 @@ class TileManager extends React.Component {
     return new Tile(index, x, y, tileState, thisColor)
   }
 
-  updateTiles = (tilesArray, index) => {
-    console.log('Updating tiles', tilesArray)
+  updateTiles = (tilesArray) => {
     this.setState({
       tiles: tilesArray,
       tileElements: tilesArray.map((tile) => tile.element),
@@ -113,8 +119,6 @@ class TileManager extends React.Component {
     const { tiles } = this.state
     const tempTiles = tiles
     const columnUpdateInfo = {}
-
-    console.log('Burst tiles', this.burstTiles.sort())
 
     this.burstTiles.forEach((tileIndex) => {
       const exists = !!columnUpdateInfo[tileIndex % 10]
@@ -127,12 +131,7 @@ class TileManager extends React.Component {
         columnUpdateInfo[tileIndex % 10].shiftFactor += 1
         columnUpdateInfo[tileIndex % 10].hitTiles.push(tileIndex)
       }
-
-      console.log('Burst tile:', tileIndex, 'Affected column: ', tileIndex % 10)
     })
-
-    console.log('Data gathered', columnUpdateInfo)
-    // TODO: Bug. Tiles are dropped somewhere during the processing.
 
     const newColumnTiles = []
 
@@ -143,10 +142,6 @@ class TileManager extends React.Component {
       newColumnTiles.push(this.processTilesForColumn(tiles, parsedKey, currentColumn))
     })
 
-    // TODO: Bug. Tiles are dropped somewhere during the processing.
-    console.log('Have new column tiles', newColumnTiles)
-
-    const newTiles = []
     newColumnTiles.forEach((tilesArray) => {
       tilesArray.forEach((tile) => {
         tempTiles[tile.index] = tile
@@ -161,19 +156,19 @@ class TileManager extends React.Component {
   // eslint-disable-next-line
   processTilesForColumn(tilesArray, columnKey, currentColumn) {
     const { hitTiles } = currentColumn
+    // hitTiles.sort((a, b) => a - b)
+
     const updatedColumnTiles = []
-    // TODO: Implement numeric sort for hitTiles to fix skipped hit tiles.
-    console.log('Hit tiles sorted for column', columnKey, hitTiles.sort((a, b) => a - b))
     const lastTileIndex = hitTiles[hitTiles.length - 1]
 
     let runningShiftUpFactor = 0
     let runningShiftDownFactor = 0
 
+
     for (let i = lastTileIndex; i >= 0; i -= 10) {
       const currentTile = tilesArray[i]
 
       if (hitTiles.includes(i)) {
-        console.log('Processing a hit tile', i)
         const tileStartY = 0 - this.tileEdge - (this.tileEdge * runningShiftUpFactor)
         const tileEndY = tileStartY + this.tileEdge + (this.tileEdge * runningShiftDownFactor * 2)
 
@@ -188,8 +183,6 @@ class TileManager extends React.Component {
         runningShiftDownFactor += 1
       }
       else {
-        console.log('Processing an affected tile', i)
-
         const tileStartY = this.getTileY(currentTile.y)
         const tileEndY = tileStartY + (this.tileEdge * runningShiftDownFactor)
 
@@ -206,8 +199,8 @@ class TileManager extends React.Component {
   }
 
   getTileY = (yValue) => {
-    if (yValue._value || yValue._value === 0) {
-      return yValue._value
+    if (yValue._value || yValue._value === 0) { // eslint-disable-line
+      return yValue._value // eslint-disable-line
     }
 
     return yValue
@@ -215,7 +208,7 @@ class TileManager extends React.Component {
 
   getTileKey = (row, column) => parseInt(row.toString() + column.toString(), 10)
 
-  handleTileRespawn = (index) => {
+  handleTileRespawn = () => {
     this.readyTiles += 1
     if (this.readyTiles === this.burstTiles.length) {
       this.respawnAllTiles()
@@ -233,7 +226,13 @@ class TileManager extends React.Component {
       allHitTiles.forEach((tileKey) => {
         const currentTile = tiles[tileKey]
 
-        tempTiles[tileKey] = this.getNewTile(currentTile.index, currentTile.x, this.getTileY(currentTile.y), Tile.states.hit, currentTile.color)
+        tempTiles[tileKey] = this.getNewTile(
+          currentTile.index,
+          currentTile.x,
+          this.getTileY(currentTile.y),
+          Tile.states.hit,
+          currentTile.color,
+        )
       })
 
       this.burstTiles = allHitTiles
@@ -244,7 +243,8 @@ class TileManager extends React.Component {
       })
     }
     else {
-      console.log('Currently respawning tiles, please wait.')
+      // Tiles are respawning.
+      // console.log('Currently respawning tiles, please wait.')
     }
   }
 
@@ -254,14 +254,17 @@ class TileManager extends React.Component {
 
     const adjacentTileKeys = this.getAdjacentTiles(hitTileKey)
 
+    console.info('Adjacent Keys:', adjacentTileKeys)
     adjacentTileKeys.forEach((key) => {
-      if (key && !hitArray.includes(key)) {
+      if ((key || key === 0) && !hitArray.includes(key)) {
         if (currentTile.color === tiles[key].color) {
           hitArray.push(key)
           this.addAdjacentHits(key, hitArray)
         }
       }
     })
+
+    console.info('Hit keys:', hitArray)
 
     return hitArray
   }
@@ -282,7 +285,7 @@ class TileManager extends React.Component {
     const { tileElements } = this.state
     return (
       <View style={{
-        flex: 1, backgroundColor: 'black', justifyContent: 'center',
+        flex: 1, backgroundColor: 'black', justifyContent: 'center', overflow: 'hidden',
       }}
       >
         { tileElements }
