@@ -49,10 +49,6 @@ class App extends React.Component {
     })
   }
 
-  handlePointTouch = (coords) => {
-    console.log('Screen touched at', coords)
-  }
-
   render() {
     const {
       sbHeight, score, points, lastTouch,
@@ -67,7 +63,7 @@ class App extends React.Component {
           borderColor: '#333',
         }}
         />
-        <Grid style={{ paddingVertical: 10 }} handleUpdateScore={this.handleUpdateScore} handlePointTouch={this.handlePointTouch} />
+        <Grid style={{ paddingVertical: 10 }} handleUpdateScore={this.handleUpdateScore} />
         <View style={{
           flex: 1,
           borderTopWidth: 5,

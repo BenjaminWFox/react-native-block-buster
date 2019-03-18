@@ -64,7 +64,6 @@ class Grid extends React.Component {
           gridWidth={gridWidth}
           gridHeight={gridHeight}
           handleUpdateScore={handleUpdateScore}
-          handlePointTouch={handlePointTouch}
         />
         )
         }

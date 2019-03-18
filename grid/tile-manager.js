@@ -224,25 +224,32 @@ class TileManager extends React.Component {
 
       allHitTiles = this.addAdjacentHits(key, allHitTiles)
 
-      allHitTiles.forEach((tileKey) => {
-        const currentTile = tiles[tileKey]
+      if (allHitTiles.length > 2) {
+        allHitTiles.forEach((tileKey) => {
+          const currentTile = tiles[tileKey]
 
-        tempTiles[tileKey] = this.getNewTile(
-          currentTile.index,
-          currentTile.x,
-          this.getTileY(currentTile.y),
-          Tile.states.hit,
-          currentTile.color,
-        )
-      })
+          tempTiles[tileKey] = this.getNewTile(
+            currentTile.index,
+            currentTile.x,
+            this.getTileY(currentTile.y),
+            Tile.states.hit,
+            currentTile.color,
+          )
+        })
 
-      this.sendScoreUpdate(allHitTiles.length, event)
-      this.burstTiles = allHitTiles
-      this.readyTiles = 0
-      this.setState({
-        tiles: tempTiles,
-        tileElements: tiles.map((tile) => tile.element),
-      })
+        console.log('Enough hit', allHitTiles)
+        this.sendScoreUpdate(allHitTiles.length, event)
+        this.burstTiles = allHitTiles
+        this.readyTiles = 0
+        this.setState({
+          tiles: tempTiles,
+          tileElements: tiles.map((tile) => tile.element),
+        })
+      }
+      else {
+        this.burstTiles = []
+        this.readyTiles = 0
+      }
     }
     else {
       // Tiles are respawning.
@@ -274,7 +281,7 @@ class TileManager extends React.Component {
 
     const adjacentTileKeys = this.getAdjacentTiles(hitTileKey)
 
-    console.info('Adjacent Keys:', adjacentTileKeys)
+    // console.info('Adjacent Keys:', adjacentTileKeys)
 
     adjacentTileKeys.forEach((key) => {
       if ((key || key === 0) && !hitArray.includes(key)) {
@@ -285,7 +292,7 @@ class TileManager extends React.Component {
       }
     })
 
-    console.info('Hit keys:', hitArray)
+    // console.info('Hit keys:', hitArray)
 
     return hitArray
   }
