@@ -15,6 +15,11 @@ const setHighScore = async (score) => {
   }
 }
 
+const deleteHighScore = () => {
+  // AsyncStorage.clear()
+  AsyncStorage.removeItem(HighScoreKey)
+}
+
 const getHighScore = async () => {
   try {
     const value = await AsyncStorage.getItem(HighScoreKey)
@@ -24,7 +29,7 @@ const getHighScore = async () => {
 
     setHighScore(0)
 
-    return 0
+    return formatScore(0)
   }
   catch (error) {
     console.log('Error getting high score', error)
@@ -33,5 +38,5 @@ const getHighScore = async () => {
 }
 
 export default {
-  PointPopper, Scoreboard, getHighScore, setHighScore,
+  PointPopper, Scoreboard, getHighScore, setHighScore, deleteHighScore,
 }

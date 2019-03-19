@@ -1,10 +1,12 @@
 import React from 'react'
 import {
-  StatusBar, View, NativeModules, Platform, SafeAreaView,
+  StatusBar, View, NativeModules, Platform, SafeAreaView, Modal, Text, TouchableHighlight,
 } from 'react-native'
+import { Ionicons } from '@expo/vector-icons'
 import Game from './components/game/game'
 import ScoreManager from './components/score-manager/score-manager'
 import InfoTile from './components/bottom-info/info-tile'
+import InfoIcon from './components/bottom-info/info-icon'
 import { formatScore } from './classes/formatting'
 
 class App extends React.Component {
@@ -15,14 +17,17 @@ class App extends React.Component {
     points: 0,
     movesLeft: 0,
     lastTouch: {},
+    gameId: 1,
+    confirmRestart: false,
   }
 
   componentDidMount = () => {
     const { StatusBarManager } = NativeModules
-    // ScoreManager.setHighScore(0)
     const assignHeightAndroid = () => {
       this.setState({ sbHeight: StatusBar.currentHeight })
     }
+
+    // ScoreManager.setHighScore(0)
 
     const assignHeightIOS = () => StatusBarManager.getHeight(({ height }) => {
       this.setState({ sbHeight: height })
@@ -74,9 +79,32 @@ class App extends React.Component {
     })
   }
 
+  handleRestartGame = () => {
+    this.setState({
+      confirmRestart: true,
+    })
+  }
+
+  forRealRestartGame = () => {
+    const { gameId } = this.state
+
+    this.setState({
+      score: 0,
+      points: 0,
+      movesLeft: 0,
+      lastTouch: {},
+      gameId: gameId + 1,
+      confirmRestart: false,
+    })
+  }
+
+  handleOpenMenu = () => {
+    console.log('Open menu!')
+  }
+
   render() {
     const {
-      sbHeight, score, points, lastTouch, movesLeft, highScore,
+      sbHeight, score, points, lastTouch, movesLeft, highScore, gameId, confirmRestart,
     } = this.state
 
     console.log('App rendering...')
@@ -90,7 +118,7 @@ class App extends React.Component {
           borderColor: '#333',
         }}
         />
-        <Game style={{ paddingVertical: 10 }} handleUpdateScore={this.handleUpdateScore} handleUpdateMoves={this.handleUpdateMoves} />
+        <Game style={{ paddingVertical: 10 }} key={gameId} handleUpdateScore={this.handleUpdateScore} handleUpdateMoves={this.handleUpdateMoves} />
         <View style={{
           flex: 1,
           borderTopWidth: 2,
@@ -106,13 +134,37 @@ class App extends React.Component {
               justifyContent: 'center',
             }}
             >
-              <InfoTile title="Potential Moves" displayData={movesLeft} />
+              <InfoTile title="Possible Moves" displayData={movesLeft} />
               <InfoTile title="High Score" displayData={highScore} />
-              <InfoTile title="Restart" displayData="[O]" />
+              <InfoIcon title={<Ionicons name="md-refresh" size={40} />} onPress={this.handleRestartGame} />
+              <InfoIcon title={<Ionicons name="md-menu" size={40} />} onPress={this.handleOpenMenu} />
             </View>
           </SafeAreaView>
         </View>
         <ScoreManager.PointPopper coords={lastTouch} points={points} />
+        { confirmRestart && (
+        <Modal onRequestClose={() => {}} animationType="slide" transparent visible={confirmRestart} style={{ }}>
+          <View style={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <View style={{
+              width: '50%',
+              backgroundColor: '#fff',
+            }}
+            >
+              <Text>Are you really sure??</Text>
+              <TouchableHighlight style={{ height: 50, justifyContent: 'center', alignItems: 'center' }} onPress={this.forRealRestartGame}><Text>Yes</Text></TouchableHighlight>
+              <TouchableHighlight
+                style={{ height: 50, justifyContent: 'center', alignItems: 'center' }}
+                onPress={() => {
+                  this.setState({ confirmRestart: false })
+                }}
+              >
+                <Text>No</Text>
+
+              </TouchableHighlight>
+            </View>
+          </View>
+        </Modal>
+        )}
       </View>
     )
   }

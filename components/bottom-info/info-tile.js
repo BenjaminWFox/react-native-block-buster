@@ -10,7 +10,7 @@ const InfoTile = function InfoTile({ title, displayData }) {
       justifyContent: 'flex-end',
     }}
     >
-      <Theme.Text>{title}</Theme.Text>
+      {title.split(' ').map((word, idx) => <Theme.Text key={idx} style={{ paddingVertical: 0, marginVertical: 0 }}>{word}</Theme.Text>)}
       <Theme.Text>{displayData}</Theme.Text>
     </View>
   )
