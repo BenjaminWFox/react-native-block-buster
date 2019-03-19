@@ -3,6 +3,7 @@ import { View } from 'react-native'
 import PropTypes from 'prop-types'
 import Tile from './tile'
 import { slideDownAnimation } from '../../animation/animations'
+// import moveAnalyzer from '../../classes/move-analyzer'
 
 const COLORS = [
   /* Flat, brights: */
@@ -109,10 +110,44 @@ class TileManager extends React.Component {
   }
 
   updateTiles = (tilesArray) => {
+    this.updateMoves(tilesArray)
+
     this.setState({
       tiles: tilesArray,
       tileElements: tilesArray.map((tile) => tile.element),
     })
+  }
+
+  updateMoves = async (tilesArray) => {
+    const { handleUpdateMoves } = this.props
+    const moves = await this.moveAnalyzer(tilesArray)
+    handleUpdateMoves(moves)
+  }
+
+  moveAnalyzer = async (tileset) => {
+    // const visitedUnburstable = {}
+    // const visitedBurstable = {}
+    const tilesFullyChecked = {}
+    const burstableGroups = []
+
+    for (let i = 0; i < tileset.length; i += 1) {
+      const currentKey = i
+      let burstableGroup = [currentKey]
+
+      if (!tilesFullyChecked[currentKey]) {
+        burstableGroup = this.addAdjacentHits(currentKey, burstableGroup, tileset)
+
+        burstableGroup.forEach((tileKey) => {
+          tilesFullyChecked[tileKey] = true
+        })
+
+        if (burstableGroup.length >= 3) {
+          burstableGroups.push(burstableGroup)
+        }
+      }
+    }
+
+    return burstableGroups.length
   }
 
   respawnAllTiles = () => {
@@ -250,10 +285,6 @@ class TileManager extends React.Component {
         this.readyTiles = 0
       }
     }
-    else {
-      // Tiles are respawning.
-      // console.log('Currently respawning tiles, please wait.')
-    }
   }
 
   sendScoreUpdate = (totalHitTiles, event) => {
@@ -279,8 +310,6 @@ class TileManager extends React.Component {
 
     const adjacentTileKeys = this.getAdjacentTiles(hitTileKey)
 
-    // console.info('Adjacent Keys:', adjacentTileKeys)
-
     adjacentTileKeys.forEach((key) => {
       if ((key || key === 0) && !hitArray.includes(key)) {
         if (currentTile.color === tiles[key].color) {
@@ -289,8 +318,6 @@ class TileManager extends React.Component {
         }
       }
     })
-
-    // console.info('Hit keys:', hitArray)
 
     return hitArray
   }

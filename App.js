@@ -2,17 +2,17 @@ import React from 'react'
 import {
   StatusBar, View, NativeModules, Platform, SafeAreaView,
 } from 'react-native'
-import Grid from './components/grid/grid'
-// import ScoreBoard from './components/score-manager/scoreboard'
-// import PointPopper from './components/score-manager/point-popper'
+import Game from './components/game/game'
 import ScoreManager from './components/score-manager/score-manager'
-import Theme from './theme'
+import InfoTile from './components/bottom-info/info-tile'
 
 class App extends React.Component {
   state = {
     sbHeight: 0,
     score: 0,
+    highScore: null,
     points: 0,
+    movesLeft: 0,
     lastTouch: {},
   }
 
@@ -32,10 +32,24 @@ class App extends React.Component {
     else {
       assignHeightIOS()
     }
+
+    this.handleUpdateHighScore()
   }
 
   componentDidUpdate = () => {
 
+  }
+
+  handleUpdateHighScore = async () => {
+    const { score, highScore } = this.state
+    if (!highScore) {
+      const storedHighScore = await ScoreManager.getHighScore()
+      this.setState({ highScore: storedHighScore })
+    }
+    else if (score > highScore) {
+      ScoreManager.setHighScore(score)
+      this.setState({ highScore: score })
+    }
   }
 
   handleUpdateScore = (scoreIncrease, event) => {
@@ -47,13 +61,23 @@ class App extends React.Component {
         x: event.pageX,
         y: event.pageY,
       },
+    }, () => {
+      this.handleUpdateHighScore()
+    })
+  }
+
+  handleUpdateMoves = (moves) => {
+    this.setState({
+      movesLeft: moves,
     })
   }
 
   render() {
     const {
-      sbHeight, score, points, lastTouch,
+      sbHeight, score, points, lastTouch, movesLeft, highScore,
     } = this.state
+
+    console.log('App rendering...')
 
     return (
       <View style={{ flex: 1, backgroundColor: '#000' }}>
@@ -64,7 +88,7 @@ class App extends React.Component {
           borderColor: '#333',
         }}
         />
-        <Grid style={{ paddingVertical: 10 }} handleUpdateScore={this.handleUpdateScore} />
+        <Game style={{ paddingVertical: 10 }} handleUpdateScore={this.handleUpdateScore} handleUpdateMoves={this.handleUpdateMoves} />
         <View style={{
           flex: 1,
           borderTopWidth: 2,
@@ -80,33 +104,9 @@ class App extends React.Component {
               justifyContent: 'center',
             }}
             >
-              <View style={{
-                flexGrow: 1,
-                flexDirection: 'column',
-                justifyContent: 'flex-end',
-              }}
-              >
-                <Theme.Text>Moves Left</Theme.Text>
-                <Theme.Text>10</Theme.Text>
-              </View>
-              <View style={{
-                flexGrow: 1,
-                flexDirection: 'column',
-                justifyContent: 'flex-end',
-              }}
-              >
-                <Theme.Text>High Score</Theme.Text>
-                <Theme.Text>10,000</Theme.Text>
-              </View>
-              <View style={{
-                flexGrow: 1,
-                flexDirection: 'column',
-                justifyContent: 'flex-end',
-              }}
-              >
-                <Theme.Text>Restart</Theme.Text>
-                <Theme.Text>[O]</Theme.Text>
-              </View>
+              <InfoTile title="Potential Moves" displayData={movesLeft} />
+              <InfoTile title="High Score" displayData={highScore} />
+              <InfoTile title="Restart" displayData="[O]" />
             </View>
           </SafeAreaView>
         </View>

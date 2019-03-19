@@ -3,7 +3,7 @@ import { View } from 'react-native'
 import PropTypes from 'prop-types'
 import TileManager from './tile-manager'
 
-class Grid extends React.Component {
+class Game extends React.Component {
   constructor() {
     super()
 
@@ -39,7 +39,7 @@ class Grid extends React.Component {
 
   render() {
     const { tileEdge, gridWidth, gridHeight } = this.state
-    const { handleUpdateScore } = this.props
+    const { handleUpdateScore, handleUpdateMoves } = this.props
 
     return (
       <View
@@ -63,6 +63,7 @@ class Grid extends React.Component {
           gridWidth={gridWidth}
           gridHeight={gridHeight}
           handleUpdateScore={handleUpdateScore}
+          handleUpdateMoves={handleUpdateMoves}
         />
         )
         }
@@ -71,8 +72,8 @@ class Grid extends React.Component {
   }
 }
 
-Grid.propTypes = {
+Game.propTypes = {
   handleUpdateScore: PropTypes.func.isRequired,
 }
 
-export default Grid
+export default Game

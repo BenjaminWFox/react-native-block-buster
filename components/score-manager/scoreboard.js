@@ -1,10 +1,9 @@
 import React from 'react'
 import { View, Text } from 'react-native'
 import PropTypes from 'prop-types'
+import { formatScore } from '../../classes/formatting'
 
 const Scoreboard = function Scoreboard({ score }) {
-  const formatScore = (number) => number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-
   return (
     <View style={{
       alignItems: 'center',
