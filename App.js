@@ -5,6 +5,7 @@ import {
 import Game from './components/game/game'
 import ScoreManager from './components/score-manager/score-manager'
 import InfoTile from './components/bottom-info/info-tile'
+import { formatScore } from './classes/formatting'
 
 class App extends React.Component {
   state = {
@@ -18,7 +19,7 @@ class App extends React.Component {
 
   componentDidMount = () => {
     const { StatusBarManager } = NativeModules
-
+    // ScoreManager.setHighScore(0)
     const assignHeightAndroid = () => {
       this.setState({ sbHeight: StatusBar.currentHeight })
     }
@@ -42,13 +43,14 @@ class App extends React.Component {
 
   handleUpdateHighScore = async () => {
     const { score, highScore } = this.state
+    console.log('Score', score, highScore)
     if (!highScore) {
       const storedHighScore = await ScoreManager.getHighScore()
       this.setState({ highScore: storedHighScore })
     }
-    else if (score > highScore) {
+    else if (score > highScore.replace(/,/g, '')) {
       ScoreManager.setHighScore(score)
-      this.setState({ highScore: score })
+      this.setState({ highScore: formatScore(score) })
     }
   }
 
