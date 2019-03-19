@@ -1,79 +1,96 @@
 import React from 'react'
-import { View } from 'react-native'
 import PropTypes from 'prop-types'
-import TileManager from './tile-manager'
+import {
+  View, SafeAreaView,
+} from 'react-native'
+import { Ionicons } from '@expo/vector-icons'
+import TileGrid from './tile-grid'
+import ScoreManager from '../score-manager/score-manager'
+import InfoTile from '../bottom-info/info-tile'
+import InfoIcon from '../bottom-info/info-icon'
+import { formatScore } from '../../classes/formatting'
 
 class Game extends React.Component {
-  constructor() {
-    super()
-
-    this.ROWS = 12
-    this.TILES_PER_ROW = 10
-    this.TILE_PADDING = 2
-  }
-
   state = {
-    tileEdge: undefined,
-    gridWidth: undefined,
-    gridHeight: undefined,
+    score: 0,
+    highScore: null,
+    points: 0,
+    movesLeft: 0,
+    lastTouch: {},
+    confirmRestart: false,
   }
 
-  shouldComponentUpdate = (nextProps, nextState) => {
-    const { tileEdge } = this.state
+  componentDidMount = () => {
+    this.handleUpdateHighScore()
+  }
 
-    if (tileEdge !== nextState.tileEdge) {
-      return true
+  handleUpdateHighScore = async () => {
+    const { score, highScore } = this.state
+    console.log('Score', score, highScore)
+    if (!highScore) {
+      const storedHighScore = await ScoreManager.getHighScore()
+      this.setState({ highScore: storedHighScore })
     }
-
-    return false
+    else if (score > highScore.replace(/,/g, '')) {
+      ScoreManager.setHighScore(score)
+      this.setState({ highScore: formatScore(score) })
+    }
   }
 
-  handleLayout = (width) => {
-    const tileEdge = Math.floor(width / this.TILES_PER_ROW)
-    const gridHeight = tileEdge * this.ROWS
-    this.setState({ gridWidth: width, gridHeight, tileEdge })
+  handleUpdateScore = (scoreIncrease, event) => {
+    const { score } = this.state
+    this.setState({
+      score: Math.ceil(score + scoreIncrease),
+      points: scoreIncrease,
+      lastTouch: {
+        x: event.pageX,
+        y: event.pageY,
+      },
+    }, () => {
+      this.handleUpdateHighScore()
+    })
   }
 
-  // handleHeightAssignment = (height) => {
-  // }
+  handleUpdateMoves = (moves) => {
+    this.setState({
+      movesLeft: moves,
+    })
+  }
 
   render() {
-    const { tileEdge, gridWidth, gridHeight } = this.state
-    const { handleUpdateScore, handleUpdateMoves } = this.props
+    const {
+      score, points, lastTouch, movesLeft, highScore, confirmRestart,
+    } = this.state
+    const { launchRestartModal } = this.props
 
     return (
-      <View
-        style={{
-          height: gridHeight,
-          width: '100%',
+      <>
+        <TileGrid handleUpdateScore={this.handleUpdateScore} handleUpdateMoves={this.handleUpdateMoves} />
+        <View style={{
+          flex: 1,
+          borderTopWidth: 2,
+          borderColor: '#333',
+          flexDirection: 'column',
         }}
-        onLayout={(event) => {
-          const {
-            width,
-          } = event.nativeEvent.layout
-          this.handleLayout(width)
-        }}
-      >
-        { tileEdge && tileEdge > 0 && (
-        <TileManager
-          tileEdge={tileEdge}
-          tileRows={this.ROWS}
-          tilesPerRow={this.TILES_PER_ROW}
-          tilePadding={this.TILE_PADDING}
-          gridWidth={gridWidth}
-          gridHeight={gridHeight}
-          handleUpdateScore={handleUpdateScore}
-          handleUpdateMoves={handleUpdateMoves}
-        />
-        )
-        }
-      </View>
+        >
+          <SafeAreaView style={{ flex: 1 }}>
+            <ScoreManager.Scoreboard score={score} points={points} />
+            <View style={{
+              flexDirection: 'row',
+              justifyContent: 'center',
+            }}
+            >
+              <InfoTile title="Possible Moves" displayData={movesLeft} />
+              <InfoTile title="High Score" displayData={highScore} />
+              <InfoIcon title={<Ionicons name="md-refresh" size={40} />} onPress={launchRestartModal} />
+              <InfoIcon title={<Ionicons name="md-menu" size={40} />} onPress={this.handleOpenMenu} />
+            </View>
+          </SafeAreaView>
+        </View>
+        <ScoreManager.PointPopper coords={lastTouch} points={points} />
+      </>
     )
   }
-}
-
-Game.propTypes = {
-  handleUpdateScore: PropTypes.func.isRequired,
 }
 
 export default Game

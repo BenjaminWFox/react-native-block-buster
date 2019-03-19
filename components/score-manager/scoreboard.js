@@ -6,10 +6,12 @@ import { formatScore } from '../../classes/formatting'
 const Scoreboard = function Scoreboard({ score }) {
   return (
     <View style={{
+      flex: 1,
       alignItems: 'center',
+      justifyContent: 'center',
       paddingVertical: 10,
-      borderBottomWidth: 2,
-      borderColor: '#333',
+      // borderBottomWidth: 2,
+      // borderColor: '#333',
     }}
     >
       <Text style={{
