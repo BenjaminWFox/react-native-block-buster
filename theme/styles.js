@@ -21,6 +21,7 @@ const colors = {
     green: '#009975', // green
     yellow: '#fabb13', // yellow
   },
+  white: '#ffffff',
 }
 
 const unit = 8

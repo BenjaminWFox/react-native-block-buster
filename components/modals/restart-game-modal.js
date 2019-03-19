@@ -2,6 +2,7 @@ import React from 'react'
 import {
   Modal, View, TouchableHighlight, Text,
 } from 'react-native'
+import Theme from '../../theme'
 
 const RestartGameModal = function RestartGameModal({ isVisible, willRestartGame }) {
   return (
@@ -9,26 +10,40 @@ const RestartGameModal = function RestartGameModal({ isVisible, willRestartGame 
       <View style={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center' }}>
         <View style={{
           width: '50%',
-          backgroundColor: '#fff',
+          backgroundColor: '#000000',
+          borderWidth: 2,
+          borderColor: '#333333',
+          paddingHorizontal: 15,
+          paddingVertical: 10,
         }}
         >
-          <Text>Are you really sure??</Text>
-          <TouchableHighlight
-            style={{ height: 50, justifyContent: 'center', alignItems: 'center' }}
-            onPress={() => {
+          <Theme.Text
+            variant="large"
+            style={{
+              color: Theme.colors.white, fontSize: 30, fontWeight: 'bold', marginBottom: 0,
+            }}
+          >
+            Restart...
+          </Theme.Text>
+          <Theme.Text variant="large" style={{ color: Theme.colors.white, fontSize: 30, fontWeight: 'bold' }}>Are you sure?</Theme.Text>
+          <Theme.Button
+            backgroundColor={Theme.colors.jewel.orange}
+            textColor="#ffffff"
+            title="Yes"
+            onPressFunc={() => {
               willRestartGame(true)
             }}
           >
-            <Text>Yes</Text>
-          </TouchableHighlight>
-          <TouchableHighlight
-            style={{ height: 50, justifyContent: 'center', alignItems: 'center' }}
-            onPress={() => {
+          </Theme.Button>
+          <Theme.Button
+            backgroundColor={Theme.colors.jewel.green}
+            textColor="#ffffff"
+            title="No"
+            onPressFunc={() => {
               willRestartGame(false)
             }}
           >
-            <Text>No</Text>
-          </TouchableHighlight>
+          </Theme.Button>
         </View>
       </View>
     </Modal>
