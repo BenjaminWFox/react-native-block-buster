@@ -1,7 +1,7 @@
 import React from 'react'
 import { Animated, Text, Dimensions } from 'react-native'
 import PropTypes from 'prop-types'
-import { flashLastPointsAnimation, interpolatePointsAnimForPosition } from '../animation/animations'
+import { flashLastPointsAnimation, interpolatePointsAnimForPosition } from '../../animation/animations'
 
 const PointPopper = function PointPopper({ points, coords }) {
   const formatScore = (score) => score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')

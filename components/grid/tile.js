@@ -2,7 +2,7 @@ import React from 'react'
 import uuid from 'uuid'
 import PropTypes from 'prop-types'
 import TileElement from './tile-element'
-import { positionFadeOutInterpolation, dimensionFadeOutInterpolation } from '../animation/animations'
+import { positionFadeOutInterpolation, dimensionFadeOutInterpolation } from '../../animation/animations'
 
 class Tile {
   constructor(index, x, y, tileState, color) {

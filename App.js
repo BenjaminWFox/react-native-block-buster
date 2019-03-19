@@ -2,9 +2,10 @@ import React from 'react'
 import {
   StatusBar, View, NativeModules, Platform, SafeAreaView,
 } from 'react-native'
-import Grid from './grid/grid'
-import ScoreBoard from './scoreboard/scoreboard'
-import PointPopper from './point-popper/point-popper'
+import Grid from './components/grid/grid'
+// import ScoreBoard from './components/score-manager/scoreboard'
+// import PointPopper from './components/score-manager/point-popper'
+import ScoreManager from './components/score-manager/score-manager'
 import Theme from './theme'
 
 class App extends React.Component {
@@ -38,7 +39,6 @@ class App extends React.Component {
   }
 
   handleUpdateScore = (scoreIncrease, event) => {
-    console.log('Score updating', event)
     const { score } = this.state
     this.setState({
       score: Math.ceil(score + scoreIncrease),
@@ -72,7 +72,7 @@ class App extends React.Component {
           flexDirection: 'column',
         }}
         >
-          <ScoreBoard score={score} points={points} />
+          <ScoreManager.Scoreboard score={score} points={points} />
           <SafeAreaView style={{ flex: 1 }}>
             <View style={{
               flex: 1,
@@ -110,7 +110,7 @@ class App extends React.Component {
             </View>
           </SafeAreaView>
         </View>
-        <PointPopper coords={lastTouch} points={points} />
+        <ScoreManager.PointPopper coords={lastTouch} points={points} />
       </View>
     )
   }

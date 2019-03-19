@@ -6,7 +6,6 @@ const TileElement = function TileElement({
   edge, padding, color, x, y, onClick,
   index, innerDimension, innerPosition,
 }) {
-  console.log('Tile respawning', index)
   return (
     <Animated.View style={{
       width: edge,

@@ -1,5 +1,6 @@
 import React from 'react'
 import { View } from 'react-native'
+import PropTypes from 'prop-types'
 import TileManager from './tile-manager'
 
 class Grid extends React.Component {
@@ -38,9 +39,7 @@ class Grid extends React.Component {
 
   render() {
     const { tileEdge, gridWidth, gridHeight } = this.state
-    const { handleUpdateScore, handlePointTouch } = this.props
-
-    console.log('GRID RENDER')
+    const { handleUpdateScore } = this.props
 
     return (
       <View
@@ -70,6 +69,10 @@ class Grid extends React.Component {
       </View>
     )
   }
+}
+
+Grid.propTypes = {
+  handleUpdateScore: PropTypes.func.isRequired,
 }
 
 export default Grid

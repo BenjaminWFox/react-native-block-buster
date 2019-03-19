@@ -2,7 +2,7 @@ import React from 'react'
 import { View } from 'react-native'
 import PropTypes from 'prop-types'
 import Tile from './tile'
-import { slideDownAnimation } from '../animation/animations'
+import { slideDownAnimation } from '../../animation/animations'
 
 const COLORS = [
   /* Flat, brights: */
@@ -237,7 +237,6 @@ class TileManager extends React.Component {
           )
         })
 
-        console.log('Enough hit', allHitTiles)
         this.sendScoreUpdate(allHitTiles.length, event)
         this.burstTiles = allHitTiles
         this.readyTiles = 0
@@ -268,7 +267,6 @@ class TileManager extends React.Component {
     }
     else {
       const multiplyer = 1 + ((totalHitTiles - 3) * OVERRUN_MULTIPLYER_PER_TILE)
-      console.log('multiplyer', multiplyer)
       points = POINTS_PER_TILE * totalHitTiles * multiplyer
     }
 
@@ -331,6 +329,7 @@ TileManager.propTypes = {
   tilePadding: PropTypes.number.isRequired,
   gridWidth: PropTypes.number.isRequired,
   gridHeight: PropTypes.number.isRequired,
+  handleUpdateScore: PropTypes.func.isRequired,
 }
 
 export default TileManager

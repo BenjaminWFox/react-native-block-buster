@@ -1,8 +1,9 @@
 import React from 'react'
 import { View, Text } from 'react-native'
+import PropTypes from 'prop-types'
 
-const ScoreBoard = function ScoreBoard({ score }) {
-  const formatScore = (score) => score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+const Scoreboard = function Scoreboard({ score }) {
+  const formatScore = (number) => number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 
   return (
     <View style={{
@@ -24,4 +25,8 @@ const ScoreBoard = function ScoreBoard({ score }) {
   )
 }
 
-export default ScoreBoard
+Scoreboard.propTypes = {
+  score: PropTypes.number.isRequired,
+}
+
+export default Scoreboard
