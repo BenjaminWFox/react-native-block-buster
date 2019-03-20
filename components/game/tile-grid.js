@@ -40,7 +40,7 @@ class TileGrid extends React.Component {
   render() {
     const { tileEdge, gridWidth, gridHeight } = this.state
     const {
-      handleUpdateScore, handleUpdateGameMeta, isNewGame, tileData, options,
+      handleUpdateScore, handleUpdateGameMeta, isNewGame, tileData, difficulty,
     } = this.props
 
     return (
@@ -59,7 +59,7 @@ class TileGrid extends React.Component {
         { tileEdge && tileEdge > 0 && (
         <TileManager
           isNewGame={isNewGame}
-          difficulty={options.difficulty}
+          difficulty={difficulty}
           tileData={tileData}
           tileEdge={tileEdge}
           tileRows={this.ROWS}

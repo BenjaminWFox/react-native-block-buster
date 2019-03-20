@@ -71,6 +71,7 @@ class GameScreen extends React.Component {
     const existingGameData = navigation.getParam('existingGameData', undefined)
     const gameOptions = navigation.getParam('gameOptions', { difficulty: 'normal' })
 
+
     console.log('Game screen rendering...', existingGameData)
 
     return (

@@ -43,7 +43,7 @@ const getColumnsArray = function getColumnsArray(numColumns) {
 
 class TileManager extends React.Component {
   constructor({
-    tileEdge, tileRows, tilesPerRow, tilePadding, gridWidth, difficulty,
+    tileEdge, tileRows, tilesPerRow, tilePadding, gridWidth,
   }) {
     super()
 
@@ -122,10 +122,10 @@ class TileManager extends React.Component {
   }
 
   updateGameMeta = async (tilesArray) => {
-    const { handleUpdateGameMeta } = this.props
+    const { handleUpdateGameMeta, difficulty } = this.props
     const moves = await this.moveAnalyzer(tilesArray)
-
-    handleUpdateGameMeta(moves, tilesArray)
+    console.log('UGM', difficulty)
+    handleUpdateGameMeta(difficulty, moves, tilesArray)
   }
 
   moveAnalyzer = async (tileset) => {
@@ -292,7 +292,7 @@ class TileManager extends React.Component {
   }
 
   sendScoreUpdate = (totalHitTiles, event) => {
-    const { handleUpdateScore } = this.props
+    const { handleUpdateScore, difficulty } = this.props
     const POINTS_PER_TILE = 10
     const OVERRUN_MULTIPLYER_PER_TILE = 0.5
     let points = 0
@@ -305,7 +305,7 @@ class TileManager extends React.Component {
       points = POINTS_PER_TILE * totalHitTiles * multiplyer
     }
 
-    handleUpdateScore(points, event)
+    handleUpdateScore(points, event, difficulty)
   }
 
   addAdjacentHits = (hitTileKey, hitArray) => {

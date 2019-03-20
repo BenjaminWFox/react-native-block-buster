@@ -46,7 +46,7 @@ class Game extends React.Component {
     }
   }
 
-  handleUpdateScore = (scoreIncrease, event) => {
+  handleUpdateScore = (scoreIncrease, event, currentDifficulty) => {
     const { score } = this.state
     this.setState({
       score: Math.ceil(score + scoreIncrease),
@@ -60,9 +60,9 @@ class Game extends React.Component {
     })
   }
 
-  handleUpdateGameMeta = (moves, tiles) => {
+  handleUpdateGameMeta = (currentDifficulty, moves, tiles) => {
     const { score } = this.state
-    setGameData(score, tiles)
+    setGameData(currentDifficulty, score, tiles)
     this.setState({
       movesLeft: moves,
     })
@@ -77,13 +77,15 @@ class Game extends React.Component {
     } = this.props
 
     let tileData
+    let { difficulty } = options
     if (existingGameData) {
       tileData = existingGameData.tileData
+      difficulty = existingGameData.difficulty
     }
 
     return (
       <>
-        <TileGrid isNewGame={isNewGame} options={options} tileData={tileData} handleUpdateScore={this.handleUpdateScore} handleUpdateGameMeta={this.handleUpdateGameMeta} />
+        <TileGrid isNewGame={isNewGame} difficulty={difficulty} tileData={tileData} handleUpdateScore={this.handleUpdateScore} handleUpdateGameMeta={this.handleUpdateGameMeta} />
         <View style={{
           flex: 1,
           borderTopWidth: 2,
