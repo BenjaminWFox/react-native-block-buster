@@ -2,6 +2,7 @@ import React from 'react'
 import { View, Text } from 'react-native'
 import Theme from '../theme'
 import { getGameData } from '../components/game/game-saver'
+import { getOptions } from '../classes/options-manager'
 
 class HomeScreen extends React.Component {
   constructor({ navigation }) {
@@ -11,6 +12,7 @@ class HomeScreen extends React.Component {
       'willFocus',
       async () => {
         await this.updateGameData()
+        await this.getGameOptions()
       },
     )
 
@@ -28,6 +30,7 @@ class HomeScreen extends React.Component {
   state = {
     canResumeGame: false,
     existingGameData: null,
+    gameOptions: null,
   }
 
   componentWillUnmount = () => {
@@ -46,8 +49,19 @@ class HomeScreen extends React.Component {
     }
   }
 
+  getGameOptions = async () => {
+    const gameOptions = await getOptions()
+
+    console.log('Have options', gameOptions)
+    if (gameOptions) {
+      this.setState({
+        gameOptions,
+      })
+    }
+  }
+
   render() {
-    const { canResumeGame, existingGameData } = this.state
+    const { canResumeGame, existingGameData, gameOptions } = this.state
     const { navigation } = this.props
 
     return (
@@ -58,7 +72,7 @@ class HomeScreen extends React.Component {
           textColor="#ffffff"
           title="Resume Game"
           onPressFunc={() => {
-            navigation.navigate('Game', { isNewGame: false, existingGameData })
+            navigation.navigate('Game', { isNewGame: false, existingGameData, gameOptions })
           }}
         />
         <Theme.Button
@@ -66,7 +80,7 @@ class HomeScreen extends React.Component {
           textColor="#ffffff"
           title="New Game"
           onPressFunc={() => {
-            navigation.navigate('Game', { isNewGame: true })
+            navigation.navigate('Game', { isNewGame: true, gameOptions })
           }}
         />
         <Theme.Button
@@ -74,6 +88,7 @@ class HomeScreen extends React.Component {
           textColor="#ffffff"
           title="Options"
           onPressFunc={() => {
+            navigation.navigate('Options', { gameOptions })
           }}
         />
         <Theme.Button

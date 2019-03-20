@@ -9,10 +9,10 @@ const COLORS = [
   '#bb0043', // red
   '#342f9c', // blue
   '#fabb13', // yellow
-  '#009975', // green // easy
-  '#e15500', // orange // normal
-  '#3499ac', // teal // hard
-  '#70336e', // purple // crazy
+  '#009975', // green // easy - 3
+  '#e15500', // orange // normal - 4
+  '#3499ac', // teal // hard - 5
+  '#70336e', // purple // crazy - 6
 ]
 
 const getRandomInt = function getRandomInt(pMin, pMax) {
@@ -21,11 +21,11 @@ const getRandomInt = function getRandomInt(pMin, pMax) {
   return Math.floor(Math.random() * (max - min + 1)) + min
 }
 
-const getColorsForIndexes = function getColorsForIndexes(numColors) {
+const getColorsForIndexes = function getColorsForIndexes(difficulty, numColors) {
   const colorArray = []
 
   for (let i = 0; i < numColors; i += 1) {
-    colorArray.push(COLORS[getRandomInt(0, COLORS.length - 1)])
+    colorArray.push(COLORS[getRandomInt(0, difficulty - 1)])
   }
 
   return colorArray
@@ -43,7 +43,7 @@ const getColumnsArray = function getColumnsArray(numColumns) {
 
 class TileManager extends React.Component {
   constructor({
-    tileEdge, tileRows, tilesPerRow, tilePadding, gridWidth,
+    tileEdge, tileRows, tilesPerRow, tilePadding, gridWidth, difficulty,
   }) {
     super()
 
@@ -55,7 +55,7 @@ class TileManager extends React.Component {
     this.gridWidth = gridWidth
     this.burstTiles = []
     this.readyTiles = 0
-    this.colors = getColorsForIndexes(tileRows * tilesPerRow)
+    // this.colors = getColorsForIndexes(difficulty, tileRows * tilesPerRow)
     this.state = {
       tiles: [],
       tileElements: [],
@@ -68,8 +68,12 @@ class TileManager extends React.Component {
   }
 
   componentDidMount = async () => {
-    const { isNewGame, tileData } = this.props
+    const {
+      isNewGame, tileData, tileRows, tilesPerRow, difficulty,
+    } = this.props
 
+    this.colors = getColorsForIndexes(difficulty, tileRows * tilesPerRow)
+    console.log('COLORS:', difficulty, this.colors)
     console.log('Tile Manager. New game?', isNewGame)
 
     this.setupAllTiles(tileData)

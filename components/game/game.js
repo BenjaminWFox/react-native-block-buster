@@ -73,7 +73,7 @@ class Game extends React.Component {
       score, points, lastTouch, movesLeft, highScore, confirmRestart,
     } = this.state
     const {
-      launchRestartModal, launchMenuScreen, isNewGame, existingGameData,
+      launchRestartModal, launchMenuScreen, options, isNewGame, existingGameData,
     } = this.props
 
     let tileData
@@ -83,7 +83,7 @@ class Game extends React.Component {
 
     return (
       <>
-        <TileGrid isNewGame={isNewGame} tileData={tileData} handleUpdateScore={this.handleUpdateScore} handleUpdateGameMeta={this.handleUpdateGameMeta} />
+        <TileGrid isNewGame={isNewGame} options={options} tileData={tileData} handleUpdateScore={this.handleUpdateScore} handleUpdateGameMeta={this.handleUpdateGameMeta} />
         <View style={{
           flex: 1,
           borderTopWidth: 2,

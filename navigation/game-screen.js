@@ -69,6 +69,7 @@ class GameScreen extends React.Component {
     const { navigation } = this.props
     const isNewGame = navigation.getParam('isNewGame', true)
     const existingGameData = navigation.getParam('existingGameData', undefined)
+    const gameOptions = navigation.getParam('gameOptions', { difficulty: 'normal' })
 
     console.log('Game screen rendering...', existingGameData)
 
@@ -84,6 +85,7 @@ class GameScreen extends React.Component {
         <Game
           style={{ paddingVertical: 10 }}
           key={gameId}
+          options={gameOptions}
           isNewGame={isNewGame}
           existingGameData={existingGameData}
           launchRestartModal={this.handleRestartModal}
