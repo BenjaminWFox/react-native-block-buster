@@ -96,6 +96,7 @@ class HomeScreen extends React.Component {
           textColor="#ffffff"
           title="Tutorial"
           onPressFunc={() => {
+            navigation.navigate('Tutorial', { cameFromHome: true })
           }}
         />
       </View>
