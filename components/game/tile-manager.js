@@ -43,7 +43,7 @@ const getColumnsArray = function getColumnsArray(numColumns) {
 
 class TileManager extends React.Component {
   constructor({
-    tileEdge, tileRows, tilesPerRow, tilePadding, gridWidth,
+    tileEdge, tileRows, tilesPerRow, tilePadding, gridWidth, difficulty,
   }) {
     super()
 
@@ -61,7 +61,7 @@ class TileManager extends React.Component {
       tileElements: [],
       tilesCreated: false,
     }
-    this.getRandomColor = () => COLORS[getRandomInt(0, COLORS.length - 1)]
+    this.getRandomColor = () => COLORS[getRandomInt(0, difficulty - 1)]
     this.updateQueue = []
 
     Tile.init(this.tileEdge, this.tilePadding, this.handleTileClick, this.handleTileRespawn)
