@@ -3,6 +3,7 @@ import { View } from 'react-native'
 import PropTypes from 'prop-types'
 import Tile from './tile'
 import { slideDownAnimation } from '../../animation/animations'
+import { getTileData, setTileData } from './game-saver'
 // import moveAnalyzer from '../../classes/move-analyzer'
 
 const COLORS = [
@@ -73,11 +74,15 @@ class TileManager extends React.Component {
     Tile.init(this.tileEdge, this.tilePadding, this.handleTileClick, this.handleTileRespawn)
   }
 
-  componentDidMount = () => {
-    this.setupAllTiles()
+  componentDidMount = async () => {
+    const { isNewGame, tileData } = this.props
+
+    console.log('Tile Manager. New game?', isNewGame)
+
+    this.setupAllTiles(tileData)
   }
 
-  setupAllTiles = () => {
+  setupAllTiles = (existingTileData = undefined) => {
     const { tiles, tilesCreated } = this.state
     const centeringOffset = (this.gridWidth - (this.tileEdge * this.tilesPerRow)) / 2
     const tempTiles = tiles
@@ -89,10 +94,11 @@ class TileManager extends React.Component {
         column = 0 + (i % this.tilesPerRow)
         row = (i % this.tilesPerRow) === 0 ? row + 1 : row
 
+        const color = existingTileData ? existingTileData[i].color : this.colors[i]
         const x = (this.tileEdge * column) + centeringOffset
         const y = (this.tileEdge * row)
 
-        const tile = this.getNewTile(i, x, y, Tile.states.stationary, this.colors[i])
+        const tile = this.getNewTile(i, x, y, Tile.states.stationary, color)
 
         this.columns[column].push(tile)
 
@@ -110,7 +116,7 @@ class TileManager extends React.Component {
   }
 
   updateTiles = (tilesArray) => {
-    this.updateMoves(tilesArray)
+    this.updateGameMeta(tilesArray)
 
     this.setState({
       tiles: tilesArray,
@@ -118,10 +124,11 @@ class TileManager extends React.Component {
     })
   }
 
-  updateMoves = async (tilesArray) => {
-    const { handleUpdateMoves } = this.props
+  updateGameMeta = async (tilesArray) => {
+    const { handleUpdateGameMeta } = this.props
     const moves = await this.moveAnalyzer(tilesArray)
-    handleUpdateMoves(moves)
+
+    handleUpdateGameMeta(moves, tilesArray)
   }
 
   moveAnalyzer = async (tileset) => {
