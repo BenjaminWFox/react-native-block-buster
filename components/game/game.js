@@ -78,14 +78,22 @@ class Game extends React.Component {
 
     let tileData
     let { difficulty } = options
+
+    // If loading an existing game, refernce that games difficulty rather than the current saved difficulty
     if (existingGameData) {
-      tileData = existingGameData.tileData
-      difficulty = existingGameData.difficulty
+      tileData = existingGameData.tileData // eslint-disable-line
+      difficulty = existingGameData.difficulty // eslint-disable-line
     }
 
     return (
       <>
-        <TileGrid isNewGame={isNewGame} difficulty={difficulty} tileData={tileData} handleUpdateScore={this.handleUpdateScore} handleUpdateGameMeta={this.handleUpdateGameMeta} />
+        <TileGrid
+          isNewGame={isNewGame}
+          difficulty={difficulty}
+          tileData={tileData}
+          handleUpdateScore={this.handleUpdateScore}
+          handleUpdateGameMeta={this.handleUpdateGameMeta}
+        />
         <View style={{
           flex: 1,
           borderTopWidth: 2,
@@ -111,6 +119,10 @@ class Game extends React.Component {
       </>
     )
   }
+}
+
+Game.propTypes = {
+  isNewGame: PropTypes.bool.isRequired,
 }
 
 export default Game

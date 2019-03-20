@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text } from 'react-native'
+import { View } from 'react-native'
 import Theme from '../theme'
 import { getGameData } from '../components/game/game-saver'
 import { getOptions } from '../classes/options-manager'

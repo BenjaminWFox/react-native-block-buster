@@ -73,8 +73,6 @@ class TileManager extends React.Component {
     } = this.props
 
     this.colors = getColorsForIndexes(difficulty, tileRows * tilesPerRow)
-    console.log('COLORS:', difficulty, this.colors)
-    console.log('Tile Manager. New game?', isNewGame)
 
     this.setupAllTiles(tileData)
   }
@@ -124,7 +122,8 @@ class TileManager extends React.Component {
   updateGameMeta = async (tilesArray) => {
     const { handleUpdateGameMeta, difficulty } = this.props
     const moves = await this.moveAnalyzer(tilesArray)
-    console.log('UGM', difficulty)
+
+    console.log('Updating game meta. Current difficulty:', difficulty)
     handleUpdateGameMeta(difficulty, moves, tilesArray)
   }
 
