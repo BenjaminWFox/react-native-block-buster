@@ -3,23 +3,16 @@ import { View } from 'react-native'
 import PropTypes from 'prop-types'
 import Tile from './tile'
 import { slideDownAnimation } from '../../animation/animations'
-import { getTileData, setTileData } from './game-saver'
-// import moveAnalyzer from '../../classes/move-analyzer'
 
 const COLORS = [
-  /* Flat, brights: */
-  // '#FF00FF', // FUSCIA
-  // '#00FF00', // GREEN
-  // '#FFFF00', // YELLOW
-  // '#FF0000', // RED
-  // '#0000FF', // BLUE
-
   /* Jewel tones: */
   '#bb0043', // red
   '#342f9c', // blue
-  '#e15500', // orange
-  '#009975', // green
   '#fabb13', // yellow
+  '#009975', // green // easy
+  '#e15500', // orange // normal
+  '#3499ac', // teal // hard
+  '#70336e', // purple // crazy
 ]
 
 const getRandomInt = function getRandomInt(pMin, pMax) {
