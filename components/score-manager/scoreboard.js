@@ -18,7 +18,6 @@ const Scoreboard = function Scoreboard({ score }) {
       <Theme.Text style={{
         color: '#bb0043',
         fontSize: 40,
-        fontWeight: 'bold',
       }}
       >
         {formatScore(score)}

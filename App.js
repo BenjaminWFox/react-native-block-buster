@@ -18,7 +18,7 @@ class App extends React.Component {
     //   KEYS.HIGH_SCORES,
     // ])
     await Font.loadAsync({
-      'wendy-one-regular': require('./assets/WendyOne-Regular.ttf'),
+      'WendyOne-Regular': require('./assets/fonts/WendyOne-Regular.ttf'),
     })
 
     this.setState({ loaded: true })

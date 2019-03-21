@@ -20,12 +20,12 @@ const RestartGameModal = function RestartGameModal({ isVisible, willRestartGame 
           <Theme.Text
             variant="large"
             style={{
-              color: Theme.colors.white, fontSize: 30, fontWeight: 'bold', marginBottom: 0,
+              color: Theme.colors.white, fontSize: 30, marginBottom: 0,
             }}
           >
             Restart...
           </Theme.Text>
-          <Theme.Text variant="large" style={{ color: Theme.colors.white, fontSize: 30, fontWeight: 'bold' }}>Are you sure?</Theme.Text>
+          <Theme.Text variant="large" style={{ color: Theme.colors.white, fontSize: 30 }}>Are you sure?</Theme.Text>
           <Theme.Button
             backgroundColor={Theme.colors.jewel.orange}
             textColor="#ffffff"

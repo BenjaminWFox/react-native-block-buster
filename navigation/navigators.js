@@ -14,6 +14,7 @@ const headerStyle = {
 const headerTitleStyle = {
   color: Theme.colors.jewel.green,
   fontFamily: Theme.fontFamily,
+  fontWeight: '200', // This needs to be set for Android or else the fontWeight is a bold style & custom font won't load
 }
 const headerLeftContainerStyle = {
   fontFamily: Theme.fontFamily,

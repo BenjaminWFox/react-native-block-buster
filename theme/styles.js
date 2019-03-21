@@ -30,7 +30,7 @@ const unit = 8
 
 const radius = unit
 
-const fontFamily = 'wendy-one-regular'
+const fontFamily = 'WendyOne-Regular'
 
 const theme = StyleSheet.create({
   statusBar: {

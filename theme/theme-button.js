@@ -20,7 +20,7 @@ const Button = function Button({
       onPress={onPressFunc}
     >
       <Text style={{
-        fontWeight: 'bold', color: textColor, fontSize: 20, fontFamily: Styles.fontFamily,
+        color: textColor, fontSize: 20, fontFamily: Styles.fontFamily,
       }}
       >
         {title}
