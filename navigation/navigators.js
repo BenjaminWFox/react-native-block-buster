@@ -37,7 +37,7 @@ const AppNavigator = createStackNavigator(
   {
     Home: {
       screen: HomeScreen,
-      navigationOptions: defaultNavOptions('Home'),
+      navigationOptions: defaultNavOptions('Jewel Tones Blast | Solitare'),
     },
     Tutorial: {
       screen: TutorialScreen,

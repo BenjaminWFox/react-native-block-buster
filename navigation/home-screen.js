@@ -80,7 +80,7 @@ class HomeScreen extends React.Component {
       >
         <Theme.Button
           disabled={!canResumeGame}
-          backgroundColor={Theme.colors.jewel.orange}
+          backgroundColor={Theme.colors.jewel.blue}
           textColor="#ffffff"
           title="Resume Game"
           onPressFunc={() => {
@@ -88,7 +88,7 @@ class HomeScreen extends React.Component {
           }}
         />
         <Theme.Button
-          backgroundColor={Theme.colors.jewel.orange}
+          backgroundColor={Theme.colors.jewel.red}
           textColor="#ffffff"
           title="New Game"
           onPressFunc={() => {
@@ -104,7 +104,7 @@ class HomeScreen extends React.Component {
           }}
         />
         <Theme.Button
-          backgroundColor={Theme.colors.jewel.orange}
+          backgroundColor={Theme.colors.jewel.green}
           textColor="#ffffff"
           title="Options"
           onPressFunc={() => {
@@ -112,7 +112,7 @@ class HomeScreen extends React.Component {
           }}
         />
         <Theme.Button
-          backgroundColor={Theme.colors.jewel.orange}
+          backgroundColor={Theme.colors.jewel.yellow}
           textColor="#ffffff"
           title="Tutorial"
           onPressFunc={() => {

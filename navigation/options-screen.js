@@ -25,29 +25,31 @@ class OptionsScreen extends React.Component {
 
   render() {
     const { options } = this.state
-
+    console.log(Theme)
     return (
-      <View style={{
-        flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-      }}
-      >
+      <View style={Theme.styles.container}>
         <View>
-          <View style={{ zIndex: 2, backgroundColor: '#ffffff' }}>
+          <View style={{ zIndex: 2 }}>
             <Theme.Text>DIFFICULTY</Theme.Text>
             <Theme.Text>(colors on the board)</Theme.Text>
           </View>
-          <View style={{ zIndex: 1 }}>
+          <View style={{
+            zIndex: 1,
+            backgroundColor: Platform.OS === 'ios' ? Theme.colors.black : Theme.colors.white,
+            borderRadius: Theme.radius,
+          }}
+          >
             <Picker
               selectedValue={options.difficulty}
-              mode="dropdown"
               onValueChange={(itemValue) => {
                 this.handleDifficultyUpdate(itemValue)
               }}
               style={{
-                marginTop: Platform.OS === 'ios' ? -60 : 0,
+                marginTop: Platform.OS === 'ios' ? -50 : 0,
               }}
               itemStyle={{
                 fontFamily: Theme.fontFamily,
+                color: Theme.colors.jewel.yellow,
                 fontWeight: '200',
               }}
             >
@@ -66,16 +68,11 @@ class OptionsScreen extends React.Component {
             </Picker>
           </View>
         </View>
-        <View>
-          <Theme.Text>
-            Clear High Scores
-          </Theme.Text>
-        </View>
-        <View>
+        {/* <View>
           <Theme.Text>
             Show Tutorial Next Launch
           </Theme.Text>
-        </View>
+        </View> */}
       </View>
     )
   }
