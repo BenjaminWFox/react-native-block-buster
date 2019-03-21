@@ -3,43 +3,12 @@ import { View } from 'react-native'
 import PropTypes from 'prop-types'
 import Tile from './tile'
 import { slideDownAnimation } from '../../animation/animations'
+import {
+  getRandomInt, getColorsForIndexes, getRandomColor, getColumnsArray,
+} from '../../classes/utilities'
+import { tileColors } from '../../classes/options-manager'
 
-const COLORS = [
-  /* Jewel tones: */
-  '#bb0043', // red
-  '#342f9c', // blue
-  '#fabb13', // yellow
-  '#009975', // green // easy - 3
-  '#e15500', // orange // normal - 4
-  '#3499ac', // teal // hard - 5
-  '#70336e', // purple // crazy - 6
-]
-
-const getRandomInt = function getRandomInt(pMin, pMax) {
-  const min = Math.ceil(pMin)
-  const max = Math.floor(pMax)
-  return Math.floor(Math.random() * (max - min + 1)) + min
-}
-
-const getColorsForIndexes = function getColorsForIndexes(difficulty, numColors) {
-  const colorArray = []
-
-  for (let i = 0; i < numColors; i += 1) {
-    colorArray.push(COLORS[getRandomInt(0, difficulty - 1)])
-  }
-
-  return colorArray
-}
-
-const getColumnsArray = function getColumnsArray(numColumns) {
-  const arr = []
-
-  for (let i = 0; i < numColumns; i += 1) {
-    arr.push([])
-  }
-
-  return arr
-}
+const COLORS = tileColors
 
 class TileManager extends React.Component {
   constructor({
@@ -56,13 +25,12 @@ class TileManager extends React.Component {
     this.burstTiles = []
     this.burstTilesCompletedDespawn = 0
     this.tilesFallingDown = 0
-    // this.colors = getColorsForIndexes(difficulty, tileRows * tilesPerRow)
     this.state = {
       tiles: [],
       tileElements: [],
       tilesCreated: false,
     }
-    this.getRandomColor = () => COLORS[getRandomInt(0, difficulty - 1)]
+    this.getRandomColor = () => getRandomColor(difficulty, COLORS)
     this.updateQueue = []
 
     Tile.init(this.tileEdge, this.tilePadding, this.handleTileClick, this.handleTileRespawn)
@@ -73,7 +41,7 @@ class TileManager extends React.Component {
       isNewGame, tileData, tileRows, tilesPerRow, difficulty,
     } = this.props
 
-    this.colors = getColorsForIndexes(difficulty, tileRows * tilesPerRow)
+    this.colors = getColorsForIndexes(difficulty, tileRows * tilesPerRow, COLORS)
 
     this.setupAllTiles(tileData)
   }
