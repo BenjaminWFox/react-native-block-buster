@@ -7,20 +7,19 @@ import { getValue, setValue, KEYS } from '../../classes/storage-api'
 // import { difficulties } from '../../classes/options-manager'
 
 const setHighScore = async (score, difficulty) => {
-  console.log('SHS', score, difficulty)
   setValue(`${KEYS.HIGH_SCORES}_${difficulty}`, score)
 }
 
-const deleteHighScore = () => {
-  // AsyncStorage.clear()
-  AsyncStorage.removeItem(HighScoreKey)
+const deleteHighScore = async (difficulty) => {
+  await AsyncStorage.removeItem(`${KEYS.HIGH_SCORES}_${difficulty}`)
+
+  return true
 }
 
 const getHighScore = async (difficulty) => {
   const score = await getValue(`${KEYS.HIGH_SCORES}_${difficulty}`)
 
   if (score !== null) {
-    console.log('GHS', score, difficulty)
     return formatScore(score)
   }
 

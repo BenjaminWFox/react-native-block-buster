@@ -3,7 +3,7 @@ import { TouchableHighlight, Text } from 'react-native'
 import * as Styles from './styles'
 
 const Button = function Button({
-  onPressFunc, title, backgroundColor, textColor, disabled,
+  onPressFunc, title, backgroundColor, textColor, disabled, variant,
 }) {
   return (
     <TouchableHighlight
@@ -14,7 +14,7 @@ const Button = function Button({
         borderRadius: Styles.radius,
         backgroundColor,
         margin: Styles.unit,
-        padding: Styles.unit * 2,
+        padding: variant === 'small' ? Styles.unit : Styles.unit * 2,
         opacity: disabled ? 0.5 : 1,
       }}
       onPress={onPressFunc}
