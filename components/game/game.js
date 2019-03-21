@@ -33,15 +33,15 @@ class Game extends React.Component {
   }
 
   handleUpdateHighScore = async () => {
-    const { options } = this.props
+    const { currentDifficulty } = this.props
     const { score, highScore } = this.state
 
     if (!highScore) {
-      const storedHighScore = await ScoreManager.getHighScore()
+      const storedHighScore = await ScoreManager.getHighScore(currentDifficulty)
       this.setState({ highScore: storedHighScore })
     }
     else if (score > highScore.replace(/,/g, '')) {
-      ScoreManager.setHighScore(score)
+      ScoreManager.setHighScore(score, currentDifficulty)
       this.setState({ highScore: formatScore(score) })
     }
   }

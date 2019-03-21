@@ -4,15 +4,11 @@ import PointPopper from './point-popper'
 import Scoreboard from './scoreboard'
 import { formatScore } from '../../classes/formatting'
 import { getValue, setValue, KEYS } from '../../classes/storage-api'
-import { difficulties } from '../../classes/options-manager'
+// import { difficulties } from '../../classes/options-manager'
 
-const setHighScore = async (score) => {
-  try {
-    await AsyncStorage.setItem(HighScoreKey, score.toString())
-  }
-  catch (error) {
-    console.error('Error setting high score', error)
-  }
+const setHighScore = async (score, difficulty) => {
+  console.log('SHS', score, difficulty)
+  setValue(`${KEYS.HIGH_SCORES}_${difficulty}`, score)
 }
 
 const deleteHighScore = () => {
@@ -20,21 +16,17 @@ const deleteHighScore = () => {
   AsyncStorage.removeItem(HighScoreKey)
 }
 
-const getHighScore = async () => {
-  try {
-    const value = await AsyncStorage.getItem(HighScoreKey)
-    if (value !== null) {
-      return formatScore(value)
-    }
+const getHighScore = async (difficulty) => {
+  const score = await getValue(`${KEYS.HIGH_SCORES}_${difficulty}`)
 
-    setHighScore(0)
+  if (score !== null) {
+    console.log('GHS', score, difficulty)
+    return formatScore(score)
+  }
 
-    return formatScore(0)
-  }
-  catch (error) {
-    console.log('Error getting high score', error)
-    return false
-  }
+  setHighScore(0, difficulty)
+
+  return 0
 }
 
 export default {
