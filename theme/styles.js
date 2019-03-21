@@ -20,11 +20,17 @@ const colors = {
     orange: '#e15500', // orange
     green: '#009975', // green
     yellow: '#fabb13', // yellow
+    teal: '#3499ac', // teal
+    purple: '#70336e', // purple
   },
   white: '#ffffff',
 }
 
 const unit = 8
+
+const radius = unit
+
+const fontFamily = 'wendy-one-regular'
 
 const theme = StyleSheet.create({
   statusBar: {
@@ -57,6 +63,7 @@ const theme = StyleSheet.create({
     fontSize: 17,
     textAlign: 'center',
     marginVertical: unit,
+    fontFamily,
   },
   textSmall: {
     fontSize: 15,
@@ -71,6 +78,6 @@ StatusBar.setBarStyle('dark-content', false)
 // StatusBar.setBackgroundColor('#fff')
 
 export {
-  colors, unit,
+  colors, unit, radius, fontFamily,
 }
 export default theme

@@ -11,6 +11,7 @@ const Button = function Button({
       style={{
         justifyContent: 'center',
         alignItems: 'center',
+        borderRadius: Styles.radius,
         backgroundColor,
         margin: Styles.unit,
         padding: Styles.unit * 2,
@@ -18,7 +19,13 @@ const Button = function Button({
       }}
       onPress={onPressFunc}
     >
-      <Text style={{ fontWeight: 'bold', color: textColor, fontSize: 20 }}>{title}</Text>
+      <Text style={{
+        fontWeight: 'bold', color: textColor, fontSize: 20, fontFamily: Styles.fontFamily,
+      }}
+      >
+        {title}
+
+      </Text>
     </TouchableHighlight>
   )
 }

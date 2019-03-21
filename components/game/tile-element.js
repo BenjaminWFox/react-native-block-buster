@@ -1,6 +1,7 @@
 import React from 'react'
 import { TouchableHighlight, Animated } from 'react-native'
 import PropTypes from 'prop-types'
+import Theme from '../../theme'
 
 const TileElement = function TileElement({
   edge, padding, color, x, y, onClick,
@@ -28,6 +29,7 @@ const TileElement = function TileElement({
         }}
       >
         <Animated.View style={{
+          borderRadius: Theme.radius,
           backgroundColor: color,
           width: innerDimension,
           height: innerDimension,

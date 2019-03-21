@@ -12,9 +12,9 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
-      "image": "./assets/GrowSplash@2x.png",
-      "resizeMode": "cover",
-      "backgroundColor": "#0f1f38"
+      "image": "./assets/JTBS_SPLASH@2x.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#000000"
     },
     "updates": {
       "fallbackToCacheTimeout": 0

@@ -14,12 +14,6 @@ class OptionsScreen extends React.Component {
     }
   }
 
-  // componentDidMount = async () => {
-  //   const options = await getOptions()
-
-  //   this.setState({ options })
-  // }
-
   handleDifficultyUpdate = (difficulty) => {
     const { options } = this.state
 

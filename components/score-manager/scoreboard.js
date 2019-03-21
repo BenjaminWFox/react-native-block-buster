@@ -2,6 +2,7 @@ import React from 'react'
 import { View, Text } from 'react-native'
 import PropTypes from 'prop-types'
 import { formatScore } from '../../classes/formatting'
+import Theme from '../../theme'
 
 const Scoreboard = function Scoreboard({ score }) {
   return (
@@ -14,14 +15,14 @@ const Scoreboard = function Scoreboard({ score }) {
       // borderColor: '#333',
     }}
     >
-      <Text style={{
+      <Theme.Text style={{
         color: '#bb0043',
         fontSize: 40,
         fontWeight: 'bold',
       }}
       >
         {formatScore(score)}
-      </Text>
+      </Theme.Text>
     </View>
   )
 }
