@@ -38,7 +38,7 @@ export const countUpScoreAnimation = function countUpScoreAnimation(startAnimate
   return animation
 }
 
-export const slideDownAnimation = function getSlideDownAnimation(start, finish) {
+export const slideDownAnimation = function getSlideDownAnimation(start, finish, callback) {
   const animation = new Animated.Value(start)
 
   Animated.timing(
@@ -47,7 +47,9 @@ export const slideDownAnimation = function getSlideDownAnimation(start, finish) 
       toValue: finish,
       duration: 350,
     },
-  ).start()
+  ).start(() => {
+    callback()
+  })
 
   return animation
 }

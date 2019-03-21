@@ -72,7 +72,7 @@ Tile.init = (edge, padding, onClick, onRespawn) => {
     stationary: 'stationary',
     hit: 'hit',
     respawning: 'respawning',
-    dropping: 'dropping',
+    falling: 'falling',
   }
 }
 

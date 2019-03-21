@@ -54,7 +54,8 @@ class TileManager extends React.Component {
     this.tilePadding = tilePadding
     this.gridWidth = gridWidth
     this.burstTiles = []
-    this.readyTiles = 0
+    this.burstTilesCompletedDespawn = 0
+    this.tilesFallingDown = 0
     // this.colors = getColorsForIndexes(difficulty, tileRows * tilesPerRow)
     this.state = {
       tiles: [],
@@ -110,12 +111,16 @@ class TileManager extends React.Component {
     return new Tile(index, x, y, tileState, thisColor)
   }
 
-  updateTiles = (tilesArray) => {
+  updateTiles = (tilesArray, updateType) => {
     this.updateGameMeta(tilesArray)
 
     this.setState({
       tiles: tilesArray,
       tileElements: tilesArray.map((tile) => tile.element),
+    }, () => {
+      if (updateType === Tile.states.falling) {
+        console.log('EVENT: Tiles starting to fall')
+      }
     })
   }
 
@@ -123,7 +128,6 @@ class TileManager extends React.Component {
     const { handleUpdateGameMeta, difficulty } = this.props
     const moves = await this.moveAnalyzer(tilesArray)
 
-    console.log('Updating game meta. Current difficulty:', difficulty)
     handleUpdateGameMeta(difficulty, moves, tilesArray)
   }
 
@@ -160,6 +164,7 @@ class TileManager extends React.Component {
 
     this.burstTiles.forEach((tileIndex) => {
       const exists = !!columnUpdateInfo[tileIndex % 10]
+
       if (!exists) {
         columnUpdateInfo[tileIndex % 10] = {}
         columnUpdateInfo[tileIndex % 10].shiftFactor = 1
@@ -183,13 +188,16 @@ class TileManager extends React.Component {
 
     newColumnTiles.forEach((tilesArray) => {
       tilesArray.forEach((tile) => {
+        this.tilesFallingDown += 1
         tempTiles[tile.index] = tile
       })
     })
 
-    this.updateTiles(tempTiles)
+    console.log('EVENT: Blocks respawned', this.tilesFallingDown)
+
+    this.updateTiles(tempTiles, Tile.states.falling)
     this.burstTiles = []
-    this.readyTiles = 0
+    this.burstTilesCompletedDespawn = 0
   }
 
   // eslint-disable-next-line
@@ -214,7 +222,7 @@ class TileManager extends React.Component {
         updatedColumnTiles.push(this.getNewTile(
           columnKey + (10 * (runningShiftUpFactor)),
           currentTile.x,
-          slideDownAnimation(tileStartY, tileEndY),
+          slideDownAnimation(tileStartY, tileEndY, this.handleTileFallComplete),
           Tile.states.stationary,
           this.getRandomColor(),
         ))
@@ -228,7 +236,7 @@ class TileManager extends React.Component {
         updatedColumnTiles.push(this.getNewTile(
           currentTile.index + (10 * runningShiftDownFactor),
           currentTile.x,
-          slideDownAnimation(tileStartY, tileEndY),
+          slideDownAnimation(tileStartY, tileEndY, this.handleTileFallComplete),
           Tile.states.stationary,
           currentTile.color,
         ))
@@ -248,14 +256,15 @@ class TileManager extends React.Component {
   getTileKey = (row, column) => parseInt(row.toString() + column.toString(), 10)
 
   handleTileRespawn = () => {
-    this.readyTiles += 1
-    if (this.readyTiles === this.burstTiles.length) {
+    this.burstTilesCompletedDespawn += 1
+    if (this.burstTilesCompletedDespawn === this.burstTiles.length) {
+      console.log('EVENT: Blocks DeSpawned')
       this.respawnAllTiles()
     }
   }
 
   handleTileClick = (key, event) => {
-    if (!this.burstTiles.length) {
+    if (!this.burstTiles.length && this.tilesFallingDown === 0) {
       const { tiles } = this.state
       const tempTiles = tiles
       let allHitTiles = [key]
@@ -275,9 +284,10 @@ class TileManager extends React.Component {
           )
         })
 
+        console.log('EVENT: Blocks Broken')
         this.sendScoreUpdate(allHitTiles.length, event)
         this.burstTiles = allHitTiles
-        this.readyTiles = 0
+        this.burstTilesCompletedDespawn = 0
         this.setState({
           tiles: tempTiles,
           tileElements: tiles.map((tile) => tile.element),
@@ -285,7 +295,7 @@ class TileManager extends React.Component {
       }
       else {
         this.burstTiles = []
-        this.readyTiles = 0
+        this.burstTilesCompletedDespawn = 0
       }
     }
   }
@@ -323,6 +333,14 @@ class TileManager extends React.Component {
     })
 
     return hitArray
+  }
+
+  handleTileFallComplete = () => {
+    this.tilesFallingDown -= 1
+
+    if (this.tilesFallingDown === 0) {
+      console.log('EVENT: All tiles settled')
+    }
   }
 
   getAdjacentTiles = (key) => [
