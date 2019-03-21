@@ -33,6 +33,7 @@ class Game extends React.Component {
   }
 
   handleUpdateHighScore = async () => {
+    const { options } = this.props
     const { score, highScore } = this.state
 
     if (!highScore) {
@@ -72,23 +73,16 @@ class Game extends React.Component {
       score, points, lastTouch, movesLeft, highScore, confirmRestart,
     } = this.state
     const {
-      launchRestartModal, launchMenuScreen, options, isNewGame, existingGameData,
+      launchRestartModal, launchMenuScreen, options, isNewGame, existingGameData, currentDifficulty,
     } = this.props
 
-    let tileData
-    let { difficulty } = options
-
-    // If loading an existing game, refernce that games difficulty rather than the current saved difficulty
-    if (existingGameData) {
-      tileData = existingGameData.tileData // eslint-disable-line
-      difficulty = existingGameData.difficulty // eslint-disable-line
-    }
+    const { tileData } = existingGameData || {}
 
     return (
       <>
         <TileGrid
           isNewGame={isNewGame}
-          difficulty={difficulty}
+          difficulty={currentDifficulty}
           tileData={tileData}
           handleUpdateScore={this.handleUpdateScore}
           handleUpdateGameMeta={this.handleUpdateGameMeta}

@@ -72,6 +72,8 @@ class GameScreen extends React.Component {
     const existingGameData = navigation.getParam('existingGameData', undefined)
     const gameOptions = navigation.getParam('gameOptions', { difficulty: 'normal' })
 
+    const currentDifficulty = existingGameData ? existingGameData.difficulty : gameOptions.difficulty
+
     return (
       <View style={{ flex: 1, backgroundColor: '#000' }}>
         <View style={{
@@ -84,6 +86,7 @@ class GameScreen extends React.Component {
           style={{ paddingVertical: 10 }}
           key={gameId}
           options={gameOptions}
+          currentDifficulty={currentDifficulty}
           isNewGame={isNewGame}
           existingGameData={existingGameData}
           launchRestartModal={this.handleRestartModal}

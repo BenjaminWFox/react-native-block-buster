@@ -98,6 +98,14 @@ class HomeScreen extends React.Component {
         <Theme.Button
           backgroundColor={Theme.colors.jewel.orange}
           textColor="#ffffff"
+          title="High Scores"
+          onPressFunc={() => {
+            navigation.navigate('HighScores')
+          }}
+        />
+        <Theme.Button
+          backgroundColor={Theme.colors.jewel.orange}
+          textColor="#ffffff"
           title="Options"
           onPressFunc={() => {
             navigation.navigate('Options', { gameOptions })
