@@ -15,10 +15,10 @@ class Game extends React.Component {
   state = {
     score: 0,
     highScore: null,
+    surpassedHighScore: false,
     points: 0,
     movesLeft: 0,
     lastTouch: {},
-    confirmRestart: false,
   }
 
   componentDidMount = () => {
@@ -34,19 +34,28 @@ class Game extends React.Component {
 
   handleUpdateHighScore = async () => {
     const { currentDifficulty } = this.props
-    const { score, highScore } = this.state
+    const { score, highScore, surpassedHighScore } = this.state
+    const numericHighScore = (highScore && highScore.replace(/,/g, '')) || 0
+    const didSurpass = !surpassedHighScore && numericHighScore > 0 && score > numericHighScore
+
+    if (didSurpass) {
+      console.log('EVENT: New High Score Achieved!')
+    }
 
     if (!highScore) {
       const storedHighScore = await ScoreManager.getHighScore(currentDifficulty)
       this.setState({ highScore: storedHighScore })
     }
-    else if (score > highScore.replace(/,/g, '')) {
+    else if (score > numericHighScore) {
       ScoreManager.setHighScore(score, currentDifficulty)
-      this.setState({ highScore: formatScore(score) })
+      this.setState({
+        highScore: formatScore(score),
+        surpassedHighScore: didSurpass,
+      })
     }
   }
 
-  handleUpdateScore = (scoreIncrease, event, currentDifficulty) => {
+  handleUpdateScore = (scoreIncrease, event) => {
     const { score } = this.state
     this.setState({
       score: Math.ceil(score + scoreIncrease),
@@ -70,10 +79,10 @@ class Game extends React.Component {
 
   render() {
     const {
-      score, points, lastTouch, movesLeft, highScore, confirmRestart,
+      score, points, lastTouch, movesLeft, highScore,
     } = this.state
     const {
-      launchRestartModal, launchMenuScreen, options, isNewGame, existingGameData, currentDifficulty,
+      launchRestartModal, launchMenuScreen, isNewGame, existingGameData, currentDifficulty,
     } = this.props
 
     const { tileData } = existingGameData || {}
@@ -116,6 +125,15 @@ class Game extends React.Component {
 
 Game.propTypes = {
   isNewGame: PropTypes.bool.isRequired,
+  existingGameData: PropTypes.object,
+  currentDifficulty: PropTypes.number.isRequired,
+  launchRestartModal: PropTypes.func.isRequired,
+  launchMenuScreen: PropTypes.func.isRequired,
+  options: PropTypes.object.isRequired,
+}
+
+Game.defaultProps = {
+  existingGameData: {},
 }
 
 export default Game

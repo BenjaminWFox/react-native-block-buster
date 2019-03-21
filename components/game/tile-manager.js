@@ -4,11 +4,9 @@ import PropTypes from 'prop-types'
 import Tile from './tile'
 import { slideDownAnimation } from '../../animation/animations'
 import {
-  getRandomInt, getColorsForIndexes, getRandomColor, getColumnsArray,
+  getColorsForIndexes, getRandomColor, getColumnsArray,
 } from '../../classes/utilities'
 import { tileColors } from '../../classes/options-manager'
-
-const COLORS = tileColors
 
 class TileManager extends React.Component {
   constructor({
@@ -30,18 +28,17 @@ class TileManager extends React.Component {
       tileElements: [],
       tilesCreated: false,
     }
-    this.getRandomColor = () => getRandomColor(difficulty, COLORS)
-    this.updateQueue = []
+    this.getRandomColor = () => getRandomColor(difficulty, tileColors)
 
     Tile.init(this.tileEdge, this.tilePadding, this.handleTileClick, this.handleTileRespawn)
   }
 
   componentDidMount = async () => {
     const {
-      isNewGame, tileData, tileRows, tilesPerRow, difficulty,
+      tileData, tileRows, tilesPerRow, difficulty,
     } = this.props
 
-    this.colors = getColorsForIndexes(difficulty, tileRows * tilesPerRow, COLORS)
+    this.colors = getColorsForIndexes(difficulty, tileRows * tilesPerRow, tileColors)
 
     this.setupAllTiles(tileData)
   }
@@ -282,7 +279,7 @@ class TileManager extends React.Component {
       points = POINTS_PER_TILE * totalHitTiles * multiplyer
     }
 
-    handleUpdateScore(points, event, difficulty)
+    handleUpdateScore(points, event)
   }
 
   addAdjacentHits = (hitTileKey, hitArray) => {
@@ -346,6 +343,13 @@ TileManager.propTypes = {
   gridWidth: PropTypes.number.isRequired,
   gridHeight: PropTypes.number.isRequired,
   handleUpdateScore: PropTypes.func.isRequired,
+  handleUpdateGameMeta: PropTypes.func.isRequired,
+  difficulty: PropTypes.number.isRequired,
+  tileData: PropTypes.array,
+}
+
+TileManager.defaultProps = {
+  tileData: undefined,
 }
 
 export default TileManager

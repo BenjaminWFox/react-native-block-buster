@@ -1,6 +1,7 @@
 {
   "expo": {
     "name": "Jewel Tone Blast Solitare",
+    "version": "0.5.0",
     "slug": "rnjtbs",
     "privacy": "public",
     "sdkVersion": "32.0.0",
@@ -23,7 +24,11 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.smashingfox.jeweltonesblastsolitare"
+    },
+    "android": {
+      "package": "com.smashingfox.jeweltonesblastsolitare"
     }
   }
 }

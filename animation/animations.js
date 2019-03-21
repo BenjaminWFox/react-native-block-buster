@@ -23,7 +23,7 @@ export const interpolatePointsAnimForPosition = function interpolatePointsAnimFo
 
 
 export const countUpScoreAnimation = function countUpScoreAnimation(startAnimatedValue, increase) {
-  const start = startAnimatedValue === 0 ? 0 : startAnimatedValue._value
+  const start = startAnimatedValue === 0 ? 0 : startAnimatedValue._value // eslint-disable-line
   const finish = start + increase
   const animation = new Animated.Value(start)
 

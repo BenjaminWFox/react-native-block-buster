@@ -1,9 +1,5 @@
 import { AsyncStorage } from 'react-native'
 
-const TileDataKey = 'RNJTBS_TileData'
-const ScoreKey = 'RNJTBS_Score'
-const DifficultyKey = 'RNJTBS_Difficulty'
-
 const GameMetaKey = 'RNJTBS_GameMeta'
 
 export const setGameData = async (difficulty, score, tileset) => {
@@ -33,5 +29,6 @@ export const getGameData = async () => {
   }
   catch (error) {
     console.error('Error getting tileset', error)
+    return false
   }
 }
