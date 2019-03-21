@@ -43,11 +43,12 @@ class GameScreen extends React.Component {
 
   handleRestartOrNot = (willRestart) => {
     this.setState({ restartModalVisible: false })
-
     if (willRestart) {
       const { navigation } = this.props
 
-      navigation.push('Game', { isNewGame: true })
+      const gameOptions = navigation.getParam('gameOptions', { difficulty: 'normal' })
+
+      navigation.push('Game', { isNewGame: true, gameOptions })
       // const { gameId } = this.state
 
       // this.setState({
@@ -71,12 +72,8 @@ class GameScreen extends React.Component {
     const existingGameData = navigation.getParam('existingGameData', undefined)
     const gameOptions = navigation.getParam('gameOptions', { difficulty: 'normal' })
 
-
-    console.log('Game screen rendering...', existingGameData)
-
     return (
       <View style={{ flex: 1, backgroundColor: '#000' }}>
-        <StatusBar barStyle="light-content" />
         <View style={{
           height: sbHeight + 5,
           borderBottomWidth: 5,

@@ -1,6 +1,4 @@
-import { AsyncStorage } from 'react-native'
-
-const OptionsKey = 'RNJTBS_Options'
+import { getValue, setValue, KEYS } from './storage-api'
 
 export const difficulties = {
   easy: 4,
@@ -11,30 +9,21 @@ export const difficulties = {
 
 const defaultOptions = {
   difficulty: difficulties.normal,
+  hasSeenTutorial: false,
 }
 
 export const setOptions = async (options) => {
-  try {
-    await AsyncStorage.setItem(OptionsKey, JSON.stringify(options))
-  }
-  catch (error) {
-    console.error('Error setting high score', error)
-  }
+  setValue(KEYS.OPTIONS, options)
 }
 
+
 export const getOptions = async () => {
-  try {
-    const value = await AsyncStorage.getItem(OptionsKey)
-    if (value !== null) {
-      return JSON.parse(value)
-    }
-
-    setOptions(defaultOptions)
-
-    return defaultOptions
+  const options = await getValue(KEYS.OPTIONS)
+  if (options) {
+    return options
   }
-  catch (error) {
-    console.error('Error getting high score', error)
-    return false
-  }
+
+  setOptions(defaultOptions)
+
+  return defaultOptions
 }

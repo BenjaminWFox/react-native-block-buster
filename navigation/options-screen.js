@@ -33,20 +33,34 @@ class OptionsScreen extends React.Component {
     const { options } = this.state
 
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Theme.Text>DIFFICULTY</Theme.Text>
-        <Theme.Text>This changes the number of colors on the board!</Theme.Text>
-        <Picker
-          selectedValue={options.difficulty}
-          style={{ height: 50, width: 100 }}
-          onValueChange={(itemValue) => {
-            this.handleDifficultyUpdate(itemValue)
-          }}
-        >
-          { Object.keys(difficulties).map((difficulty) => (
-            <Picker.Item key={difficulty} label={`${difficulty} (${difficulties[difficulty]})`} value={difficulties[difficulty]}></Picker.Item>
-          ))}
-        </Picker>
+      <View style={{
+        flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+      }}
+      >
+        <View>
+          <Theme.Text>DIFFICULTY</Theme.Text>
+          <Theme.Text>(colors on the board)</Theme.Text>
+          <Picker
+            selectedValue={options.difficulty}
+            onValueChange={(itemValue) => {
+              this.handleDifficultyUpdate(itemValue)
+            }}
+          >
+            { Object.keys(difficulties).map((difficulty) => (
+              <Picker.Item key={difficulty} label={`${difficulty} (${difficulties[difficulty]})`} value={difficulties[difficulty]}></Picker.Item>
+            ))}
+          </Picker>
+        </View>
+        <View>
+          <Theme.Text>
+            Clear High Scores
+          </Theme.Text>
+        </View>
+        <View>
+          <Theme.Text>
+            Show Tutorial Next Launch
+          </Theme.Text>
+        </View>
       </View>
     )
   }

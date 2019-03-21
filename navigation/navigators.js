@@ -5,6 +5,15 @@ import HomeScreen from './home-screen'
 import GameScreen from './game-screen'
 import OptionsScreen from './options-screen'
 import TutorialScreen from './tutorial-screen'
+import Theme from '../theme'
+
+const headerStyle = {
+  backgroundColor: '#000000',
+
+}
+const headerTitleStyle = {
+  color: Theme.colors.jewel.green,
+}
 
 const AppNavigator = createStackNavigator(
   {
@@ -12,35 +21,49 @@ const AppNavigator = createStackNavigator(
       screen: HomeScreen,
       navigationOptions: {
         title: 'Menu',
+        headerStyle,
+        headerTitleStyle,
+        headerTintColor: Theme.colors.jewel.green,
       },
     },
     Tutorial: {
       screen: TutorialScreen,
       navigationOptions: ({ navigation }) => ({
         title: 'Tutorial',
-        headerRight: (!navigation.getParam('cameFromHome')
-          && (
-          <Button
-            onPress={() => navigation.replace('Home')}
-            title="Skip > "
-          />
-          )
-        ),
+        headerStyle,
+        headerTitleStyle,
+        headerTintColor: Theme.colors.jewel.green,
+        // headerRight: (!navigation.getParam('cameFromHome')
+        //   && (
+        //   <Button
+        //     onPress={() => navigation.replace('Home')}
+        //     title="Skip > "
+        //   />
+        //   )
+        // ),
       }),
     },
     Options: {
       screen: OptionsScreen,
       navigationOptions: {
-        title: 'Menu',
+        title: 'Options',
+        headerStyle,
+        headerTitleStyle,
+        headerTintColor: Theme.colors.jewel.green,
       },
     },
     Game: {
       screen: GameScreen,
       headerMode: 'none',
+      navigationOptions: ({ navigation }) => ({
+        title: '',
+        headerStyle,
+        headerTitleStyle,
+      }),
     },
   },
   {
-    initialRouteName: 'Tutorial',
+    initialRouteName: 'Home',
   },
 )
 

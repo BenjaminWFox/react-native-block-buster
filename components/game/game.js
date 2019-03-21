@@ -24,7 +24,6 @@ class Game extends React.Component {
   componentDidMount = () => {
     const { isNewGame, existingGameData } = this.props
 
-    console.log('IS NEW GAME?', isNewGame)
     if (isNewGame) {
       this.handleUpdateHighScore()
     }

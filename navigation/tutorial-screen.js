@@ -13,7 +13,7 @@ class TutorialScreen extends React.Component {
     const { navigation } = this.props
 
     if (playbackStatus.didJustFinish) {
-      navigation.replace('Home')
+      navigation.pop(1)
     }
   }
 

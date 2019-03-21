@@ -2,7 +2,7 @@ import React from 'react'
 import { View } from 'react-native'
 import Theme from '../theme'
 import { getGameData } from '../components/game/game-saver'
-import { getOptions } from '../classes/options-manager'
+import { getOptions, setOptions } from '../classes/options-manager'
 
 class HomeScreen extends React.Component {
   constructor({ navigation }) {
@@ -10,9 +10,15 @@ class HomeScreen extends React.Component {
 
     this.handleScreenFocus = navigation.addListener(
       'willFocus',
+
       async () => {
         await this.updateGameData()
-        await this.getGameOptions()
+        const options = await this.getGameOptions()
+        if (!options.hasSeenTutorial) {
+          options.hasSeenTutorial = true
+          setOptions(options)
+          navigation.navigate('Tutorial')
+        }
       },
     )
 
@@ -28,6 +34,7 @@ class HomeScreen extends React.Component {
   }
 
   state = {
+    ready: false,
     canResumeGame: false,
     existingGameData: null,
     gameOptions: null,
@@ -57,6 +64,8 @@ class HomeScreen extends React.Component {
       this.setState({
         gameOptions,
       })
+
+      return gameOptions
     }
   }
 
@@ -65,7 +74,10 @@ class HomeScreen extends React.Component {
     const { navigation } = this.props
 
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <View style={{
+        flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#000000',
+      }}
+      >
         <Theme.Button
           disabled={!canResumeGame}
           backgroundColor={Theme.colors.jewel.orange}
