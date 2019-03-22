@@ -7,6 +7,7 @@ import {
   getColorsForIndexes, getRandomColor, getColumnsArray,
 } from '../../classes/utilities'
 import { tileColors } from '../../classes/options-manager'
+import { tilesBrokenEvent } from './game-events'
 
 class TileManager extends React.Component {
   constructor({
@@ -230,6 +231,7 @@ class TileManager extends React.Component {
 
   handleTileClick = (key, event) => {
     if (!this.burstTiles.length && this.tilesFallingDown === 0) {
+      tilesBrokenEvent()
       const { tiles } = this.state
       const tempTiles = tiles
       let allHitTiles = [key]

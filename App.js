@@ -7,6 +7,11 @@ import { KEYS } from './classes/storage-api'
 import { getOptions } from './classes/options-manager'
 
 class App extends React.Component {
+  // constructor() {
+  //   super()
+
+  // }
+
   state = {
     loaded: false,
   }
