@@ -84,7 +84,6 @@ AudioLoader.reportFinished = () => {
   AudioLoader.waitingOn -= 1
   if (AudioLoader.waitingOn === 0) {
     AudioLoader.ready = true
-    console.log('AudioLoader is ready')
   }
 }
 
@@ -116,11 +115,9 @@ AudioLoader.constructGameSounds = () => {
 }
 
 AudioLoader.init = async () => {
-  console.log('AudioLoader RF', AudioLoader.reportFinished)
   AudioLoader.sounds = await getAllSounds(AudioLoader.reportFinished)
   AudioLoader.waitingOn = AudioLoader.sounds.length
 
-  console.log('Done with init')
   AudioLoader.constructGameSounds()
 }
 

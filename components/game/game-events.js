@@ -7,14 +7,14 @@ export const tilesBrokenEvent = () => {
 }
 
 export const gameOverEvent = () => {
-  console.log('GAME OVER!')
+  // console.log('GAME OVER!')
   playGameOverSound()
 }
 
 export const getGameOverMessage = (width, height) => (<CenteredMessage width={width} height={height} messageTextArray={['Game', 'Over']} autoOut={false} />)
 
 export const highScoreSurpassedEvent = () => {
-  console.log('NEW HIGH SCORE!!')
+  // console.log('NEW HIGH SCORE!!')
   playNewHighScoreSound()
 }
 
