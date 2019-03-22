@@ -22,6 +22,14 @@ export const playSound = () => {
   sound.playAsync()
 }
 
+export const playGameOverSound = () => {
+  AudioLoader.gameOverSound()
+}
+
+export const playNewHighScoreSound = () => {
+  AudioLoader.newHighScoreSound()
+}
+
 export const playNSounds = (number) => {
   console.log('Play how many sounds?', number)
 }

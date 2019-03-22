@@ -7,11 +7,13 @@ import { Audio } from 'expo'
  * This class allows N repeat instances of a given sound before cutting off the previous
  */
 class RepeatableSound {
-  constructor(assetRequired, numRepeats) {
+  constructor(assetRequired, numRepeats, callback) {
     this.assetRequired = assetRequired
     this.numRepeats = numRepeats
     this.sounds = [...Array(numRepeats)]
     this.playCount = 0
+    this.callbackOnInit = callback
+    this.isReady = false
     this.init()
   }
 
@@ -19,13 +21,17 @@ class RepeatableSound {
     this.sounds = await Promise.all(
       this.sounds.map(() => Audio.Sound.createAsync(this.assetRequired)),
     )
+    this.isReady = true
+    this.callbackOnInit()
   }
 
   playAsync = () => {
-    this.sounds[this.playCount].sound.playFromPositionAsync(100)
-    this.playCount += 1
-    if (this.playCount === this.numRepeats) {
-      this.playCount = 0
+    if (this.isReady) {
+      this.sounds[this.playCount].sound.playFromPositionAsync(100)
+      this.playCount += 1
+      if (this.playCount === this.numRepeats) {
+        this.playCount = 0
+      }
     }
   }
 }
@@ -46,32 +52,77 @@ const a4 = require('../../assets/sounds/a4.mp3')
 const b4 = require('../../assets/sounds/b4.mp3')
 const c4 = require('../../assets/sounds/c4.mp3')
 
-const getAllSounds = () => [
-  new RepeatableSound(c2, 5),
-  new RepeatableSound(d2, 5),
-  new RepeatableSound(e2, 5),
-  new RepeatableSound(f2, 5),
-  new RepeatableSound(g2, 5),
-  new RepeatableSound(a3, 5),
-  new RepeatableSound(b3, 5),
-  new RepeatableSound(c3, 5),
-  new RepeatableSound(d3, 5),
-  new RepeatableSound(e3, 5),
-  new RepeatableSound(f3, 5),
-  new RepeatableSound(g3, 5),
-  new RepeatableSound(a4, 5),
-  new RepeatableSound(b4, 5),
-  new RepeatableSound(c4, 5),
+const getAllSounds = (callback) => [
+  new RepeatableSound(c2, 5, callback),
+  new RepeatableSound(d2, 5, callback),
+  new RepeatableSound(e2, 5, callback),
+  new RepeatableSound(f2, 5, callback),
+  new RepeatableSound(g2, 5, callback),
+  new RepeatableSound(a3, 5, callback),
+  new RepeatableSound(b3, 5, callback),
+  new RepeatableSound(c3, 5, callback),
+  new RepeatableSound(d3, 5, callback),
+  new RepeatableSound(e3, 5, callback),
+  new RepeatableSound(f3, 5, callback),
+  new RepeatableSound(g3, 5, callback),
+  new RepeatableSound(a4, 5, callback),
+  new RepeatableSound(b4, 5, callback),
+  new RepeatableSound(c4, 5, callback),
 ]
 
 class AudioLoader {
   constructor() {
+    AudioLoader.ready = false
     AudioLoader.sounds = []
+    AudioLoader.waitingOn = 0
+    AudioLoader.gameOverSound = undefined
+    AudioLoader.newHighScoreSound = undefined
+  }
+}
+
+AudioLoader.reportFinished = () => {
+  AudioLoader.waitingOn -= 1
+  if (AudioLoader.waitingOn === 0) {
+    AudioLoader.ready = true
+    console.log('AudioLoader is ready')
+  }
+}
+
+AudioLoader.constructGameSounds = () => {
+  AudioLoader.gameOverSound = () => {
+    const gos1 = AudioLoader.sounds[1]
+    const gos2 = AudioLoader.sounds[2]
+    const gos3 = AudioLoader.sounds[3]
+    const gos4 = AudioLoader.sounds[5]
+    if (AudioLoader.ready) {
+      gos1.playAsync()
+      gos2.playAsync()
+      gos3.playAsync()
+      gos4.playAsync()
+    }
+  }
+  AudioLoader.newHighScoreSound = () => {
+    const gos1 = AudioLoader.sounds[0]
+    const gos2 = AudioLoader.sounds[2]
+    const gos3 = AudioLoader.sounds[4]
+    const gos4 = AudioLoader.sounds[7]
+    if (AudioLoader.ready) {
+      gos1.playAsync()
+      gos2.playAsync()
+      gos3.playAsync()
+      gos4.playAsync()
+    }
   }
 }
 
 AudioLoader.init = async () => {
-  AudioLoader.sounds = await getAllSounds()
+  console.log('AudioLoader RF', AudioLoader.reportFinished)
+  AudioLoader.sounds = await getAllSounds(AudioLoader.reportFinished)
+  AudioLoader.waitingOn = AudioLoader.sounds.length
+
+  console.log('Done with init')
+  AudioLoader.constructGameSounds()
 }
+
 
 export default AudioLoader
