@@ -7,7 +7,6 @@ import { getOptions, setOptions } from '../classes/options-manager'
 class HomeScreen extends React.Component {
   constructor({ navigation }) {
     super()
-
     this.handleScreenFocus = navigation.addListener(
       'willFocus',
 
@@ -57,6 +56,7 @@ class HomeScreen extends React.Component {
   }
 
   getGameOptions = async () => {
+    const { navigation } = this.props
     const gameOptions = await getOptions()
 
     console.log('Have options', gameOptions)

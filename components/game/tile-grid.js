@@ -2,6 +2,7 @@ import React from 'react'
 import { View } from 'react-native'
 import PropTypes from 'prop-types'
 import TileManager from './tile-manager'
+import CenteredMessage from '../game-messages/centered-message'
 
 class TileGrid extends React.Component {
   constructor() {
@@ -20,8 +21,13 @@ class TileGrid extends React.Component {
 
   shouldComponentUpdate = (nextProps, nextState) => {
     const { tileEdge } = this.state
+    const { displayMessage } = this.props
 
     if (tileEdge !== nextState.tileEdge) {
+      return true
+    }
+
+    if (displayMessage !== nextProps.displayMessage) {
       return true
     }
 
@@ -40,8 +46,10 @@ class TileGrid extends React.Component {
   render() {
     const { tileEdge, gridWidth, gridHeight } = this.state
     const {
-      handleUpdateScore, handleUpdateGameMeta, isNewGame, tileData, difficulty,
+      handleUpdateScore, handleUpdateGameMeta, isNewGame, tileData, difficulty, displayMessage,
     } = this.props
+
+    console.log('Rerender?', displayMessage)
 
     return (
       <View
@@ -56,6 +64,7 @@ class TileGrid extends React.Component {
           this.handleLayout(width)
         }}
       >
+        { gridWidth > 0 && gridHeight > 0 && displayMessage && displayMessage(gridWidth, gridHeight) }
         { tileEdge && tileEdge > 0 && (
         <TileManager
           isNewGame={isNewGame}

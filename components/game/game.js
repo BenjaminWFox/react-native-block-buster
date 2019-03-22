@@ -10,6 +10,9 @@ import InfoTile from '../bottom-info/info-tile'
 import InfoIcon from '../bottom-info/info-icon'
 import { formatScore } from '../../classes/formatting'
 import { setGameData } from './game-saver'
+import {
+  getNewHighScoreMessage, getGameOverMessage, highScoreSurpassedEvent, gameOverEvent,
+} from './game-events'
 
 class Game extends React.Component {
   state = {
@@ -19,6 +22,7 @@ class Game extends React.Component {
     points: 0,
     movesLeft: 0,
     lastTouch: {},
+    displayMessage: null,
   }
 
   componentDidMount = () => {
@@ -39,7 +43,11 @@ class Game extends React.Component {
     const didSurpass = !surpassedHighScore && numericHighScore > 0 && score > numericHighScore
 
     if (didSurpass) {
-      console.log('EVENT: New High Score Achieved!')
+      highScoreSurpassedEvent()
+
+      this.setState({
+        displayMessage: this.wrapMessageDelivery(getNewHighScoreMessage),
+      })
     }
 
     if (!highScore) {
@@ -50,7 +58,7 @@ class Game extends React.Component {
       ScoreManager.setHighScore(score, currentDifficulty)
       this.setState({
         highScore: formatScore(score),
-        surpassedHighScore: didSurpass,
+        surpassedHighScore: true,
       })
     }
   }
@@ -69,17 +77,32 @@ class Game extends React.Component {
     })
   }
 
+  wrapMessageDelivery = (messageDeliveryFunc) => messageDeliveryFunc
+
   handleUpdateGameMeta = (currentDifficulty, moves, tiles) => {
     const { score } = this.state
     setGameData(currentDifficulty, score, tiles)
+
+    if (moves === 0) {
+      gameOverEvent()
+
+      this.setState({
+        displayMessage: this.wrapMessageDelivery(getGameOverMessage),
+      })
+    }
+
     this.setState({
       movesLeft: moves,
     })
   }
 
+  handleUpdateDisplayMessage = (message) => {
+    this.setState({ displayMessage: message })
+  }
+
   render() {
     const {
-      score, points, lastTouch, movesLeft, highScore,
+      score, points, lastTouch, movesLeft, highScore, displayMessage,
     } = this.state
     const {
       launchRestartModal, launchMenuScreen, isNewGame, existingGameData, currentDifficulty,
@@ -95,6 +118,8 @@ class Game extends React.Component {
           tileData={tileData}
           handleUpdateScore={this.handleUpdateScore}
           handleUpdateGameMeta={this.handleUpdateGameMeta}
+          displayMessage={displayMessage}
+          messageCompleteCallback={this.handleUpdateDisplayMessage}
         />
         <View style={{
           flex: 1,

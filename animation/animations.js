@@ -1,5 +1,44 @@
 import { Animated } from 'react-native'
 
+export const scaleInAnimation = () => {
+  const animation = new Animated.Value(0)
+
+  Animated.spring(
+    animation,
+    {
+      toValue: 1,
+      duration: 500,
+    },
+  ).start()
+
+  return animation
+}
+
+export const scaleInOutAnimation = () => {
+  const animation = new Animated.Value(0)
+
+  Animated.sequence([
+    Animated.spring(
+      animation,
+      {
+        toValue: 1,
+        duration: 500,
+      },
+    ),
+    Animated.delay(500),
+    Animated.spring(
+      animation,
+      {
+        toValue: 0,
+        duration: 500,
+      },
+    ),
+
+  ]).start()
+
+  return animation
+}
+
 export const flashLastPointsAnimation = function flashLastPointsAnimation() {
   const animation = new Animated.Value(1)
 

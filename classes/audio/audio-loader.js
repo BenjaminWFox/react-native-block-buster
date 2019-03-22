@@ -71,31 +71,7 @@ class AudioLoader {
 }
 
 AudioLoader.init = async () => {
-  // await Audio.setIsEnabledAsync(true)
-
-  // await Audio.setAudioModeAsync({
-  //   playsInSilentModeIOS: false,
-  //   allowsRecordingIOS: false,
-  //   playThroughEarpieceAndroid: true,
-  //   interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
-  //   shouldDuckAndroid: false,
-  //   interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
-  // })
-
   AudioLoader.sounds = await getAllSounds()
 }
-
-// const c2 = await Audio.Sound.createAsync(require('../../assets/sounds/C2.mp3'))
-// const d2 = await Audio.Sound.createAsync(require('../../assets/sounds/D2.mp3'))
-// const e2 = await Audio.Sound.createAsync(require('../../assets/sounds/E2.mp3'))
-// const f2 = await Audio.Sound.createAsync(require('../../assets/sounds/F2.mp3'))
-// const g2 = await Audio.Sound.createAsync(require('../../assets/sounds/G2.mp3'))
-// const a3 = await Audio.Sound.createAsync(require('../../assets/sounds/A3.mp3'))
-// const b3 = await Audio.Sound.createAsync(require('../../assets/sounds/B3.mp3'))
-// const c3 = await Audio.Sound.createAsync(require('../../assets/sounds/C3.mp3'))
-
-
-// const HarpSounds = [c2, d2, e2, f2, g2, a3, b3, c3]
-// const sounds = async () => getAllSounds
 
 export default AudioLoader
