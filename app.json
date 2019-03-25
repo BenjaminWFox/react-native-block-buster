@@ -27,7 +27,8 @@
       "bundleIdentifier": "com.smashingfox.jeweltonesblastsolitare"
     },
     "android": {
-      "package": "com.smashingfox.jeweltonesblastsolitare"
+      "package": "com.smashingfox.jeweltonesblastsolitare",
+      "versionCode": 2
     }
   }
 }

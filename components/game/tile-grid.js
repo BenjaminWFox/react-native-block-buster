@@ -49,7 +49,7 @@ class TileGrid extends React.Component {
       handleUpdateScore, handleUpdateGameMeta, isNewGame, tileData, difficulty, displayMessage,
     } = this.props
 
-    console.log('Rerender?', displayMessage)
+    // console.log('Rerender?', displayMessage)
 
     return (
       <View

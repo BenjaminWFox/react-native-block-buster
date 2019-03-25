@@ -14,15 +14,15 @@ class RepeatableSound {
     this.playCount = 0
     this.callbackOnInit = callback
     this.isReady = false
-    this.init()
   }
 
   init = async () => {
     this.sounds = await Promise.all(
-      this.sounds.map(() => Audio.Sound.createAsync(this.assetRequired)),
+      this.sounds.map(() => Audio.Sound.createAsync(this.assetRequired, {}, null, false)),
     )
     this.isReady = true
     this.callbackOnInit()
+    return true
   }
 
   playAsync = () => {
@@ -52,23 +52,31 @@ const a4 = require('../../assets/sounds/a4.mp3')
 const b4 = require('../../assets/sounds/b4.mp3')
 const c4 = require('../../assets/sounds/c4.mp3')
 
-const getAllSounds = (callback) => [
-  new RepeatableSound(c2, 5, callback),
-  new RepeatableSound(d2, 5, callback),
-  new RepeatableSound(e2, 5, callback),
-  new RepeatableSound(f2, 5, callback),
-  new RepeatableSound(g2, 5, callback),
-  new RepeatableSound(a3, 5, callback),
-  new RepeatableSound(b3, 5, callback),
-  new RepeatableSound(c3, 5, callback),
-  new RepeatableSound(d3, 5, callback),
-  new RepeatableSound(e3, 5, callback),
-  new RepeatableSound(f3, 5, callback),
-  new RepeatableSound(g3, 5, callback),
-  new RepeatableSound(a4, 5, callback),
-  new RepeatableSound(b4, 5, callback),
-  new RepeatableSound(c4, 5, callback),
-]
+const getNewRepeatableSound = async (sound, num, callback) => {
+  const nrm = new RepeatableSound(sound, num, callback)
+  await nrm.init()
+  return nrm
+}
+
+const getAllSounds = async (callback) => {
+  const a = await getNewRepeatableSound(c2, 5, callback)
+  const b = await getNewRepeatableSound(d2, 5, callback)
+  const c = await getNewRepeatableSound(e2, 5, callback)
+  const d = await getNewRepeatableSound(f2, 5, callback)
+  const e = await getNewRepeatableSound(g2, 5, callback)
+  const f = await getNewRepeatableSound(a3, 5, callback)
+  const g = await getNewRepeatableSound(b3, 5, callback)
+  const h = await getNewRepeatableSound(c3, 5, callback)
+  const i = await getNewRepeatableSound(d3, 5, callback)
+  const p = await getNewRepeatableSound(e3, 5, callback)
+  const o = await getNewRepeatableSound(f3, 5, callback)
+  const n = await getNewRepeatableSound(g3, 5, callback)
+  const m = await getNewRepeatableSound(a4, 5, callback)
+  const k = await getNewRepeatableSound(b4, 5, callback)
+  const j = await getNewRepeatableSound(c4, 5, callback)
+
+  return [a, b, c, d, e, f, g, h, i, p, o, n, m, k, j]
+}
 
 class AudioLoader {
   constructor() {

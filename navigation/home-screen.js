@@ -59,7 +59,7 @@ class HomeScreen extends React.Component {
     const { navigation } = this.props
     const gameOptions = await getOptions()
 
-    console.log('Have options', gameOptions)
+    // console.log('Have options', gameOptions)
     if (gameOptions) {
       this.setState({
         gameOptions,
