@@ -9,15 +9,11 @@ const getStartingSound = () => {
   const noteIndexes = sounds.length - 1
   const startSoundIndex = getRandomInt(0, noteIndexes)
 
-  // console.log('Have sounds from AudioLoader', sounds)
-
   return sounds[startSoundIndex]
 }
 
 export const playSound = () => {
   const sound = getStartingSound()
-
-  // console.log('Got a sound?', sound)
 
   sound.playAsync()
 }
