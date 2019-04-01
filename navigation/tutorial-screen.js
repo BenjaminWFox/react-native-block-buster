@@ -31,10 +31,8 @@ class TutorialScreen extends React.Component {
           }}
           onPlaybackStatusUpdate={this._onPlaybackStatusUpdate}
           shouldPlay
-          style={{
-            width: '100%',
-            height: '100%',
-          }}
+          resizeMode="contain"
+          style={{ height: 200 }}
         />
       </View>
     )
