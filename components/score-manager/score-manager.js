@@ -2,7 +2,7 @@
 import { AsyncStorage } from 'react-native'
 import PointPopper from './point-popper'
 import Scoreboard from './scoreboard'
-import { formatScore } from '../../classes/formatting'
+import formatScore from '../../classes/formatting'
 import { getValue, setValue, KEYS } from '../../classes/storage-api'
 // import { difficulties } from '../../classes/options-manager'
 

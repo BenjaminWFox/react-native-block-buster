@@ -1,7 +1,6 @@
 import React from 'react'
-import {
-  Modal, View, TouchableHighlight, Text,
-} from 'react-native'
+import { Modal, View } from 'react-native'
+import PropTypes from 'prop-types'
 import Theme from '../../theme'
 
 const RestartGameModal = function RestartGameModal({ isVisible, willRestartGame }) {
@@ -48,6 +47,11 @@ const RestartGameModal = function RestartGameModal({ isVisible, willRestartGame 
       </View>
     </Modal>
   )
+}
+
+RestartGameModal.propTypes = {
+  isVisible: PropTypes.bool.isRequired,
+  willRestartGame: PropTypes.func.isRequired,
 }
 
 export default RestartGameModal

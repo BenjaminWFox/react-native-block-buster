@@ -1,7 +1,8 @@
 import React from 'react'
 import { View, Picker, Platform } from 'react-native'
+import PropTypes from 'prop-types'
 import Theme from '../theme'
-import { getOptions, setOptions, difficulties } from '../classes/options-manager'
+import { setOptions, difficulties } from '../classes/options-manager'
 
 class OptionsScreen extends React.Component {
   constructor({ navigation }) {
@@ -25,7 +26,7 @@ class OptionsScreen extends React.Component {
 
   render() {
     const { options } = this.state
-    console.log(Theme)
+
     return (
       <View style={Theme.styles.container}>
         <View>
@@ -76,6 +77,10 @@ class OptionsScreen extends React.Component {
       </View>
     )
   }
+}
+
+OptionsScreen.propTypes = {
+  navigation: PropTypes.object.isRequired,
 }
 
 export default OptionsScreen

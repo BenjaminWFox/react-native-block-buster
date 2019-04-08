@@ -8,7 +8,7 @@ import TileGrid from './tile-grid'
 import ScoreManager from '../score-manager/score-manager'
 import InfoTile from '../bottom-info/info-tile'
 import InfoIcon from '../bottom-info/info-icon'
-import { formatScore } from '../../classes/formatting'
+import formatScore from '../../classes/formatting'
 import { setGameData } from './game-saver'
 import {
   getNewHighScoreMessage, getGameOverMessage, highScoreSurpassedEvent, gameOverEvent,
@@ -37,13 +37,13 @@ class Game extends React.Component {
   }
 
   handleUpdateHighScore = async () => {
-    const { currentDifficulty } = this.props
+    const { currentDifficulty, audioManager } = this.props
     const { score, highScore, surpassedHighScore } = this.state
     const numericHighScore = (highScore && highScore.replace(/,/g, '')) || 0
     const didSurpass = !surpassedHighScore && numericHighScore > 0 && score > numericHighScore
 
     if (didSurpass) {
-      highScoreSurpassedEvent()
+      highScoreSurpassedEvent(audioManager)
 
       this.setState({
         displayMessage: this.wrapMessageDelivery(getNewHighScoreMessage),
@@ -81,10 +81,11 @@ class Game extends React.Component {
 
   handleUpdateGameMeta = (currentDifficulty, moves, tiles) => {
     const { score } = this.state
+    const { audioManager } = this.props
     setGameData(currentDifficulty, score, tiles)
 
     if (moves === 0) {
-      gameOverEvent()
+      gameOverEvent(audioManager)
 
       this.setState({
         displayMessage: this.wrapMessageDelivery(getGameOverMessage),
@@ -105,7 +106,8 @@ class Game extends React.Component {
       score, points, lastTouch, movesLeft, highScore, displayMessage,
     } = this.state
     const {
-      launchRestartModal, launchMenuScreen, isNewGame, existingGameData, currentDifficulty,
+      launchRestartModal, launchMenuScreen, isNewGame,
+      existingGameData, currentDifficulty, audioManager,
     } = this.props
 
     const { tileData } = existingGameData || {}
@@ -113,6 +115,7 @@ class Game extends React.Component {
     return (
       <>
         <TileGrid
+          audioManager={audioManager}
           isNewGame={isNewGame}
           difficulty={currentDifficulty}
           tileData={tileData}
@@ -154,7 +157,7 @@ Game.propTypes = {
   currentDifficulty: PropTypes.number.isRequired,
   launchRestartModal: PropTypes.func.isRequired,
   launchMenuScreen: PropTypes.func.isRequired,
-  options: PropTypes.object.isRequired,
+  audioManager: PropTypes.object.isRequired,
 }
 
 Game.defaultProps = {

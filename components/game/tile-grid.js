@@ -2,7 +2,6 @@ import React from 'react'
 import { View } from 'react-native'
 import PropTypes from 'prop-types'
 import TileManager from './tile-manager'
-import CenteredMessage from '../game-messages/centered-message'
 
 class TileGrid extends React.Component {
   constructor() {
@@ -40,13 +39,11 @@ class TileGrid extends React.Component {
     this.setState({ gridWidth: width, gridHeight, tileEdge })
   }
 
-  // handleHeightAssignment = (height) => {
-  // }
-
   render() {
     const { tileEdge, gridWidth, gridHeight } = this.state
     const {
-      handleUpdateScore, handleUpdateGameMeta, isNewGame, tileData, difficulty, displayMessage,
+      handleUpdateScore, handleUpdateGameMeta, isNewGame,
+      tileData, difficulty, displayMessage, audioManager,
     } = this.props
 
     // console.log('Rerender?', displayMessage)
@@ -64,9 +61,11 @@ class TileGrid extends React.Component {
           this.handleLayout(width)
         }}
       >
-        { gridWidth > 0 && gridHeight > 0 && displayMessage && displayMessage(gridWidth, gridHeight) }
+        { gridWidth > 0 && gridHeight > 0 && displayMessage
+          && displayMessage(gridWidth, gridHeight) }
         { tileEdge && tileEdge > 0 && (
         <TileManager
+          audioManager={audioManager}
           isNewGame={isNewGame}
           difficulty={difficulty}
           tileData={tileData}
@@ -88,6 +87,17 @@ class TileGrid extends React.Component {
 
 TileGrid.propTypes = {
   handleUpdateScore: PropTypes.func.isRequired,
+  handleUpdateGameMeta: PropTypes.func.isRequired,
+  isNewGame: PropTypes.bool.isRequired,
+  difficulty: PropTypes.number.isRequired,
+  audioManager: PropTypes.object.isRequired,
+  displayMessage: PropTypes.func,
+  tileData: PropTypes.object,
+}
+
+TileGrid.defaultProps = {
+  tileData: undefined,
+  displayMessage: null,
 }
 
 export default TileGrid

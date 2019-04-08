@@ -1,5 +1,6 @@
 import React from 'react'
 import { Animated, View } from 'react-native'
+import PropTypes from 'prop-types'
 import Theme from '../../theme'
 import { scaleInAnimation, scaleInOutAnimation } from '../../animation/animations'
 
@@ -50,6 +51,13 @@ const CenteredGameMessage = function CenteredMessage({
       ))}
     </View>
   )
+}
+
+CenteredGameMessage.propTypes = {
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired,
+  messageTextArray: PropTypes.array.isRequired,
+  autoOut: PropTypes.bool.isRequired,
 }
 
 export default CenteredGameMessage

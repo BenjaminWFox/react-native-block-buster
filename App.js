@@ -1,16 +1,18 @@
 import React from 'react'
-import { AsyncStorage, StatusBar } from 'react-native'
-import { NavigationActions } from 'react-navigation'
+import { StatusBar } from 'react-native'
 import { Font } from 'expo'
 import AppContainer from './navigation/navigators'
-import { KEYS } from './classes/storage-api'
-import { getOptions } from './classes/options-manager'
+import AudioManager from './classes/audio/audio-manager'
+import AudioContext from './classes/audio/audio-context'
+
+const FONT = require('./assets/fonts/WendyOne-Regular.ttf')
 
 class App extends React.Component {
-  // constructor() {
-  //   super()
+  constructor() {
+    super()
 
-  // }
+    this.audioManager = undefined
+  }
 
   state = {
     loaded: false,
@@ -23,8 +25,13 @@ class App extends React.Component {
     //   KEYS.HIGH_SCORES,
     // ])
     await Font.loadAsync({
-      'WendyOne-Regular': require('./assets/fonts/WendyOne-Regular.ttf'),
+      'WendyOne-Regular': FONT,
     })
+    const audioManager = new AudioManager()
+
+    await audioManager.load()
+
+    this.audioManager = audioManager
 
     this.setState({ loaded: true })
   }
@@ -34,11 +41,13 @@ class App extends React.Component {
     return loaded && (
       <>
         <StatusBar barStyle="light-content" />
-        <AppContainer
-          ref={(nav) => {
-            this.navigator = nav
-          }}
-        />
+        <AudioContext.Provider value={this.audioManager}>
+          <AppContainer
+            ref={(nav) => {
+              this.navigator = nav
+            }}
+          />
+        </AudioContext.Provider>
       </>
     )
   }

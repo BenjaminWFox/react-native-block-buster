@@ -1,31 +1,65 @@
 // import { Audio } from 'expo'
-import AudioLoader from './audio-loader'
+// import AudioLoader from './audio-loader'
 import { getRandomInt } from '../utilities'
+import AudioLoader from './audio-loader'
 
-AudioLoader.init()
+const DEFAULT_MAX_PLAYS = 4
 
-const getStartingSound = () => {
-  const { sounds } = AudioLoader
-  const noteIndexes = sounds.length - 1
-  const startSoundIndex = getRandomInt(0, noteIndexes)
+export default class AudioManger {
+  constructor() {
+    this.sounds = undefined
+    this.lastSoundPlayed = undefined
+    this.ready = false
+    this.soundAnimation = undefined
+    this.soundAnimationTimesPlayed = 0
+    this.soundAnimationMaxPlays = DEFAULT_MAX_PLAYS
+  }
 
-  return sounds[startSoundIndex]
-}
+  async load() {
+    const audioLoader = new AudioLoader()
 
-export const playSound = () => {
-  const sound = getStartingSound()
+    await audioLoader.init()
 
-  sound.playAsync()
-}
+    this.sounds = audioLoader.sounds
+    this.ready = true
+  }
 
-export const playGameOverSound = () => {
-  AudioLoader.gameOverSound()
-}
+  playSound = async () => {
+    if (this.soundAnimation) {
+      this.soundAnimationTimesPlayed += 1
+      if (this.soundAnimationTimesPlayed >= this.soundAnimationMaxPlays) {
+        clearTimeout(this.soundAnimation)
+        this.soundAnimation = undefined
+        this.soundAnimationTimesPlayed = 0
+        this.soundAnimationMaxPlays = DEFAULT_MAX_PLAYS
+      }
+    }
+    let idx = this.lastSoundPlayed
 
-export const playNewHighScoreSound = () => {
-  AudioLoader.newHighScoreSound()
-}
+    while (idx === this.lastSoundPlayed) {
+      idx = getRandomInt(0, this.sounds.length - 1)
+    }
 
-export const playNSounds = (number) => {
-  console.log('Play how many sounds?', number)
+    this.lastSoundPlayed = idx
+
+    await this.sounds[idx].sound.playFromPositionAsync(100).then(() => {}).catch(() => {})
+  }
+
+  playGameOverSound = async () => {
+    this.soundAnimation = setTimeout(this.playNewHighScoreSound, 150)
+    this.playSound()
+  }
+
+  playNewHighScoreSound = async () => {
+    this.soundAnimation = setTimeout(this.playNewHighScoreSound, 150)
+    this.playSound()
+  }
+
+  playNSounds = async (n) => {
+    this.soundAnimationMaxPLays = n
+    this.soundAnimation = setTimeout(() => {
+      this.playNSounds(n)
+    }, 150)
+    this.playSound()
+  }
 }
