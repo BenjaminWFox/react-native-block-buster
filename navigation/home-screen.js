@@ -3,6 +3,8 @@ import { View } from 'react-native'
 import Theme from '../theme'
 import { getGameData } from '../components/game/game-saver'
 import { getOptions, setOptions } from '../classes/options-manager'
+import AudioContext from '../classes/audio/audio-context'
+import { getRandomInt } from '../classes/utilities'
 
 class HomeScreen extends React.Component {
   constructor({ navigation }) {
@@ -69,6 +71,10 @@ class HomeScreen extends React.Component {
     }
   }
 
+  handleSoundPress = (audio) => {
+    audio.playSound()
+  }
+
   render() {
     const { canResumeGame, existingGameData, gameOptions } = this.state
     const { navigation } = this.props
@@ -119,6 +125,19 @@ class HomeScreen extends React.Component {
             navigation.navigate('Tutorial', { cameFromHome: true })
           }}
         />
+        <AudioContext.Consumer>
+          { (sounds) => (
+            <Theme.Button
+              backgroundColor={Theme.colors.jewel.yellow}
+              textColor="#ffffff"
+              title="Play a sound"
+              onPressFunc={() => {
+                this.handleSoundPress(sounds)
+              }}
+            />
+          )
+        }
+        </AudioContext.Consumer>
       </View>
     )
   }

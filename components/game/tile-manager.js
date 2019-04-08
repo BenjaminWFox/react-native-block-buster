@@ -11,10 +11,11 @@ import { tilesBrokenEvent } from './game-events'
 
 class TileManager extends React.Component {
   constructor({
-    tileEdge, tileRows, tilesPerRow, tilePadding, gridWidth, difficulty,
+    tileEdge, tileRows, tilesPerRow, tilePadding, gridWidth, difficulty, audioManager,
   }) {
     super()
 
+    this.audioManager = audioManager
     this.tileEdge = tileEdge
     this.tileRows = tileRows
     this.columns = getColumnsArray(tilesPerRow)
@@ -231,7 +232,7 @@ class TileManager extends React.Component {
 
   handleTileClick = (key, event) => {
     if (!this.burstTiles.length && this.tilesFallingDown === 0) {
-      tilesBrokenEvent()
+      tilesBrokenEvent(this.audioManager)
       const { tiles } = this.state
       const tempTiles = tiles
       let allHitTiles = [key]

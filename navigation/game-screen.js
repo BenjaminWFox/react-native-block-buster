@@ -4,6 +4,7 @@ import {
 } from 'react-native'
 import Game from '../components/game/game'
 import RestartGameModal from '../components/modals/restart-game-modal'
+import AudioContext from '../classes/audio/audio-context'
 
 class GameScreen extends React.Component {
   static navigationOptions = {
@@ -82,16 +83,22 @@ class GameScreen extends React.Component {
           borderColor: '#333',
         }}
         />
-        <Game
-          style={{ paddingVertical: 10 }}
-          key={gameId}
-          options={gameOptions}
-          currentDifficulty={currentDifficulty}
-          isNewGame={isNewGame}
-          existingGameData={existingGameData}
-          launchRestartModal={this.handleRestartModal}
-          launchMenuScreen={this.handleOpenMenu}
-        />
+        <AudioContext.Consumer>
+          {(audioManager) => (
+
+            <Game
+              audioManager={audioManager}
+              style={{ paddingVertical: 10 }}
+              key={gameId}
+              options={gameOptions}
+              currentDifficulty={currentDifficulty}
+              isNewGame={isNewGame}
+              existingGameData={existingGameData}
+              launchRestartModal={this.handleRestartModal}
+              launchMenuScreen={this.handleOpenMenu}
+            />
+          )}
+        </AudioContext.Consumer>
         { restartModalVisible && (
           <RestartGameModal
             isVisible={restartModalVisible}

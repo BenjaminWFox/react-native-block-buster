@@ -5,12 +5,15 @@ import { Font } from 'expo'
 import AppContainer from './navigation/navigators'
 import { KEYS } from './classes/storage-api'
 import { getOptions } from './classes/options-manager'
+import AudioManager from './classes/audio/audio-manager'
+import AudioContext from './classes/audio/audio-context'
 
 class App extends React.Component {
-  // constructor() {
-  //   super()
+  constructor() {
+    super()
 
-  // }
+    this.audioManager = undefined
+  }
 
   state = {
     loaded: false,
@@ -25,6 +28,11 @@ class App extends React.Component {
     await Font.loadAsync({
       'WendyOne-Regular': require('./assets/fonts/WendyOne-Regular.ttf'),
     })
+    const audioManager = new AudioManager()
+
+    await audioManager.load()
+
+    this.audioManager = audioManager
 
     this.setState({ loaded: true })
   }
@@ -34,11 +42,13 @@ class App extends React.Component {
     return loaded && (
       <>
         <StatusBar barStyle="light-content" />
-        <AppContainer
-          ref={(nav) => {
-            this.navigator = nav
-          }}
-        />
+        <AudioContext.Provider value={this.audioManager}>
+          <AppContainer
+            ref={(nav) => {
+              this.navigator = nav
+            }}
+          />
+        </AudioContext.Provider>
       </>
     )
   }

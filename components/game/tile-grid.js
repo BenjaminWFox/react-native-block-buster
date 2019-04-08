@@ -46,7 +46,7 @@ class TileGrid extends React.Component {
   render() {
     const { tileEdge, gridWidth, gridHeight } = this.state
     const {
-      handleUpdateScore, handleUpdateGameMeta, isNewGame, tileData, difficulty, displayMessage,
+      handleUpdateScore, handleUpdateGameMeta, isNewGame, tileData, difficulty, displayMessage, audioManager,
     } = this.props
 
     // console.log('Rerender?', displayMessage)
@@ -67,6 +67,7 @@ class TileGrid extends React.Component {
         { gridWidth > 0 && gridHeight > 0 && displayMessage && displayMessage(gridWidth, gridHeight) }
         { tileEdge && tileEdge > 0 && (
         <TileManager
+          audioManager={audioManager}
           isNewGame={isNewGame}
           difficulty={difficulty}
           tileData={tileData}
