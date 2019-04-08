@@ -2,12 +2,14 @@ import React from 'react'
 import { Animated, Text, Dimensions } from 'react-native'
 import PropTypes from 'prop-types'
 import { flashLastPointsAnimation, interpolatePointsAnimForPosition } from '../../animation/animations'
-import { formatScore } from '../../classes/formatting'
+import formatScore from '../../classes/formatting'
 
 class PointPopper extends React.Component {
   shouldComponentUpdate = (nextProps) => {
     const { coords, points } = this.props
-    if (coords.x !== nextProps.coords.x && coords.y !== nextProps.coords.y && points !== nextProps) {
+    if (coords.x !== nextProps.coords.x
+      && coords.y !== nextProps.coords.y
+      && points !== nextProps) {
       return true
     }
     return false

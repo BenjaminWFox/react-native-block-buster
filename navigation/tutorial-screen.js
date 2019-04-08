@@ -1,7 +1,8 @@
 import React from 'react'
 import { View } from 'react-native'
 import { Video, Asset } from 'expo'
-// import TutorialVideo from '../assets/tutorial.mp4'
+import PropTypes from 'prop-types'
+
 const TutorialVideo = Asset.fromModule(require('../assets/tutorial.mp4'))
 
 class TutorialScreen extends React.Component {
@@ -29,7 +30,7 @@ class TutorialScreen extends React.Component {
           ref={(ref) => {
             this.player = ref
           }}
-          onPlaybackStatusUpdate={this._onPlaybackStatusUpdate}
+          onPlaybackStatusUpdate={this._onPlaybackStatusUpdate} // eslint-disable-line
           shouldPlay
           resizeMode="contain"
           style={{ height: 200 }}
@@ -38,4 +39,9 @@ class TutorialScreen extends React.Component {
     )
   }
 }
+
+TutorialScreen.propTypes = {
+  navigation: PropTypes.object.isRequired,
+}
+
 export default TutorialScreen

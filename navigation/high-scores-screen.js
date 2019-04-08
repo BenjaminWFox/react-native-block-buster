@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, View } from 'react-native'
+import { View } from 'react-native'
 import Theme from '../theme'
 import { difficulties } from '../classes/options-manager'
 import ScoreManager from '../components/score-manager/score-manager'
@@ -48,7 +48,7 @@ class HighScoresScreen extends React.Component {
         backgroundColor: '#000000',
       }}
       >
-        {highScores.map((scoreObject, index) => (
+        {highScores.map((scoreObject) => (
           <View
             key={scoreObject.difficulty}
             style={{

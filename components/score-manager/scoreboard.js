@@ -1,7 +1,7 @@
 import React from 'react'
-import { View, Text } from 'react-native'
+import { View } from 'react-native'
 import PropTypes from 'prop-types'
-import { formatScore } from '../../classes/formatting'
+import formatScore from '../../classes/formatting'
 import Theme from '../../theme'
 
 const Scoreboard = function Scoreboard({ score }) {

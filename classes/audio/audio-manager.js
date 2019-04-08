@@ -3,6 +3,8 @@
 import { getRandomInt } from '../utilities'
 import AudioLoader from './audio-loader'
 
+const DEFAULT_MAX_PLAYS = 4
+
 export default class AudioManger {
   constructor() {
     this.sounds = undefined
@@ -10,15 +12,13 @@ export default class AudioManger {
     this.ready = false
     this.soundAnimation = undefined
     this.soundAnimationTimesPlayed = 0
-    this.soundAnimationMaxPlays = 4
+    this.soundAnimationMaxPlays = DEFAULT_MAX_PLAYS
   }
 
   async load() {
     const audioLoader = new AudioLoader()
 
     await audioLoader.init()
-
-    console.log('AM done loading')
 
     this.sounds = audioLoader.sounds
     this.ready = true
@@ -31,6 +31,7 @@ export default class AudioManger {
         clearTimeout(this.soundAnimation)
         this.soundAnimation = undefined
         this.soundAnimationTimesPlayed = 0
+        this.soundAnimationMaxPlays = DEFAULT_MAX_PLAYS
       }
     }
     let idx = this.lastSoundPlayed
@@ -53,40 +54,12 @@ export default class AudioManger {
     this.soundAnimation = setTimeout(this.playNewHighScoreSound, 150)
     this.playSound()
   }
-}
 
-// AudioLoader.init()
-
-// const getStartingSound = () => {
-//   const { sounds } = AudioLoader
-//   const noteIndexes = sounds.length - 1
-//   const startSoundIndex = getRandomInt(0, noteIndexes)
-
-//   return sounds[startSoundIndex]
-// }
-export const load = async () => {
-  const audioLoader = new AudioLoader()
-
-  await audioLoader.init()
-}
-
-export const playSound = () => {
-  // const sound = getStartingSound()
-
-  // sound.playAsync()
-  console.log('PLAY SOUND...')
-}
-
-export const playGameOverSound = () => {
-  // AudioLoader.gameOverSound()
-  console.log('PLAY GO SOUND...')
-}
-
-export const playNewHighScoreSound = () => {
-  // AudioLoader.newHighScoreSound()
-  console.log('PLAY HS SOUND...')
-}
-
-export const playNSounds = (number) => {
-  console.log('Play how many sounds?', number)
+  playNSounds = async (n) => {
+    this.soundAnimationMaxPLays = n
+    this.soundAnimation = setTimeout(() => {
+      this.playNSounds(n)
+    }, 150)
+    this.playSound()
+  }
 }

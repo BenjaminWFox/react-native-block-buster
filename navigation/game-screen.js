@@ -2,6 +2,7 @@ import React from 'react'
 import {
   StatusBar, View, NativeModules, Platform,
 } from 'react-native'
+import PropTypes from 'prop-types'
 import Game from '../components/game/game'
 import RestartGameModal from '../components/modals/restart-game-modal'
 import AudioContext from '../classes/audio/audio-context'
@@ -58,7 +59,7 @@ class GameScreen extends React.Component {
     }
   }
 
-  handleOpenMenu = (tileSet) => {
+  handleOpenMenu = () => {
     const { navigation } = this.props
 
     navigation.navigate('Home')
@@ -73,7 +74,9 @@ class GameScreen extends React.Component {
     const existingGameData = navigation.getParam('existingGameData', undefined)
     const gameOptions = navigation.getParam('gameOptions', { difficulty: 'normal' })
 
-    const currentDifficulty = existingGameData ? existingGameData.difficulty : gameOptions.difficulty
+    const currentDifficulty = existingGameData
+      ? existingGameData.difficulty
+      : gameOptions.difficulty
 
     return (
       <View style={{ flex: 1, backgroundColor: '#000' }}>
@@ -108,6 +111,10 @@ class GameScreen extends React.Component {
       </View>
     )
   }
+}
+
+GameScreen.propTypes = {
+  navigation: PropTypes.object.isRequired,
 }
 
 export default GameScreen

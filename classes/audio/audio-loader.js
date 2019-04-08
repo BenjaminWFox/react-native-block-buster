@@ -1,9 +1,8 @@
-import { Audio, Asset } from 'expo'
+import { Audio } from 'expo'
 
 const c2 = require('../../assets/sounds/c2.mp3')
 const d2 = require('../../assets/sounds/d2.mp3')
 const e2 = require('../../assets/sounds/e2.mp3')
-
 const f2 = require('../../assets/sounds/f2.mp3')
 const g2 = require('../../assets/sounds/g2.mp3')
 const a3 = require('../../assets/sounds/a3.mp3')
@@ -29,10 +28,6 @@ class AudioLoader {
   }
 
   async init() {
-    // this.rawSoundPaths.forEach((soundPath) => {
-    //   this.loadSound(soundPath)
-    // })
-
     await Promise.all(this.rawSoundPaths.map((soundPath) => this.loadSound(soundPath)))
   }
 
@@ -42,7 +37,7 @@ class AudioLoader {
         this.sounds.push(soundObject)
         this.loadCompleted()
       })
-      .catch((err) => {
+      .catch(() => {
         this.loadCompleted()
       })
   }

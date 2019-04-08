@@ -86,7 +86,7 @@ class TileManager extends React.Component {
       tileElements: tilesArray.map((tile) => tile.element),
     }, () => {
       if (updateType === Tile.states.falling) {
-        console.log('EVENT: Tiles starting to fall')
+        // console.log('EVENT: Tiles starting to fall')
       }
     })
   }
@@ -160,7 +160,7 @@ class TileManager extends React.Component {
       })
     })
 
-    console.log('EVENT: Blocks respawned', this.tilesFallingDown)
+    // console.log('EVENT: Blocks respawned', this.tilesFallingDown)
 
     this.updateTiles(tempTiles, Tile.states.falling)
     this.burstTiles = []
@@ -225,7 +225,7 @@ class TileManager extends React.Component {
   handleTileRespawn = () => {
     this.burstTilesCompletedDespawn += 1
     if (this.burstTilesCompletedDespawn === this.burstTiles.length) {
-      console.log('EVENT: Blocks DeSpawned')
+      // console.log('EVENT: Blocks DeSpawned')
       this.respawnAllTiles()
     }
   }
@@ -252,7 +252,7 @@ class TileManager extends React.Component {
           )
         })
 
-        console.log('EVENT: Blocks Broken')
+        // console.log('EVENT: Blocks Broken')
         this.sendScoreUpdate(allHitTiles.length, event)
         this.burstTiles = allHitTiles
         this.burstTilesCompletedDespawn = 0
@@ -269,7 +269,7 @@ class TileManager extends React.Component {
   }
 
   sendScoreUpdate = (totalHitTiles, event) => {
-    const { handleUpdateScore, difficulty } = this.props
+    const { handleUpdateScore } = this.props
     const POINTS_PER_TILE = 10
     const OVERRUN_MULTIPLYER_PER_TILE = 0.5
     let points = 0
@@ -307,7 +307,7 @@ class TileManager extends React.Component {
     this.tilesFallingDown -= 1
 
     if (this.tilesFallingDown === 0) {
-      console.log('EVENT: All tiles settled')
+      // console.log('EVENT: All tiles settled')
     }
   }
 
@@ -349,6 +349,7 @@ TileManager.propTypes = {
   handleUpdateGameMeta: PropTypes.func.isRequired,
   difficulty: PropTypes.number.isRequired,
   tileData: PropTypes.array,
+  audioManager: PropTypes.object.isRequired,
 }
 
 TileManager.defaultProps = {

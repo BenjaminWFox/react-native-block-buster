@@ -1,6 +1,4 @@
-import React from 'react'
 import { createStackNavigator, createAppContainer } from 'react-navigation'
-import { Button, Text } from 'react-native'
 import HomeScreen from './home-screen'
 import GameScreen from './game-screen'
 import OptionsScreen from './options-screen'
@@ -21,7 +19,7 @@ const headerLeftContainerStyle = {
   fontFamily: Theme.fontFamily,
 }
 
-const defaultNavOptions = (title) => ({ navigation }) => ({
+const defaultNavOptions = (title) => () => ({
   title,
   headerStyle,
   headerTitleStyle,

@@ -1,5 +1,4 @@
 import React from 'react'
-import { playSound, playGameOverSound, playNewHighScoreSound } from '../../classes/audio/audio-manager'
 import CenteredMessage from '../game-messages/centered-message'
 
 export const tilesBrokenEvent = (audioManager) => {
@@ -7,14 +6,14 @@ export const tilesBrokenEvent = (audioManager) => {
 }
 
 export const gameOverEvent = (audioManager) => {
-  console.log('GAME OVER!')
+  // console.log('GAME OVER!')
   audioManager.playGameOverSound()
 }
 
 export const getGameOverMessage = (width, height) => (<CenteredMessage width={width} height={height} messageTextArray={['Game', 'Over']} autoOut={false} />)
 
 export const highScoreSurpassedEvent = (audioManager) => {
-  console.log('NEW HIGH SCORE!!')
+  // console.log('NEW HIGH SCORE!!')
   audioManager.playNewHighScoreSound()
 }
 

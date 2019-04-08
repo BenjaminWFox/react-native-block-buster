@@ -1,10 +1,10 @@
 import React from 'react'
 import { View } from 'react-native'
+import PropTypes from 'prop-types'
 import Theme from '../theme'
 import { getGameData } from '../components/game/game-saver'
 import { getOptions, setOptions } from '../classes/options-manager'
-import AudioContext from '../classes/audio/audio-context'
-import { getRandomInt } from '../classes/utilities'
+// import AudioContext from '../classes/audio/audio-context'
 
 class HomeScreen extends React.Component {
   constructor({ navigation }) {
@@ -35,7 +35,6 @@ class HomeScreen extends React.Component {
   }
 
   state = {
-    ready: false,
     canResumeGame: false,
     existingGameData: null,
     gameOptions: null,
@@ -58,10 +57,8 @@ class HomeScreen extends React.Component {
   }
 
   getGameOptions = async () => {
-    const { navigation } = this.props
     const gameOptions = await getOptions()
 
-    // console.log('Have options', gameOptions)
     if (gameOptions) {
       this.setState({
         gameOptions,
@@ -69,6 +66,8 @@ class HomeScreen extends React.Component {
 
       return gameOptions
     }
+
+    return false
   }
 
   handleSoundPress = (audio) => {
@@ -125,7 +124,7 @@ class HomeScreen extends React.Component {
             navigation.navigate('Tutorial', { cameFromHome: true })
           }}
         />
-        <AudioContext.Consumer>
+        {/* <AudioContext.Consumer>
           { (sounds) => (
             <Theme.Button
               backgroundColor={Theme.colors.jewel.yellow}
@@ -137,9 +136,13 @@ class HomeScreen extends React.Component {
             />
           )
         }
-        </AudioContext.Consumer>
+        </AudioContext.Consumer> */}
       </View>
     )
   }
+}
+
+HomeScreen.propTypes = {
+  navigation: PropTypes.object.isRequired,
 }
 export default HomeScreen

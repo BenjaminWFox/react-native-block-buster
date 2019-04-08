@@ -8,7 +8,7 @@ import TileGrid from './tile-grid'
 import ScoreManager from '../score-manager/score-manager'
 import InfoTile from '../bottom-info/info-tile'
 import InfoIcon from '../bottom-info/info-icon'
-import { formatScore } from '../../classes/formatting'
+import formatScore from '../../classes/formatting'
 import { setGameData } from './game-saver'
 import {
   getNewHighScoreMessage, getGameOverMessage, highScoreSurpassedEvent, gameOverEvent,
@@ -106,7 +106,8 @@ class Game extends React.Component {
       score, points, lastTouch, movesLeft, highScore, displayMessage,
     } = this.state
     const {
-      launchRestartModal, launchMenuScreen, isNewGame, existingGameData, currentDifficulty, audioManager,
+      launchRestartModal, launchMenuScreen, isNewGame,
+      existingGameData, currentDifficulty, audioManager,
     } = this.props
 
     const { tileData } = existingGameData || {}
@@ -156,7 +157,7 @@ Game.propTypes = {
   currentDifficulty: PropTypes.number.isRequired,
   launchRestartModal: PropTypes.func.isRequired,
   launchMenuScreen: PropTypes.func.isRequired,
-  options: PropTypes.object.isRequired,
+  audioManager: PropTypes.object.isRequired,
 }
 
 Game.defaultProps = {
