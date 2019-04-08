@@ -42,7 +42,7 @@ export default class AudioManger {
 
     this.lastSoundPlayed = idx
 
-    await this.sounds[idx].sound.playFromPositionAsync(0).then(() => {}).catch(() => {})
+    await this.sounds[idx].sound.playFromPositionAsync(100).then(() => {}).catch(() => {})
   }
 
   playGameOverSound = async () => {

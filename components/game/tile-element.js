@@ -2,6 +2,7 @@ import React from 'react'
 import { TouchableHighlight, Animated } from 'react-native'
 import PropTypes from 'prop-types'
 import Theme from '../../theme'
+import AudioContext from '../../classes/audio/audio-context'
 
 const TileElement = function TileElement({
   edge, padding, color, x, y, onClick,
@@ -18,26 +19,33 @@ const TileElement = function TileElement({
       backgroundColor: 'transparent',
     }}
     >
-      <TouchableHighlight
-        onPress={(event) => {
-          onClick(index, event.nativeEvent)
-        }}
-        underlayColor="transparent"
-        style={{
-          width: '100%',
-          height: '100%',
-        }}
-      >
-        <Animated.View style={{
-          borderRadius: Theme.radius,
-          backgroundColor: color,
-          width: innerDimension,
-          height: innerDimension,
-          left: innerPosition,
-          top: innerPosition,
-        }}
-        />
-      </TouchableHighlight>
+      <AudioContext.Consumer>
+        {(audio) => (
+          <TouchableHighlight
+            onPressIn={() => {
+              audio.playSound()
+            }}
+            onPress={(event) => {
+              onClick(index, event.nativeEvent)
+            }}
+            underlayColor="transparent"
+            style={{
+              width: '100%',
+              height: '100%',
+            }}
+          >
+            <Animated.View style={{
+              borderRadius: Theme.radius,
+              backgroundColor: color,
+              width: innerDimension,
+              height: innerDimension,
+              left: innerPosition,
+              top: innerPosition,
+            }}
+            />
+          </TouchableHighlight>
+        )}
+      </AudioContext.Consumer>
     </Animated.View>
   )
 }
