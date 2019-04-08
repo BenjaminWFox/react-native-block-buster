@@ -33,7 +33,7 @@ class TutorialScreen extends React.Component {
           onPlaybackStatusUpdate={this._onPlaybackStatusUpdate} // eslint-disable-line
           shouldPlay
           resizeMode="contain"
-          style={{ height: 200 }}
+          style={{ height: 600 }}
         />
       </View>
     )
