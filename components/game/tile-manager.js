@@ -232,12 +232,12 @@ class TileManager extends React.Component {
 
   handleTileClick = (key, event) => {
     if (!this.burstTiles.length && this.tilesFallingDown === 0) {
-      tilesBrokenEvent(this.audioManager)
       const { tiles } = this.state
       const tempTiles = tiles
       let allHitTiles = [key]
 
       allHitTiles = this.addAdjacentHits(key, allHitTiles)
+      tilesBrokenEvent(this.audioManager, allHitTiles.length)
 
       if (allHitTiles.length > 2) {
         allHitTiles.forEach((tileKey) => {

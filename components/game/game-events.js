@@ -1,8 +1,18 @@
 import React from 'react'
 import CenteredMessage from '../game-messages/centered-message'
 
-export const tilesBrokenEvent = (audioManager) => {
-  audioManager.playSound()
+export const tilesBrokenEvent = (audioManager, hitTiles = 1) => {
+  let notesToPlay = 1
+
+  if (hitTiles > 3) {
+    notesToPlay = 2
+  }
+
+  if (hitTiles > 5) {
+    notesToPlay = 3
+  }
+
+  audioManager.playHarmonySequence(notesToPlay)
 }
 
 export const gameOverEvent = (audioManager) => {

@@ -71,7 +71,7 @@ class HomeScreen extends React.Component {
   }
 
   handleSoundPress = (audio) => {
-    audio.playSound()
+    audio.playGameOverSound()
   }
 
   render() {
