@@ -35,10 +35,11 @@ class AudioLoader {
     return Audio.Sound.createAsync(soundPath, this.initialPBStatus, null, false)
       .then((soundObject) => {
         this.sounds.push(soundObject)
-        console.log('Sound load success')
+        // console.log('Sound load success.')
         this.loadCompleted()
       })
       .catch(() => {
+        // console.log('--> Failed to load sound.')
         this.loadCompleted()
       })
   }

@@ -42,7 +42,13 @@ export default class AudioManger {
   playSound = (soundIndex) => {
     this.lastSoundIndexPlayed = soundIndex
 
-    this.sounds[soundIndex].sound.playFromPositionAsync(100).then(() => {}).catch(() => { })
+    this.sounds[soundIndex].sound.playFromPositionAsync(100).then(() => {
+      // eslint-disable-next-line
+    }).catch((err) => {
+      // Errors attempting to play the sounds will be caught here
+      // ...typically sound not loaded on android
+      // console.log('Error playing sound', soundIndex, err)
+    })
   }
 
   playNewSound = () => {
@@ -78,8 +84,6 @@ export default class AudioManger {
         harmonyIndexes.push(this.getPreviousNoteIndex(harmonyIndexes[i - 1]))
       }
     }
-
-    console.log('Disharmony:', harmonyIndexes)
 
     return harmonyIndexes
   }
