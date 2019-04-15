@@ -12,7 +12,7 @@ export const tilesBrokenEvent = (audioManager, hitTiles = 1) => {
     notesToPlay = 3
   }
 
-  audioManager.playHarmonySequence(notesToPlay)
+  audioManager.playHarmonyChord(notesToPlay)
 }
 
 export const gameOverEvent = (audioManager) => {

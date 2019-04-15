@@ -23,7 +23,8 @@ const TileElement = function TileElement({
         {(audio) => (
           <TouchableHighlight
             onPressIn={() => {
-              audio.playNewSound()
+              // There may be an issue calling this here. Sometimes the sound drops.
+              // audio.playNewSound()
             }}
             onPress={(event) => {
               onClick(index, event.nativeEvent)

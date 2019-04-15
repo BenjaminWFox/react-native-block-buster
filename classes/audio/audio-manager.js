@@ -27,6 +27,14 @@ export default class AudioManger {
     this.ready = true
   }
 
+  getLastSoundIndexPlayed = () => {
+    if (!this.lastSoundIndexPlayed) {
+      this.lastSoundIndexPlayed = this.getNewSoundIndex()
+    }
+
+    return this.lastSoundIndexPlayed
+  }
+
   getNewSoundIndex = () => {
     let idx = this.lastSoundIndexPlayed
 
@@ -36,6 +44,8 @@ export default class AudioManger {
 
     this.lastSoundIndexPlayed = idx
 
+    console.log('Have new sound index', idx)
+
     return idx
   }
 
@@ -44,10 +54,11 @@ export default class AudioManger {
 
     this.sounds[soundIndex].sound.playFromPositionAsync(100).then(() => {
       // eslint-disable-next-line
+      console.log('Finished playing sound', soundIndex)
     }).catch((err) => {
       // Errors attempting to play the sounds will be caught here
       // ...typically sound not loaded on android
-      // console.log('Error playing sound', soundIndex, err)
+      console.log('Error playing sound', soundIndex, err)
     })
   }
 
@@ -60,12 +71,14 @@ export default class AudioManger {
 
     for (let i = 0; i < totalNotes; i += 1) {
       if (!harmonyIndexes.length) {
-        harmonyIndexes.push(this.getNextThirdIndex(this.lastSoundIndexPlayed))
+        harmonyIndexes.push(this.getNextThirdIndex(this.getLastSoundIndexPlayed()))
       }
       else {
         harmonyIndexes.push(this.getNextThirdIndex(harmonyIndexes[i - 1]))
       }
     }
+
+    console.log('Have harmony indexes', harmonyIndexes)
 
     return harmonyIndexes
   }
@@ -118,7 +131,7 @@ export default class AudioManger {
       this.playSound(soundIndexToPlay)
       setTimeout(() => {
         this.playSoundsStaggered(soundIndexesArray)
-      }, 200)
+      }, 100)
     }
   }
 
