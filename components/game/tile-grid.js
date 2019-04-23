@@ -92,7 +92,7 @@ TileGrid.propTypes = {
   difficulty: PropTypes.number.isRequired,
   audioManager: PropTypes.object.isRequired,
   displayMessage: PropTypes.func,
-  tileData: PropTypes.object,
+  tileData: PropTypes.array,
 }
 
 TileGrid.defaultProps = {

@@ -1,5 +1,7 @@
 import React from 'react'
-import { View, Picker, Platform } from 'react-native'
+import {
+  View, Picker, Platform, TouchableHighlight, Text,
+} from 'react-native'
 import PropTypes from 'prop-types'
 import Theme from '../theme'
 import { setOptions, difficulties } from '../classes/options-manager'
@@ -36,37 +38,24 @@ class OptionsScreen extends React.Component {
           </View>
           <View style={{
             zIndex: 1,
-            backgroundColor: Platform.OS === 'ios' ? Theme.colors.black : Theme.colors.white,
+            backgroundColor: 'transparent',
             borderRadius: Theme.radius,
           }}
           >
-            <Picker
-              selectedValue={options.difficulty}
-              onValueChange={(itemValue) => {
-                this.handleDifficultyUpdate(itemValue)
-              }}
-              style={{
-                marginTop: Platform.OS === 'ios' ? -50 : 0,
-              }}
-              itemStyle={{
-                fontFamily: Theme.fontFamily,
-                color: Theme.colors.jewel.yellow,
-                fontWeight: '200',
-              }}
-            >
-              { Object.keys(difficulties).map((difficulty) => (
-                <Picker.Item
+            { Object.keys(difficulties).map((difficulty) => {
+              const selected = options.difficulty === difficulties[difficulty]
+              return (
+                <Theme.Button
                   key={difficulty}
-                  label={`${difficulty} (${difficulties[difficulty]})`}
-                  value={difficulties[difficulty]}
-                  style={{
-                    fontFamily: Theme.fontFamily,
-                    fontWeight: '200',
+                  backgroundColor={selected ? Theme.colors.jewel.orange : Theme.colors.white}
+                  textColor={selected ? '#ffffff' : '#999999'}
+                  title={`${difficulty} (${difficulties[difficulty]})`}
+                  onPressFunc={() => {
+                    this.handleDifficultyUpdate(difficulties[difficulty])
                   }}
-                >
-                </Picker.Item>
-              ))}
-            </Picker>
+                />
+              )
+            }) }
           </View>
         </View>
         {/* <View>

@@ -50,7 +50,7 @@ class GameScreen extends React.Component {
 
       const gameOptions = navigation.getParam('gameOptions', { difficulty: 'normal' })
 
-      navigation.push('Game', { isNewGame: true, gameOptions })
+      navigation.replace('Game', { isNewGame: true, gameOptions })
       // const { gameId } = this.state
 
       // this.setState({
