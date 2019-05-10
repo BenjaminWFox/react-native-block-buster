@@ -1,4 +1,4 @@
-// import { Audio } from 'expo'
+import { Audio } from 'expo'
 // import AudioLoader from './audio-loader'
 import { getRandomInt } from '../utilities'
 import AudioLoader from './audio-loader'
@@ -15,22 +15,34 @@ export default class AudioManger {
     this.soundAnimationMaxPlays = DEFAULT_MAX_PLAYS
 
     this.staggeredSoundsTimer = undefined
+    this.audioLoader = new AudioLoader()
+    this.totalNotes = this.audioLoader.rawSoundPaths.length
+    this.maxSoundIndex = this.totalNotes - 1
   }
 
   async load() {
-    const audioLoader = new AudioLoader()
+    // const audioLoader = new AudioLoader()
 
-    await audioLoader.init()
+    // await audioLoader.init()
 
-    this.sounds = audioLoader.sounds
-    this.totalNotes = this.sounds.length
-    this.ready = true
+    // this.sounds = audioLoader.sounds
+    // this.totalNotes = this.sounds.length
+    // this.ready = true
   }
 
   getLastSoundIndexPlayed = () => {
+    const oldSoundIndex = this.lastSoundIndexPlayed
+
     if (!this.lastSoundIndexPlayed) {
       this.lastSoundIndexPlayed = this.getNewSoundIndex()
     }
+    else {
+      while (oldSoundIndex === this.lastSoundIndexPlayed) {
+        this.lastSoundIndexPlayed = this.getNewSoundIndex()
+      }
+    }
+
+    console.log('last index played was:', this.lastSoundIndexPlayed)
 
     return this.lastSoundIndexPlayed
   }
@@ -39,7 +51,7 @@ export default class AudioManger {
     let idx = this.lastSoundIndexPlayed
 
     while (idx === this.lastSoundIndexPlayed) {
-      idx = getRandomInt(0, this.sounds.length - 1)
+      idx = getRandomInt(0, this.maxSoundIndex)
     }
 
     this.lastSoundIndexPlayed = idx
@@ -47,6 +59,27 @@ export default class AudioManger {
     console.log('Have new sound index', idx)
 
     return idx
+  }
+
+  newPlaySound = (name, sound) => {
+    console.log(`Playing ${name}`)
+    Audio.Sound.createAsync(
+      sound,
+      { shouldPlay: true },
+    ).then((res) => {
+      res.sound.setOnPlaybackStatusUpdate((status) => {
+        if (!status.didJustFinish) return
+        console.log(`Unloading ${name}`)
+        res.sound.unloadAsync().catch(() => {})
+      })
+    }).catch((error) => {})
+  }
+
+  testPlaySound = (pIdx = undefined) => {
+    const index = pIdx || getRandomInt(0, this.maxSoundIndex)
+    const sound = this.audioLoader.rawSoundPaths[index]
+
+    this.newPlaySound('index0', sound)
   }
 
   playSound = (soundIndex) => {
@@ -106,7 +139,10 @@ export default class AudioManger {
   }
 
   playHarmonyChord = (totalNotes) => {
-    this.playSounds(this.getHarmonyIndexes(totalNotes))
+    // this.playSounds(this.getHarmonyIndexes(totalNotes))
+    this.getHarmonyIndexes(totalNotes).forEach((idx) => {
+      this.testPlaySound(idx)
+    })
   }
 
   playDisharmonySequence = (totalNotes) => {
