@@ -8,23 +8,26 @@
     "eject": "expo eject"
   },
   "dependencies": {
-    "@expo/vector-icons": "^10.0.1",
-    "expo": "^32.0.0",
+    "@expo/vector-icons": "^10.0.6",
+    "expo": "^33.0.0",
+    "expo-asset": "^8.0.0",
+    "expo-av": "^8.0.0",
+    "expo-font": "^8.0.0",
     "prop-types": "^15.7.2",
-    "react": "16.5.0",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
-    "react-native-video": "^4.4.0",
-    "react-navigation": "^3.5.1",
-    "uuid": "^3.3.2"
+    "react": "16.8.3",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-33.0.0.tar.gz",
+    "react-native-video": "^4.4.4",
+    "react-navigation": "^3.13.0",
+    "uuid": "^3.3.3"
   },
   "devDependencies": {
-    "babel-eslint": "^10.0.1",
-    "babel-preset-expo": "^5.0.0",
-    "eslint": "^5.15.1",
-    "eslint-config-airbnb": "^17.1.0",
-    "eslint-plugin-import": "^2.16.0",
-    "eslint-plugin-jsx-a11y": "^6.2.1",
-    "eslint-plugin-react": "^7.12.4"
+    "babel-eslint": "^10.0.3",
+    "babel-preset-expo": "^5.2.0",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb": "^17.1.1",
+    "eslint-plugin-import": "^2.19.1",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-react": "^7.17.0"
   },
   "private": true
 }

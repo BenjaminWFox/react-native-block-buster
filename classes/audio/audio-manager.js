@@ -1,4 +1,4 @@
-import { Audio } from 'expo'
+import { Audio } from 'expo-av';
 // import AudioLoader from './audio-loader'
 import { getRandomInt } from '../utilities'
 import AudioLoader from './audio-loader'

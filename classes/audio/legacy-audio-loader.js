@@ -1,4 +1,4 @@
-import { Audio } from 'expo'
+import { Audio } from 'expo-av';
 
 /**
  * So expo doesn't let one sound play multiple times in sequence

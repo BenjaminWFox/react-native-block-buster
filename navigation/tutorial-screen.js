@@ -1,6 +1,7 @@
 import React from 'react'
 import { View } from 'react-native'
-import { Video, Asset } from 'expo'
+import { Asset } from 'expo-asset';
+import { Video } from 'expo-av';
 import PropTypes from 'prop-types'
 
 const TutorialVideo = Asset.fromModule(require('../assets/tutorial.mp4'))
