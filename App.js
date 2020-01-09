@@ -1,6 +1,6 @@
 import React from 'react'
 import { StatusBar } from 'react-native'
-import * as Font from 'expo-font';
+import * as Font from 'expo-font'
 import AppContainer from './navigation/navigators'
 import AudioManager from './classes/audio/audio-manager'
 import AudioContext from './classes/audio/audio-context'
