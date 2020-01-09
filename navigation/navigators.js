@@ -1,4 +1,5 @@
-import { createStackNavigator, createAppContainer } from 'react-navigation'
+import { createAppContainer } from 'react-navigation'
+import { createStackNavigator } from 'react-navigation-stack'
 import HomeScreen from './home-screen'
 import GameScreen from './game-screen'
 import OptionsScreen from './options-screen'
@@ -8,7 +9,6 @@ import Theme from '../theme'
 
 const headerStyle = {
   backgroundColor: '#000000',
-  fontFamily: Theme.fontFamily,
 }
 const headerTitleStyle = {
   color: Theme.colors.jewel.green,

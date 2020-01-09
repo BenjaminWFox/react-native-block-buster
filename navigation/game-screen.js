@@ -9,7 +9,7 @@ import AudioContext from '../classes/audio/audio-context'
 
 class GameScreen extends React.Component {
   static navigationOptions = {
-    header: null,
+    headerShown: false,
   }
 
   state = {

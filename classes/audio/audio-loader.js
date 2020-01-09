@@ -1,4 +1,4 @@
-import { Audio } from 'expo'
+import { Audio } from 'expo-av';
 
 const c2 = require('../../assets/sounds/c2.mp3')
 const d2 = require('../../assets/sounds/d2.mp3')
