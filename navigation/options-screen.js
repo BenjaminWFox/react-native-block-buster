@@ -1,6 +1,6 @@
 import React from 'react'
 import {
-  View, Picker, Platform, TouchableHighlight, Text,
+  View, // Switch, Picker, Platform, TouchableHighlight, Text,
 } from 'react-native'
 import PropTypes from 'prop-types'
 import Theme from '../theme'
@@ -23,7 +23,28 @@ class OptionsScreen extends React.Component {
     options.difficulty = difficulty
 
     setOptions(options)
+
     this.setState({ options })
+  }
+
+  handleSoundUpdate = (hasSound) => {
+    const { options } = this.state
+
+    console.log('event:', hasSound)
+
+    options.sound = hasSound
+
+    setOptions(options)
+
+    this.setState({ options })
+  }
+
+  handleSoundOn = () => {
+    this.handleSoundUpdate(true)
+  }
+
+  handleSoundOff = () => {
+    this.handleSoundUpdate(false)
   }
 
   render() {
@@ -56,6 +77,25 @@ class OptionsScreen extends React.Component {
                 />
               )
             }) }
+          </View>
+          <View>
+            <View>
+              <Theme.Text>SOUND</Theme.Text>
+            </View>
+            <View>
+              <Theme.Button
+                title="On"
+                backgroundColor={options.sound ? Theme.colors.jewel.orange : Theme.colors.white}
+                textColor={options.sound ? '#ffffff' : '#999999'}
+                onPressFunc={this.handleSoundOn}
+              />
+              <Theme.Button
+                title="Off"
+                backgroundColor={!options.sound ? Theme.colors.jewel.orange : Theme.colors.white}
+                textColor={!options.sound ? '#ffffff' : '#999999'}
+                onPressFunc={this.handleSoundOff}
+              />
+            </View>
           </View>
         </View>
         {/* <View>

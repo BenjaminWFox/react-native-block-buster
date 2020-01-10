@@ -1,7 +1,8 @@
-import { Audio } from 'expo-av';
+import { Audio } from 'expo-av'
 // import AudioLoader from './audio-loader'
 import { getRandomInt } from '../utilities'
 import AudioLoader from './audio-loader'
+import { getCurrentOptionsSync } from '../options-manager'
 
 const DEFAULT_MAX_PLAYS = 4
 
@@ -63,16 +64,19 @@ export default class AudioManger {
 
   newPlaySound = (name, sound) => {
     console.log(`Playing ${name}`)
-    Audio.Sound.createAsync(
-      sound,
-      { shouldPlay: true },
-    ).then((res) => {
-      res.sound.setOnPlaybackStatusUpdate((status) => {
-        if (!status.didJustFinish) return
-        console.log(`Unloading ${name}`)
-        res.sound.unloadAsync().catch(() => {})
-      })
-    }).catch((error) => {})
+
+    if (getCurrentOptionsSync().sound) {
+      Audio.Sound.createAsync(
+        sound,
+        { shouldPlay: true },
+      ).then((res) => {
+        res.sound.setOnPlaybackStatusUpdate((status) => {
+          if (!status.didJustFinish) return
+          console.log(`Unloading ${name}`)
+          res.sound.unloadAsync().catch(() => {})
+        })
+      }).catch((error) => {})
+    }
   }
 
   testPlaySound = (pIdx = undefined) => {
@@ -111,8 +115,6 @@ export default class AudioManger {
       }
     }
 
-    console.log('Have harmony indexes', harmonyIndexes)
-
     return harmonyIndexes
   }
 
@@ -139,6 +141,7 @@ export default class AudioManger {
   }
 
   playHarmonyChord = (totalNotes) => {
+    console.log('playHarmonyChord')
     // this.playSounds(this.getHarmonyIndexes(totalNotes))
     this.getHarmonyIndexes(totalNotes).forEach((idx) => {
       this.testPlaySound(idx)

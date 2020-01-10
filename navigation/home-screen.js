@@ -3,7 +3,7 @@ import { View } from 'react-native'
 import PropTypes from 'prop-types'
 import Theme from '../theme'
 import { getGameData } from '../components/game/game-saver'
-import { getOptions, setOptions } from '../classes/options-manager'
+import { getOptionsFromStorageAsync, setOptions } from '../classes/options-manager'
 // import AudioContext from '../classes/audio/audio-context'
 
 class HomeScreen extends React.Component {
@@ -57,7 +57,7 @@ class HomeScreen extends React.Component {
   }
 
   getGameOptions = async () => {
-    const gameOptions = await getOptions()
+    const gameOptions = await getOptionsFromStorageAsync()
 
     if (gameOptions) {
       this.setState({

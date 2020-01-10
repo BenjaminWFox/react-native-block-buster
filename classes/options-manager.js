@@ -20,16 +20,22 @@ export const tileColors = [
 
 const defaultOptions = {
   difficulty: difficulties.normal,
+  sound: true,
   hasSeenTutorial: false,
 }
 
-export const setOptions = async (options) => {
+let currentOptions = defaultOptions
+
+export const setOptions = (options) => {
+  currentOptions = options
   setValue(KEYS.OPTIONS, options)
 }
 
+export const getCurrentOptionsSync = () => currentOptions
 
-export const getOptions = async () => {
+export const getOptionsFromStorageAsync = async () => {
   const options = await getValue(KEYS.OPTIONS)
+
   if (options) {
     return options
   }
