@@ -1,6 +1,7 @@
 import React from 'react'
-import { StatusBar } from 'react-native'
+import { StatusBar } from 'react-native' // , AsyncStorage
 import * as Font from 'expo-font'
+// import { KEYS } from './classes/storage-api'
 import AppContainer from './navigation/navigators'
 import AudioManager from './classes/audio/audio-manager'
 import AudioContext from './classes/audio/audio-context'
@@ -20,16 +21,16 @@ class App extends React.Component {
 
   componentDidMount = async () => {
     // AsyncStorage.clear()
+
     // await AsyncStorage.multiRemove([
     //   KEYS.OPTIONS,
     //   KEYS.HIGH_SCORES,
     // ])
+
     await Font.loadAsync({
       'WendyOne-Regular': FONT,
     })
     const audioManager = new AudioManager()
-
-    await audioManager.load()
 
     this.audioManager = audioManager
 
