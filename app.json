@@ -8,7 +8,7 @@
       "ios",
       "android"
     ],
-    "version": "4.0.0",
+    "version": "5.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -28,7 +28,7 @@
     },
     "android": {
       "package": "com.smashingfox.jeweltonesblastsolitare",
-      "versionCode": 6
+      "versionCode": 7
     }
   }
 }
