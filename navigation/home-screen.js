@@ -14,7 +14,9 @@ class HomeScreen extends React.Component {
 
       async () => {
         await this.updateGameData()
+
         const options = await this.getGameOptions()
+
         if (!options.hasSeenTutorial) {
           options.hasSeenTutorial = true
           setOptions(options)
