@@ -21,14 +21,19 @@ export default class AudioManger {
     this.maxSoundIndex = this.totalNotes - 1
   }
 
-  async load() {
-    // const audioLoader = new AudioLoader()
+  // async load() {
+  //   // const audioLoader = new AudioLoader()
 
-    // await audioLoader.init()
+  //   // await audioLoader.init()
 
-    // this.sounds = audioLoader.sounds
-    // this.totalNotes = this.sounds.length
-    // this.ready = true
+  //   // this.sounds = audioLoader.sounds
+  //   // this.totalNotes = this.sounds.length
+  //   // this.ready = true
+  // }
+
+  // eslint-disable-next-line
+  get canPlaySound() {
+    return getCurrentOptionsSync().sound
   }
 
   getLastSoundIndexPlayed = () => {
@@ -62,41 +67,26 @@ export default class AudioManger {
     return idx
   }
 
-  newPlaySound = (name, sound) => {
-    console.log(`Playing ${name}`)
+  playSound = (name, sound) => {
+    Audio.Sound.createAsync(
+      sound,
+      { shouldPlay: true },
+    ).then((res) => {
+      res.sound.setOnPlaybackStatusUpdate((status) => {
+        if (!status.didJustFinish) return
+        console.log(`Unloading ${name}`)
+        res.sound.unloadAsync().catch(() => {})
+      })
+    }).catch((error) => {})
+  }
 
-    if (getCurrentOptionsSync().sound) {
-      Audio.Sound.createAsync(
-        sound,
-        { shouldPlay: true },
-      ).then((res) => {
-        res.sound.setOnPlaybackStatusUpdate((status) => {
-          if (!status.didJustFinish) return
-          console.log(`Unloading ${name}`)
-          res.sound.unloadAsync().catch(() => {})
-        })
-      }).catch((error) => {})
+  playSoundAtThisOrNewIndex = (pIdx = undefined) => {
+    if (this.canPlaySound) {
+      const index = pIdx || getRandomInt(0, this.maxSoundIndex)
+      const sound = this.audioLoader.rawSoundPaths[index]
+
+      this.playSound(`index${index}`, sound)
     }
-  }
-
-  testPlaySound = (pIdx = undefined) => {
-    const index = pIdx || getRandomInt(0, this.maxSoundIndex)
-    const sound = this.audioLoader.rawSoundPaths[index]
-
-    this.newPlaySound('index0', sound)
-  }
-
-  playSound = (soundIndex) => {
-    this.lastSoundIndexPlayed = soundIndex
-
-    this.sounds[soundIndex].sound.playFromPositionAsync(100).then(() => {
-      // eslint-disable-next-line
-      console.log('Finished playing sound', soundIndex)
-    }).catch((err) => {
-      // Errors attempting to play the sounds will be caught here
-      // ...typically sound not loaded on android
-      console.log('Error playing sound', soundIndex, err)
-    })
   }
 
   playNewSound = () => {
@@ -141,11 +131,11 @@ export default class AudioManger {
   }
 
   playHarmonyChord = (totalNotes) => {
-    console.log('playHarmonyChord')
-    // this.playSounds(this.getHarmonyIndexes(totalNotes))
-    this.getHarmonyIndexes(totalNotes).forEach((idx) => {
-      this.testPlaySound(idx)
-    })
+    if (this.canPlaySound) {
+      this.getHarmonyIndexes(totalNotes).forEach((idx) => {
+        this.playSoundAtThisOrNewIndex(idx)
+      })
+    }
   }
 
   playDisharmonySequence = (totalNotes) => {
@@ -153,13 +143,15 @@ export default class AudioManger {
   }
 
   playDisharmonyChord = (totalNotes) => {
-    this.playSounds(this.getDisharmonyIndexes(totalNotes))
+    if (this.canPlaySound) {
+      this.playSounds(this.getDisharmonyIndexes(totalNotes))
+    }
   }
 
   playSounds = (soundIndexesArray) => {
     if (soundIndexesArray.length) {
       soundIndexesArray.forEach((soundIndex) => {
-        this.playSound(soundIndex)
+        this.playSoundAtThisOrNewIndex(soundIndex)
       })
     }
   }
