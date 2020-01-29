@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Jewel Tones Blast Solitare",
+    "name": "Jewel Tones",
     "slug": "rnjtbs",
     "privacy": "public",
     "sdkVersion": "36.0.0",
@@ -8,7 +8,7 @@
       "ios",
       "android"
     ],
-    "version": "5.0.0",
+    "version": "5.2.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
