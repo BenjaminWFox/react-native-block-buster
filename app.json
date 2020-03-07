@@ -24,10 +24,10 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.smashingfox.jeweltonesblastsolitare"
+      "bundleIdentifier": "com.sleepyFox.jeweltonesblastsolitare"
     },
     "android": {
-      "package": "com.smashingfox.jeweltonesblastsolitare",
+      "package": "com.sleepyfox.jeweltonesblastsolitare",
       "versionCode": 7
     }
   }
