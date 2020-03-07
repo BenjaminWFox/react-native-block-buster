@@ -46,7 +46,7 @@ export const flashLastPointsAnimation = function flashLastPointsAnimation() {
     animation,
     {
       toValue: 0,
-      duration: 1000,
+      duration: 2000,
     },
   ).start()
 

@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Jewel Tones Blast Solitare",
+    "name": "Jewel Tones",
     "slug": "rnjtbs",
     "privacy": "public",
     "sdkVersion": "36.0.0",
@@ -8,7 +8,7 @@
       "ios",
       "android"
     ],
-    "version": "5.0.0",
+    "version": "5.2.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -24,10 +24,10 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.smashingfox.jeweltonesblastsolitare"
+      "bundleIdentifier": "com.sleepyFox.jeweltonesblastsolitare"
     },
     "android": {
-      "package": "com.smashingfox.jeweltonesblastsolitare",
+      "package": "com.sleepyfox.jeweltonesblastsolitare",
       "versionCode": 7
     }
   }
