@@ -274,6 +274,13 @@ class TileManager extends React.Component {
     const OVERRUN_MULTIPLYER_PER_TILE = 0.5
     let points = 0
 
+    // 10 points per tile
+    // 100 : 1 + (97 * .5) = 49.5
+    // 10 * 100 * 49.5 = 49,500
+    // 10 * 80 * 39.5 = 31,600
+    // 10 * 70 * 34.5 = 24,150
+    // 10 * 60 * 29.5 = 17,700
+
     if (totalHitTiles <= 3) {
       points = POINTS_PER_TILE * totalHitTiles
     }
