@@ -1,5 +1,5 @@
 import React from 'react'
-import { View } from 'react-native'
+import { View, Dimensions } from 'react-native'
 import PropTypes from 'prop-types'
 import TileManager from './tile-manager'
 
@@ -7,9 +7,17 @@ class TileGrid extends React.Component {
   constructor() {
     super()
 
+    const screenWidth = Math.round(Dimensions.get('window').width)
+    const screenHeight = Math.round(Dimensions.get('window').height)
+
     this.ROWS = 12
     this.TILES_PER_ROW = 10
     this.TILE_PADDING = 2
+    this.WIDTH_SHRINK_VALUE = 1
+
+    // If the screen ration as ~4:3 or greater, the width needs to shrink
+    // a little to keep the score in view.
+    if (screenWidth / screenHeight > 0.7) this.WIDTH_SHRINK_VALUE = 0.9
   }
 
   state = {
@@ -34,7 +42,7 @@ class TileGrid extends React.Component {
   }
 
   handleLayout = (width) => {
-    const tileEdge = Math.floor(width / this.TILES_PER_ROW)
+    const tileEdge = Math.floor(width / this.TILES_PER_ROW * this.WIDTH_SHRINK_VALUE)
     const gridHeight = tileEdge * this.ROWS
     this.setState({ gridWidth: width, gridHeight, tileEdge })
   }
