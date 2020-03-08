@@ -6,17 +6,19 @@ import formatScore from '../../classes/formatting'
 
 class PointPopper extends React.Component {
   shouldComponentUpdate = (nextProps) => {
-    const { coords, points } = this.props
+    const { coords, points, onBlastReport } = this.props
     if (coords.x !== nextProps.coords.x
       && coords.y !== nextProps.coords.y
       && points !== nextProps) {
+      onBlastReport(nextProps.points)
+
       return true
     }
     return false
   }
 
   render() {
-    const { coords, points } = this.props
+    const { coords, points, onBlastReport } = this.props
     const { x, y } = coords.x && coords.y ? coords : { x: 0, y: 0 }
     const { height, width } = Dimensions.get('window')
     let xPos = x - 25
@@ -40,7 +42,6 @@ class PointPopper extends React.Component {
           top: interpolatePointsAnimForPosition(yPos),
           opacity: points === 0 ? 0 : flashLastPointsAnimation(),
           display: points === 0 ? 'none' : 'flex',
-
         }}
         pointerEvents="none"
       >

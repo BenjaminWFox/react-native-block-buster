@@ -36,6 +36,13 @@ class Game extends React.Component {
     }
   }
 
+  handleUpdateHighBlast = async (points) => {
+    const { currentDifficulty } = this.props
+    console.log('update high scores', points, currentDifficulty)
+
+    ScoreManager.setHighBlast(points, currentDifficulty)
+  }
+
   handleUpdateHighScore = async () => {
     const { currentDifficulty, audioManager } = this.props
     const { score, highScore, surpassedHighScore } = this.state
@@ -145,7 +152,11 @@ class Game extends React.Component {
             </View>
           </SafeAreaView>
         </View>
-        <ScoreManager.PointPopper coords={lastTouch} points={points} />
+        <ScoreManager.PointPopper
+          coords={lastTouch}
+          points={points}
+          onBlastReport={this.handleUpdateHighBlast}
+        />
       </>
     )
   }
