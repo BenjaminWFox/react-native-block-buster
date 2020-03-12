@@ -18,6 +18,7 @@ class Game extends React.Component {
   state = {
     score: 0,
     highScore: null,
+    highBlast: null,
     surpassedHighScore: false,
     points: 0,
     movesLeft: 0,
@@ -38,7 +39,21 @@ class Game extends React.Component {
 
   handleUpdateHighBlast = async (points) => {
     const { currentDifficulty } = this.props
-    console.log('update high scores', points, currentDifficulty)
+    const { highBlast } = this.state
+
+    console.log('update high blast', points, currentDifficulty)
+
+    if (!highBlast) {
+      const storedHighBlast = await ScoreManager.getHighBlast(currentDifficulty)
+
+      this.setState({ highBlast: storedHighBlast })
+    }
+    else if (points > highBlast) {
+      ScoreManager.setHighBlast(points, currentDifficulty)
+      this.setState({
+        highBlast: points,
+      })
+    }
 
     ScoreManager.setHighBlast(points, currentDifficulty)
   }

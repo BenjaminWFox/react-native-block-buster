@@ -15,20 +15,30 @@ class HighScoresScreen extends React.Component {
 
   updateHighScores = async () => {
     const scoreArray = []
+    const blastArray = []
 
-    const scores = await Promise.all(
+    const [scores, blasts] = await Promise.all(
       Object.keys(difficulties).map((key) => ScoreManager.getHighScore(difficulties[key])),
+      Object.keys(difficulties).map((key) => ScoreManager.getHighBlast(difficulties[key])),
     )
+
+    console.log('SCORES', scores)
+    console.log('BLASTS', blasts)
 
     Object.keys(difficulties).forEach((key, index) => {
       scoreArray.push({
         difficulty: key,
         score: scores[index],
       })
+      blastArray.push({
+        difficulty: key,
+        blast: blasts[index],
+      })
     })
 
     this.setState({
       highScores: scoreArray,
+      highBlasts: blastArray,
     })
   }
 
@@ -39,7 +49,7 @@ class HighScoresScreen extends React.Component {
   }
 
   render() {
-    const { highScores } = this.state
+    const { highScores, highBlasts } = this.state
 
     return (
       <View style={{
@@ -48,7 +58,7 @@ class HighScoresScreen extends React.Component {
         backgroundColor: '#000000',
       }}
       >
-        {highScores.map((scoreObject) => (
+        {highScores.map((scoreObject, i) => (
           <View
             key={scoreObject.difficulty}
             style={{
@@ -61,6 +71,8 @@ class HighScoresScreen extends React.Component {
               :
               {' '}
               {scoreObject.score}
+              {' / '}
+              {highBlasts[i].blast}
             </Theme.Text>
             <Theme.Button
               title="reset"

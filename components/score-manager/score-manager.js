@@ -11,13 +11,17 @@ const setHighScore = async (score, difficulty) => {
 }
 
 const setHighBlast = async (blastScore, difficulty) => {
-  console.log('SET HIGH BLAST', blastScore)
-
   setValue(`${KEYS.HIGH_BLAST}_${difficulty}`, blastScore)
 }
 
 const deleteHighScore = async (difficulty) => {
   await AsyncStorage.removeItem(`${KEYS.HIGH_SCORES}_${difficulty}`)
+
+  return true
+}
+
+const deleteHighBlast = async (difficulty) => {
+  await AsyncStorage.removeItem(`${KEYS.HIGH_BLAST}_${difficulty}`)
 
   return true
 }
@@ -34,6 +38,25 @@ const getHighScore = async (difficulty) => {
   return 0
 }
 
+const getHighBlast = async (difficulty) => {
+  const score = await getValue(`${KEYS.HIGH_BLAST}_${difficulty}`)
+
+  if (score !== null) {
+    return formatScore(score)
+  }
+
+  setHighBlast(0, difficulty)
+
+  return 0
+}
+
 export default {
-  PointPopper, Scoreboard, getHighScore, setHighScore, deleteHighScore, setHighBlast,
+  PointPopper,
+  Scoreboard,
+  getHighScore,
+  setHighScore,
+  deleteHighScore,
+  getHighBlast,
+  setHighBlast,
+  deleteHighBlast,
 }
