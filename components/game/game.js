@@ -40,22 +40,27 @@ class Game extends React.Component {
   handleUpdateHighBlast = async (points) => {
     const { currentDifficulty } = this.props
     const { highBlast } = this.state
-
-    console.log('update high blast', points, currentDifficulty)
+    let hB = highBlast
 
     if (!highBlast) {
       const storedHighBlast = await ScoreManager.getHighBlast(currentDifficulty)
 
+      hB = storedHighBlast
+
       this.setState({ highBlast: storedHighBlast })
     }
-    else if (points > highBlast) {
+
+    const numericHighBlast = (hB && hB.replace(/,/g, '')) || 0
+
+    console.log('Check HighBlast', points, numericHighBlast, hB)
+
+    if (points > numericHighBlast) {
       ScoreManager.setHighBlast(points, currentDifficulty)
+
       this.setState({
-        highBlast: points,
+        highBlast: formatScore(points),
       })
     }
-
-    ScoreManager.setHighBlast(points, currentDifficulty)
   }
 
   handleUpdateHighScore = async () => {
@@ -71,6 +76,8 @@ class Game extends React.Component {
         displayMessage: this.wrapMessageDelivery(getNewHighScoreMessage),
       })
     }
+
+    console.log('Check HighScore', score, numericHighScore, highScore)
 
     if (!highScore) {
       const storedHighScore = await ScoreManager.getHighScore(currentDifficulty)

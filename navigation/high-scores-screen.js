@@ -17,8 +17,11 @@ class HighScoresScreen extends React.Component {
     const scoreArray = []
     const blastArray = []
 
-    const [scores, blasts] = await Promise.all(
+    const scores = await Promise.all(
       Object.keys(difficulties).map((key) => ScoreManager.getHighScore(difficulties[key])),
+    )
+
+    const blasts = await Promise.all(
       Object.keys(difficulties).map((key) => ScoreManager.getHighBlast(difficulties[key])),
     )
 
@@ -44,6 +47,7 @@ class HighScoresScreen extends React.Component {
 
   clearHighScore = async (difficulty) => {
     await ScoreManager.deleteHighScore(difficulties[difficulty])
+    await ScoreManager.deleteHighBlast(difficulties[difficulty])
 
     this.updateHighScores()
   }
@@ -65,13 +69,18 @@ class HighScoresScreen extends React.Component {
               margin: 5, justifyContent: 'center', alignItems: 'center',
             }}
           >
-            <Theme.Text style={{ fontSize: 30 }}>
+            <Theme.Text style={{ fontSize: 32 }}>
               {scoreObject.difficulty}
               {' '}
               :
               {' '}
               {scoreObject.score}
-              {' / '}
+            </Theme.Text>
+            <Theme.Text style={{ fontSize: 22 }}>
+              {'best blast'}
+              {' '}
+              :
+              {' '}
               {highBlasts[i].blast}
             </Theme.Text>
             <Theme.Button
