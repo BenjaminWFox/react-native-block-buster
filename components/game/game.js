@@ -52,8 +52,6 @@ class Game extends React.Component {
 
     const numericHighBlast = (hB && hB.replace(/,/g, '')) || 0
 
-    console.log('Check HighBlast', points, numericHighBlast, hB)
-
     if (points > numericHighBlast) {
       ScoreManager.setHighBlast(points, currentDifficulty)
 
@@ -76,8 +74,6 @@ class Game extends React.Component {
         displayMessage: this.wrapMessageDelivery(getNewHighScoreMessage),
       })
     }
-
-    console.log('Check HighScore', score, numericHighScore, highScore)
 
     if (!highScore) {
       const storedHighScore = await ScoreManager.getHighScore(currentDifficulty)

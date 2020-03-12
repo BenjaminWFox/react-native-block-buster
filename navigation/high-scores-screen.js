@@ -25,9 +25,6 @@ class HighScoresScreen extends React.Component {
       Object.keys(difficulties).map((key) => ScoreManager.getHighBlast(difficulties[key])),
     )
 
-    console.log('SCORES', scores)
-    console.log('BLASTS', blasts)
-
     Object.keys(difficulties).forEach((key, index) => {
       scoreArray.push({
         difficulty: key,

@@ -48,7 +48,7 @@ export default class AudioManger {
       }
     }
 
-    // console.log('last index played was:', this.lastSoundIndexPlayed)
+    console.log('last index played was:', this.lastSoundIndexPlayed)
 
     return this.lastSoundIndexPlayed
   }
@@ -62,7 +62,7 @@ export default class AudioManger {
 
     this.lastSoundIndexPlayed = idx
 
-    // console.log('Have new sound index', idx)
+    console.log('Have new sound index', idx)
 
     return idx
   }
@@ -74,7 +74,7 @@ export default class AudioManger {
     ).then((res) => {
       res.sound.setOnPlaybackStatusUpdate((status) => {
         if (!status.didJustFinish) return
-        // console.log(`Unloading ${name}`)
+        console.log(`Unloading ${name}`)
         res.sound.unloadAsync().catch(() => {})
       })
     }).catch((error) => {})
