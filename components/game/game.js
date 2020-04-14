@@ -18,6 +18,7 @@ class Game extends React.Component {
   state = {
     score: 0,
     highScore: null,
+    highBlast: null,
     surpassedHighScore: false,
     points: 0,
     movesLeft: 0,
@@ -33,6 +34,30 @@ class Game extends React.Component {
     }
     else {
       this.handleUpdateScore(existingGameData.score, { x: 0, y: 0 })
+    }
+  }
+
+  handleUpdateHighBlast = async (points) => {
+    const { currentDifficulty } = this.props
+    const { highBlast } = this.state
+    let hB = highBlast
+
+    if (!highBlast) {
+      const storedHighBlast = await ScoreManager.getHighBlast(currentDifficulty)
+
+      hB = storedHighBlast
+
+      this.setState({ highBlast: storedHighBlast })
+    }
+
+    const numericHighBlast = (hB && hB.replace(/,/g, '')) || 0
+
+    if (points > numericHighBlast) {
+      ScoreManager.setHighBlast(points, currentDifficulty)
+
+      this.setState({
+        highBlast: formatScore(points),
+      })
     }
   }
 
@@ -145,7 +170,11 @@ class Game extends React.Component {
             </View>
           </SafeAreaView>
         </View>
-        <ScoreManager.PointPopper coords={lastTouch} points={points} />
+        <ScoreManager.PointPopper
+          coords={lastTouch}
+          points={points}
+          onBlastReport={this.handleUpdateHighBlast}
+        />
       </>
     )
   }

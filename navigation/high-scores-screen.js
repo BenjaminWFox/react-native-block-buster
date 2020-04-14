@@ -15,9 +15,14 @@ class HighScoresScreen extends React.Component {
 
   updateHighScores = async () => {
     const scoreArray = []
+    const blastArray = []
 
     const scores = await Promise.all(
       Object.keys(difficulties).map((key) => ScoreManager.getHighScore(difficulties[key])),
+    )
+
+    const blasts = await Promise.all(
+      Object.keys(difficulties).map((key) => ScoreManager.getHighBlast(difficulties[key])),
     )
 
     Object.keys(difficulties).forEach((key, index) => {
@@ -25,21 +30,27 @@ class HighScoresScreen extends React.Component {
         difficulty: key,
         score: scores[index],
       })
+      blastArray.push({
+        difficulty: key,
+        blast: blasts[index],
+      })
     })
 
     this.setState({
       highScores: scoreArray,
+      highBlasts: blastArray,
     })
   }
 
   clearHighScore = async (difficulty) => {
     await ScoreManager.deleteHighScore(difficulties[difficulty])
+    await ScoreManager.deleteHighBlast(difficulties[difficulty])
 
     this.updateHighScores()
   }
 
   render() {
-    const { highScores } = this.state
+    const { highScores, highBlasts } = this.state
 
     return (
       <View style={{
@@ -48,19 +59,26 @@ class HighScoresScreen extends React.Component {
         backgroundColor: '#000000',
       }}
       >
-        {highScores.map((scoreObject) => (
+        {highScores.map((scoreObject, i) => (
           <View
             key={scoreObject.difficulty}
             style={{
               margin: 5, justifyContent: 'center', alignItems: 'center',
             }}
           >
-            <Theme.Text style={{ fontSize: 30 }}>
+            <Theme.Text style={{ fontSize: 32 }}>
               {scoreObject.difficulty}
               {' '}
               :
               {' '}
               {scoreObject.score}
+            </Theme.Text>
+            <Theme.Text style={{ fontSize: 22 }}>
+              {'best blast'}
+              {' '}
+              :
+              {' '}
+              {highBlasts[i].blast}
             </Theme.Text>
             <Theme.Button
               title="reset"
