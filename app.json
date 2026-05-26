@@ -20,7 +20,10 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.sleepyFox.jeweltonesblastsolitare",
-      "buildNumber": "9"
+      "buildNumber": "9",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "package": "com.sleepyfox.jeweltonesblastsolitare",
@@ -28,6 +31,11 @@
     },
     "plugins": [
       "expo-font"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "40a7bd30-4c20-11e9-a4fc-cd81cfcdff7e"
+      }
+    }
   }
 }
