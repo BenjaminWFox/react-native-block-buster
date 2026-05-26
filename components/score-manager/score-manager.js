@@ -1,5 +1,5 @@
 // import React from 'react'
-import { AsyncStorage } from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import PointPopper from './point-popper'
 import Scoreboard from './scoreboard'
 import formatScore from '../../classes/formatting'

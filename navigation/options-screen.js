@@ -1,16 +1,16 @@
 import React from 'react'
 import {
-  View, // Switch, Picker, Platform, TouchableHighlight, Text,
+  View,
 } from 'react-native'
 import PropTypes from 'prop-types'
 import Theme from '../theme'
 import { setOptions, difficulties } from '../classes/options-manager'
 
 class OptionsScreen extends React.Component {
-  constructor({ navigation }) {
-    super()
+  constructor(props) {
+    super(props)
 
-    const options = navigation.getParam('gameOptions', {})
+    const options = props.route.params?.gameOptions ?? {}
 
     this.state = {
       options,
@@ -98,18 +98,13 @@ class OptionsScreen extends React.Component {
             </View>
           </View>
         </View>
-        {/* <View>
-          <Theme.Text>
-            Show Tutorial Next Launch
-          </Theme.Text>
-        </View> */}
       </View>
     )
   }
 }
 
 OptionsScreen.propTypes = {
-  navigation: PropTypes.object.isRequired,
+  route: PropTypes.object.isRequired,
 }
 
 export default OptionsScreen

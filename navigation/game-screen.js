@@ -8,10 +8,6 @@ import RestartGameModal from '../components/modals/restart-game-modal'
 import AudioContext from '../classes/audio/audio-context'
 
 class GameScreen extends React.Component {
-  static navigationOptions = {
-    headerShown: false,
-  }
-
   state = {
     sbHeight: 0,
     gameId: 1,
@@ -46,16 +42,11 @@ class GameScreen extends React.Component {
   handleRestartOrNot = (willRestart) => {
     this.setState({ restartModalVisible: false })
     if (willRestart) {
-      const { navigation } = this.props
+      const { navigation, route } = this.props
 
-      const gameOptions = navigation.getParam('gameOptions', { difficulty: 'normal' })
+      const gameOptions = route.params?.gameOptions ?? { difficulty: 'normal' }
 
       navigation.replace('Game', { isNewGame: true, gameOptions })
-      // const { gameId } = this.state
-
-      // this.setState({
-      //   gameId: gameId + 1,
-      // })
     }
   }
 
@@ -69,10 +60,10 @@ class GameScreen extends React.Component {
     const {
       sbHeight, gameId, restartModalVisible,
     } = this.state
-    const { navigation } = this.props
-    const isNewGame = navigation.getParam('isNewGame', true)
-    const existingGameData = navigation.getParam('existingGameData', undefined)
-    const gameOptions = navigation.getParam('gameOptions', { difficulty: 'normal' })
+    const { route } = this.props
+    const isNewGame = route.params?.isNewGame ?? true
+    const existingGameData = route.params?.existingGameData ?? undefined
+    const gameOptions = route.params?.gameOptions ?? { difficulty: 'normal' }
 
     const currentDifficulty = existingGameData
       ? existingGameData.difficulty
@@ -115,6 +106,7 @@ class GameScreen extends React.Component {
 
 GameScreen.propTypes = {
   navigation: PropTypes.object.isRequired,
+  route: PropTypes.object.isRequired,
 }
 
 export default GameScreen

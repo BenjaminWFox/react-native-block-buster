@@ -4,13 +4,13 @@ import PropTypes from 'prop-types'
 import Theme from '../theme'
 import { getGameData } from '../components/game/game-saver'
 import { getOptionsFromStorageAsync, setOptions } from '../classes/options-manager'
-// import AudioContext from '../classes/audio/audio-context'
+import NewGameModal from '../components/modals/new-game-modal'
 
 class HomeScreen extends React.Component {
   constructor({ navigation }) {
     super()
     this.handleScreenFocus = navigation.addListener(
-      'willFocus',
+      'focus',
 
       async () => {
         await this.updateGameData()
@@ -26,7 +26,7 @@ class HomeScreen extends React.Component {
     )
 
     this.handleScreenBlur = navigation.addListener(
-      'didBlur',
+      'blur',
       () => {
         this.setState({
           canResumeGame: false,
@@ -40,11 +40,12 @@ class HomeScreen extends React.Component {
     canResumeGame: false,
     existingGameData: null,
     gameOptions: null,
+    newGameModalVisible: false,
   }
 
   componentWillUnmount = () => {
-    this.handleScreenBlur.remove()
-    this.handleScreenFocus.remove()
+    if (this.handleScreenBlur) this.handleScreenBlur()
+    if (this.handleScreenFocus) this.handleScreenFocus()
   }
 
   updateGameData = async () => {
@@ -72,12 +73,37 @@ class HomeScreen extends React.Component {
     return false
   }
 
+  handleNewGamePress = () => {
+    const { canResumeGame } = this.state
+
+    if (canResumeGame) {
+      this.setState({ newGameModalVisible: true })
+    } else {
+      this.startNewGame()
+    }
+  }
+
+  handleNewGameOrNot = (willStart) => {
+    this.setState({ newGameModalVisible: false })
+
+    if (willStart) {
+      this.startNewGame()
+    }
+  }
+
+  startNewGame = () => {
+    const { navigation } = this.props
+    const { gameOptions } = this.state
+
+    navigation.navigate('Game', { isNewGame: true, gameOptions })
+  }
+
   handleSoundPress = (audio) => {
     audio.playGameOverSound()
   }
 
   render() {
-    const { canResumeGame, existingGameData, gameOptions } = this.state
+    const { canResumeGame, existingGameData, gameOptions, newGameModalVisible } = this.state
     const { navigation } = this.props
 
     return (
@@ -98,9 +124,7 @@ class HomeScreen extends React.Component {
           backgroundColor={Theme.colors.jewel.red}
           textColor="#ffffff"
           title="New Game"
-          onPressFunc={() => {
-            navigation.navigate('Game', { isNewGame: true, gameOptions })
-          }}
+          onPressFunc={this.handleNewGamePress}
         />
         <Theme.Button
           backgroundColor={Theme.colors.jewel.orange}
@@ -126,19 +150,12 @@ class HomeScreen extends React.Component {
             navigation.navigate('Tutorial', { cameFromHome: true })
           }}
         />
-        {/* <AudioContext.Consumer>
-          { (sounds) => (
-            <Theme.Button
-              backgroundColor={Theme.colors.jewel.yellow}
-              textColor="#ffffff"
-              title="Play a sound"
-              onPressFunc={() => {
-                this.handleSoundPress(sounds)
-              }}
-            />
-          )
-        }
-        </AudioContext.Consumer> */}
+        { newGameModalVisible && (
+          <NewGameModal
+            isVisible={newGameModalVisible}
+            willStartNewGame={this.handleNewGameOrNot}
+          />
+        )}
       </View>
     )
   }

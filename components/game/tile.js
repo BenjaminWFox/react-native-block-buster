@@ -1,5 +1,5 @@
 import React from 'react'
-import uuid from 'uuid'
+import { v4 as uuid } from 'uuid'
 import PropTypes from 'prop-types'
 import TileElement from './tile-element'
 import { positionFadeOutInterpolation, dimensionFadeOutInterpolation } from '../../animation/animations'

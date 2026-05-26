@@ -8,6 +8,7 @@ export const scaleInAnimation = () => {
     {
       toValue: 1,
       duration: 500,
+      useNativeDriver: false,
     },
   ).start()
 
@@ -23,6 +24,7 @@ export const scaleInOutAnimation = () => {
       {
         toValue: 1,
         duration: 500,
+        useNativeDriver: false,
       },
     ),
     Animated.delay(500),
@@ -31,6 +33,7 @@ export const scaleInOutAnimation = () => {
       {
         toValue: 0,
         duration: 500,
+        useNativeDriver: false,
       },
     ),
 
@@ -47,6 +50,7 @@ export const flashLastPointsAnimation = function flashLastPointsAnimation() {
     {
       toValue: 0,
       duration: 2000,
+      useNativeDriver: false,
     },
   ).start()
 
@@ -71,6 +75,7 @@ export const countUpScoreAnimation = function countUpScoreAnimation(startAnimate
     {
       toValue: finish,
       duartion: 500,
+      useNativeDriver: false,
     },
   ).start()
 
@@ -85,6 +90,7 @@ export const slideDownAnimation = function getSlideDownAnimation(start, finish, 
     {
       toValue: finish,
       duration: 350,
+      useNativeDriver: false,
     },
   ).start(() => {
     callback()
@@ -101,6 +107,7 @@ export const fadeOutAnimation = function fadeOutAnimation(callback) {
     {
       toValue: 0,
       duration: 250,
+      useNativeDriver: false,
     },
   ).start(() => {
     callback()

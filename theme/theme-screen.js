@@ -1,7 +1,6 @@
 import React from 'react'
-import {
-  ScrollView, SafeAreaView, View, StatusBar,
-} from 'react-native'
+import { ScrollView, View, StatusBar } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 import Theme from '.'
 
 const ThemeScreen = function ThemeScreen() {

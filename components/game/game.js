@@ -1,8 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {
-  View, SafeAreaView,
-} from 'react-native'
+import { View } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 import { Ionicons } from '@expo/vector-icons'
 import TileGrid from './tile-grid'
 import ScoreManager from '../score-manager/score-manager'
@@ -163,10 +162,10 @@ class Game extends React.Component {
               justifyContent: 'center',
             }}
             >
-              <InfoIcon title={<Ionicons name="md-menu" size={40} />} onPress={launchMenuScreen} />
+              <InfoIcon title={<Ionicons name="menu" size={40} />} onPress={launchMenuScreen} />
               <InfoTile title="Possible Moves" displayData={movesLeft} />
               <InfoTile title="High Score" displayData={highScore} />
-              <InfoIcon title={<Ionicons name="md-refresh" size={40} />} onPress={launchRestartModal} />
+              <InfoIcon title={<Ionicons name="refresh" size={40} />} onPress={launchRestartModal} />
             </View>
           </SafeAreaView>
         </View>

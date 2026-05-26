@@ -2,10 +2,10 @@
     "env": {
         "node": true,
         "browser": true,
-        "es6": true,
+        "es2022": true,
         "jest": true
     },
-    "parser": "babel-eslint",
+    "parser": "@babel/eslint-parser",
     "extends": "airbnb",
     "rules": {
       "semi": [2, "never"],
@@ -19,12 +19,14 @@
       "react/forbid-prop-types": { "forbid": ["any", "array"] }
     },
     "parserOptions": {
-      "ecmaVersion": 6,
+      "ecmaVersion": 2022,
       "sourceType": "module",
       "ecmaFeatures": {
-        "jsx": true,
-        "modules": true,
-        "experimentalObjectRestSpread": true
+        "jsx": true
+      },
+      "requireConfigFile": false,
+      "babelOptions": {
+        "presets": ["babel-preset-expo"]
       }
     },
     "globals": {}

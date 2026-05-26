@@ -1,5 +1,3 @@
-import { Audio } from 'expo-av';
-
 const c2 = require('../../assets/sounds/c2.mp3')
 const d2 = require('../../assets/sounds/d2.mp3')
 const e2 = require('../../assets/sounds/e2.mp3')
@@ -19,36 +17,6 @@ const c4 = require('../../assets/sounds/c4.mp3')
 class AudioLoader {
   constructor() {
     this.rawSoundPaths = [c2, d2, e2, f2, g2, a3, b3, c3, d3, e3, f3, g3, a4, b4, c4]
-    this.completedLoads = 0
-    this.complete = false
-    this.sounds = []
-    this.initialPBStatus = {
-      shouldPlay: false,
-    }
-  }
-
-  async init() {
-    await Promise.all(this.rawSoundPaths.map((soundPath) => this.loadSound(soundPath)))
-  }
-
-  async loadSound(soundPath) {
-    return Audio.Sound.createAsync(soundPath, this.initialPBStatus, null, false)
-      .then((soundObject) => {
-        this.sounds.push(soundObject)
-        // console.log('Sound load success.')
-        this.loadCompleted()
-      })
-      .catch(() => {
-        // console.log('--> Failed to load sound.')
-        this.loadCompleted()
-      })
-  }
-
-  loadCompleted() {
-    this.completedLoads += 1
-    if (this.completedLoads === this.rawSoundPaths.length) {
-      this.complete = true
-    }
   }
 }
 

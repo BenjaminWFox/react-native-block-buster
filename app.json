@@ -2,7 +2,6 @@
   "expo": {
     "name": "Jewel Tones",
     "slug": "rnjtbs",
-    "privacy": "public",
     "platforms": [
       "ios",
       "android"
@@ -15,19 +14,20 @@
       "resizeMode": "contain",
       "backgroundColor": "#000000"
     },
-    "updates": {
-      "fallbackToCacheTimeout": 0
-    },
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.sleepyFox.jeweltonesblastsolitare"
+      "bundleIdentifier": "com.sleepyFox.jeweltonesblastsolitare",
+      "buildNumber": "9"
     },
     "android": {
       "package": "com.sleepyfox.jeweltonesblastsolitare",
-      "versionCode": 8
-    }
+      "versionCode": 9
+    },
+    "plugins": [
+      "expo-font"
+    ]
   }
 }

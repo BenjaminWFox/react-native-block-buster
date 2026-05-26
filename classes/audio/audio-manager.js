@@ -1,5 +1,4 @@
-import { Audio } from 'expo-av'
-// import AudioLoader from './audio-loader'
+import { createAudioPlayer } from 'expo-audio'
 import { getRandomInt } from '../utilities'
 import AudioLoader from './audio-loader'
 import { getCurrentOptionsSync } from '../options-manager'
@@ -20,16 +19,6 @@ export default class AudioManger {
     this.totalNotes = this.audioLoader.rawSoundPaths.length
     this.maxSoundIndex = this.totalNotes - 1
   }
-
-  // async load() {
-  //   // const audioLoader = new AudioLoader()
-
-  //   // await audioLoader.init()
-
-  //   // this.sounds = audioLoader.sounds
-  //   // this.totalNotes = this.sounds.length
-  //   // this.ready = true
-  // }
 
   // eslint-disable-next-line
   get canPlaySound() {
@@ -68,16 +57,16 @@ export default class AudioManger {
   }
 
   playSound = (name, sound) => {
-    Audio.Sound.createAsync(
-      sound,
-      { shouldPlay: true },
-    ).then((res) => {
-      res.sound.setOnPlaybackStatusUpdate((status) => {
+    try {
+      const player = createAudioPlayer(sound)
+      const subscription = player.addListener('playbackStatusUpdate', (status) => {
         if (!status.didJustFinish) return
-        console.log(`Unloading ${name}`)
-        res.sound.unloadAsync().catch(() => {})
+        console.log(`Releasing ${name}`)
+        subscription.remove()
+        player.release()
       })
-    }).catch((error) => {})
+      player.play()
+    } catch (error) {} // eslint-disable-line
   }
 
   playSoundAtThisOrNewIndex = (pIdx = undefined) => {

@@ -1,48 +1,36 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { View } from 'react-native'
-import { Asset } from 'expo-asset';
-import { Video } from 'expo-av';
-import PropTypes from 'prop-types'
+import { useVideoPlayer, VideoView } from 'expo-video'
 
-const TutorialVideo = Asset.fromModule(require('../assets/tutorial.mp4'))
+const videoSource = require('../assets/tutorial.mp4')
 
-class TutorialScreen extends React.Component {
-  // constructor() {
-  //   super()
-  // }
+export default function TutorialScreen({ navigation }) {
+  const player = useVideoPlayer(videoSource, (p) => {
+    p.play()
+  })
 
-  _onPlaybackStatusUpdate = (playbackStatus) => {
-    const { navigation } = this.props
+  useEffect(() => {
+    const subscription = player.addListener('playToEnd', () => {
+      navigation.goBack()
+    })
 
-    if (playbackStatus.didJustFinish) {
-      navigation.pop(1)
+    return () => {
+      subscription.remove()
     }
-  }
+  }, [player, navigation])
 
-  render() {
-    return (
-      <View style={{
-        flex: 1,
-        backgroundColor: '#000000',
-      }}
-      >
-        <Video
-          source={{ uri: TutorialVideo.uri }}
-          ref={(ref) => {
-            this.player = ref
-          }}
-          onPlaybackStatusUpdate={this._onPlaybackStatusUpdate} // eslint-disable-line
-          shouldPlay
-          resizeMode="contain"
-          style={{ height: 600 }}
-        />
-      </View>
-    )
-  }
+  return (
+    <View style={{
+      flex: 1,
+      backgroundColor: '#000000',
+    }}
+    >
+      <VideoView
+        player={player}
+        contentFit="contain"
+        nativeControls={false}
+        style={{ height: 600 }}
+      />
+    </View>
+  )
 }
-
-TutorialScreen.propTypes = {
-  navigation: PropTypes.object.isRequired,
-}
-
-export default TutorialScreen
